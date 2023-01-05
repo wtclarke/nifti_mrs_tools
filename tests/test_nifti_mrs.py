@@ -11,6 +11,7 @@ import numpy as np
 
 from nifti_mrs.nifti_mrs import NIFTI_MRS
 from nifti_mrs.validator import headerExtensionError
+from nifti_mrs.create_nmrs import gen_nifti_mrs, gen_nifti_mrs_hdr_ext
 
 # Files
 testsPath = Path('/Users/wclarke/Documents/Python/fsl_mrs/fsl_mrs/tests')
@@ -235,31 +236,31 @@ def test_nifti_mrs_generator():
         assert slice_idx == (0, 0, 0, slice(None, None, None), 0)
         break
 
-    # obj2 = gen_new_nifti_mrs(
-    #     np.zeros((1, 1, 1, 100, 2, 10), dtype=complex),
-    #     0.0005,
-    #     120.0,
-    #     dim_tags=['DIM_EDIT', 'DIM_DYN', None])
+    obj2 = gen_nifti_mrs(
+        np.zeros((1, 1, 1, 100, 2, 10), dtype=complex),
+        0.0005,
+        120.0,
+        dim_tags=['DIM_EDIT', 'DIM_DYN', None])
 
-    # for gen_data, slice_idx in obj2.iterate_over_dims(dim='DIM_DYN'):
-    #     assert gen_data.shape == (1, 1, 1, 100, 10)
-    #     assert slice_idx == (slice(None, None, None),
-    #                          slice(None, None, None),
-    #                          slice(None, None, None),
-    #                          slice(None, None, None),
-    #                          0,
-    #                          slice(None, None, None))
-    #     break
+    for gen_data, slice_idx in obj2.iterate_over_dims(dim='DIM_DYN'):
+        assert gen_data.shape == (1, 1, 1, 100, 10)
+        assert slice_idx == (slice(None, None, None),
+                             slice(None, None, None),
+                             slice(None, None, None),
+                             slice(None, None, None),
+                             0,
+                             slice(None, None, None))
+        break
 
-    # for gen_data, slice_idx in obj2.iterate_over_dims(dim='DIM_EDIT'):
-    #     assert gen_data.shape == (1, 1, 1, 100, 2)
-    #     assert slice_idx == (slice(None, None, None),
-    #                          slice(None, None, None),
-    #                          slice(None, None, None),
-    #                          slice(None, None, None),
-    #                          slice(None, None, None),
-    #                          0)
-    #     break
+    for gen_data, slice_idx in obj2.iterate_over_dims(dim='DIM_EDIT'):
+        assert gen_data.shape == (1, 1, 1, 100, 2)
+        assert slice_idx == (slice(None, None, None),
+                             slice(None, None, None),
+                             slice(None, None, None),
+                             slice(None, None, None),
+                             slice(None, None, None),
+                             0)
+        break
 
 
 def test_nifti_mrs_spatial_generator():
@@ -273,4 +274,69 @@ def test_nifti_mrs_spatial_generator():
                              slice(None, None, None))
         break
 
+
 # Test the dynamic header method
+def test_dynamic_headers():
+    data = np.zeros((1, 1, 1, 512, 10), dtype=np.complex64)
+    affine = np.eye(4)
+
+    from nifti_mrs.hdr_ext import Hdr_Ext
+    hdr_ext = Hdr_Ext(128.0, '1H', dimensions=5)
+    hdr_ext.set_dim_info(
+        0,
+        'DIM_INDIRECT_0',
+        info="Incremented echo time for j-evolution",
+        hdr={
+            "EchoTime": np.linspace(0.03, 0.12, 10).tolist(),
+            "EchoTime2": {"start": 0.03, "increment": 0.01},
+            "RepetitionTime": np.linspace(1.0, 1.9, 10).tolist()})
+
+    nmrs = gen_nifti_mrs_hdr_ext(
+        data,
+        1 / 2000.0,
+        hdr_ext,
+        affine=affine)
+
+    dictrep, tuplerep, arrayrep = nmrs.dynamic_hdr_vals()
+    assert len(dictrep) == 10
+    assert len(tuplerep) == 10
+    for d, t, a in zip(dictrep, tuplerep, arrayrep):
+        assert 'EchoTime' in d.keys()\
+            and 'EchoTime2' in d.keys()\
+            and 'RepetitionTime' in d.keys()
+        assert len(t) == 3
+        assert a.shape[0] == 3
+        assert d['EchoTime'] == t[0] == t[1] == a[0] == a[1]
+
+    # 2D
+    data = np.zeros((1, 1, 1, 512, 2, 3), dtype=np.complex64)
+    affine = np.eye(4)
+    hdr_ext = Hdr_Ext(128.0, '1H', dimensions=6)
+    hdr_ext.set_dim_info(
+        0,
+        'DIM_EDIT',
+        info="Editing condition",
+        hdr={
+            "EditCondition": ['ON', 'OFF']})
+    hdr_ext.set_dim_info(
+        1,
+        'DIM_INDIRECT_0',
+        info="Incremented echo time for j-evolution",
+        hdr={
+            "EchoTime": np.linspace(0.03, 0.09, 3).tolist()})
+
+    nmrs = gen_nifti_mrs_hdr_ext(
+        data,
+        1 / 2000.0,
+        hdr_ext,
+        affine=affine)
+
+    dictrep, tuplerep, arrayrep = nmrs.dynamic_hdr_vals()
+    assert dictrep.shape == tuplerep.shape == (2, 3)
+    assert arrayrep.shape == (6, 2)
+    for d, t, a in zip(dictrep.ravel(), tuplerep.ravel(), arrayrep):
+        assert 'EditCondition' in d.keys()\
+            and 'EchoTime' in d.keys()
+        assert len(t) == 2
+        assert a.shape[0] == 2
+        assert d['EditCondition'] == t[0] == a[0]
