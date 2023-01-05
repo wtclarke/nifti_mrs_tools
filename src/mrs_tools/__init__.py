@@ -8,8 +8,7 @@ Copyright (C) William Clarke, 2023, University of Oxford
 import argparse
 from pathlib import Path
 
-# from fsl_mrs import __version__
-__version__ = 'TO DO'
+from nifti_mrs import __version__
 
 
 def main():
