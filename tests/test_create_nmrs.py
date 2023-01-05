@@ -1,10 +1,9 @@
-'''Test the NIFTI-MRS object generation 
+'''Test the NIFTI-MRS object generation.
 
 Copyright Will Clarke, University of Oxford, 2023'''
 
 # Imports
 from pathlib import Path
-from copy import deepcopy
 
 import numpy as np
 
