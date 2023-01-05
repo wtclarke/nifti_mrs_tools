@@ -1,3 +1,8 @@
+"""Core NIfTI-MRS class.
+For more information on NIfTI-MRS see https://github.com/wtclarke/mrs_nifti_standard
+
+Copyright William Clarke, University of Oxford, 2023
+"""
 import json
 from pathlib import Path
 import re
@@ -69,11 +74,9 @@ class NIFTI_MRS():
         """
         # Handle various options for the first (data source) argument
         if isinstance(args[0], np.ndarray):
-            # WTC 12/22
-            # Original implementation indluded this conjugation.
-            # I now don't understand.
-            # If generated from np array include conjugation
-            # to make sure storage is right-handed
+            # If generated from np.array include conjugation
+            # to make sure generation from data of existing NIfTI-MRS
+            # object results in consistent phase/freq convention.
             args = list(args)
             args[0] = args[0].conj()
             filename = None
@@ -84,6 +87,10 @@ class NIFTI_MRS():
         elif isinstance(args[0], str):
             args = list(args)
             filename = Path(args[0]).name
+        elif isinstance(args[0], NIFTI_MRS):
+            args = list(args)
+            filename = args[0].filename
+            args[0] = args[0]._image
 
         # Instantiate Image object
         self._image = Image(*args, **kwargs)

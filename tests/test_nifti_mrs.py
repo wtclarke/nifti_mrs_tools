@@ -1,8 +1,6 @@
-'''FSL-MRS test script
+'''Test the NIFTI-MRS class implementation
 
-Test the NIFTI-MRS class implementation
-
-Copyright Will Clarke, University of Oxford, 2021'''
+Copyright Will Clarke, University of Oxford, 2023'''
 
 # Imports
 from pathlib import Path
@@ -13,8 +11,6 @@ import numpy as np
 
 from nifti_mrs.nifti_mrs import NIFTI_MRS
 from nifti_mrs.validator import headerExtensionError
-# from fsl_mrs.core.nifti_mrs import gen_new_nifti_mrs
-# from fsl_mrs.utils import mrs_io
 
 # Files
 testsPath = Path('/Users/wclarke/Documents/Python/fsl_mrs/fsl_mrs/tests')
@@ -39,6 +35,15 @@ def test_nifti_mrs():
     assert obj.dim_position('DIM_DYN') == 5
 
     assert obj.copy(remove_dim='DIM_DYN').shape == (1, 1, 1, 4096, 32)
+
+
+def test_copy():
+    obj1 = NIFTI_MRS(data['unprocessed'])
+    obj2 = obj1.copy()
+    obj3 = NIFTI_MRS(obj1)
+
+    assert np.allclose(obj2[:], obj1[:])
+    assert np.allclose(obj3[:], obj1[:])
 
 
 def test_modification_mrs_meta():
@@ -268,39 +273,4 @@ def test_nifti_mrs_spatial_generator():
                              slice(None, None, None))
         break
 
-
 # Test the dynamic header method
-
-
-# def test_gen_new_nifti_mrs(tmp_path):
-#     data = np.zeros((1, 1, 1, 1024, 4), dtype=np.complex64)
-#     affine = np.eye(4)
-#     nmrs = gen_new_nifti_mrs(data,
-#                              1 / 2000.0,
-#                              128.0,
-#                              nucleus='1H',
-#                              affine=affine,
-#                              dim_tags=['DIM_COIL', None, None])
-
-#     assert nmrs.shape == (1, 1, 1, 1024, 4)
-#     assert nmrs.dwelltime == 1 / 2000.0
-#     assert nmrs.nucleus == ['1H']
-#     assert nmrs.spectrometer_frequency == [128.0]
-#     assert nmrs.bandwidth == 2000.0
-#     assert nmrs.dim_tags == ['DIM_COIL', None, None]
-#     assert isinstance(nmrs.hdr_ext, dict)
-
-#     nmrs.save(tmp_path / 'out')
-
-#     assert (tmp_path / 'out.nii.gz').exists()
-
-
-# def test_gen_new_nifti_mrs_conj(tmp_path):
-#     obj_in = NIFTI_MRS(data['metab'])
-
-#     nmrs = gen_new_nifti_mrs(obj_in[:],
-#                              obj_in.dwelltime,
-#                              obj_in.spectrometer_frequency[0],
-#                              nucleus='1H')
-
-#     assert np.allclose(nmrs[:], obj_in[:])

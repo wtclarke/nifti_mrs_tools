@@ -8,7 +8,7 @@ Copyright Will Clarke, University of Oxford, 2021
 
 # Define nifti-mrs version number here.
 # First element is major version, second is minor
-nifti_mrs_version = [0, 5]
+nifti_mrs_version = [0, 6]
 
 # Possible dimension tags and descriptions
 dimension_tags = {"DIM_COIL": "For storage of data from each individual receiver coil element.",
