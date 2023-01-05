@@ -6,7 +6,7 @@
 
 import numpy as np
 
-from fsl_mrs.core import NIFTI_MRS
+from nifti_mrs.nifti_mrs import NIFTI_MRS
 
 
 def conjugate(nmrs):

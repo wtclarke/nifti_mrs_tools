@@ -192,6 +192,24 @@ class NIFTI_MRS():
         '''Central or spectrometer frequency in MHz - returns list'''
         return self.hdr_ext['SpectrometerFrequency']
 
+    def getAffine(self, *args):
+        """Return an affine transformation which can be used to transform
+        coordinates from ``from_`` to ``to``.
+
+        Valid values for the ``from_`` and ``to`` arguments are:
+
+         - ``'voxel'``: The voxel coordinate system
+         - ``'world'``: The world coordinate system, as defined by the image
+           sform/qform
+         - ``'fsl'``: The FSL coordinate system (scaled voxels, with a
+           left-right flip if the sform/qform has a positive determinant)
+
+        :arg from_: Source coordinate system
+        :arg to:    Destination coordinate system
+        :returns:   A ``numpy`` array of shape ``(4, 4)``
+        """
+        return self._image.getAffine(*args)
+
     @property
     def hdr_ext(self):
         '''Return MRS JSON header extension object.'''

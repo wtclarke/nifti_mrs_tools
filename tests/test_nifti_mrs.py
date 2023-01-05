@@ -340,3 +340,10 @@ def test_dynamic_headers():
         assert len(t) == 2
         assert a.shape[0] == 2
         assert d['EditCondition'] == t[0] == a[0]
+
+
+def test_getaffine():
+    obj = NIFTI_MRS(data['unprocessed'])
+    assert np.allclose(
+        obj.getAffine('voxel', 'world'),
+        obj._image.getAffine('voxel', 'world'))

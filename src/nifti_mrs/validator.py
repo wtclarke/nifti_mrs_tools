@@ -130,7 +130,7 @@ def validate_hdr_ext(header_ex, data_dimensions):
             raise headerExtensionError(f'{key} must be a {standard_defined[key][0]}. '
                                        f'{key} is a {type(json_dict[key])}, with value {json_dict[key]}.')
 
-    print('Header extension validated!')
+    # print('Header extension validated!')
 
 
 def check_type(value, json_type):

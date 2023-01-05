@@ -3,7 +3,6 @@
     Author: Will Clarke <william.clarke@ndcn.ox.ac.uk>
     Copyright (C) 2021 University of Oxford
 """
-import json
 
 import numpy as np
 from nibabel.nifti1 import Nifti1Extension
@@ -21,7 +20,7 @@ def modify_hdr_ext(new_hdr_ext, hdr):
     :rtype: nibabel.nifti2.Nifti2Header
     """
     modded_hdr = hdr.copy()
-    json_s = json.dumps(new_hdr_ext)
+    json_s = new_hdr_ext.to_json()
     extension = Nifti1Extension(44, json_s.encode('UTF-8'))
     modded_hdr.extensions.clear()
     modded_hdr.extensions.append(extension)

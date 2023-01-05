@@ -221,3 +221,18 @@ class Hdr_Ext:
 
     def __repr__(self) -> str:
         return str(self)
+
+    def __iter__(self):
+        yield from self.current_keys
+
+    def copy(self):
+        from copy import deepcopy
+        return deepcopy(self)
+
+    def __eq__(self, other):
+        if isinstance(other, Hdr_Ext):
+            return self.to_dict() == other.to_dict()
+        elif isinstance(other, dict):
+            return self.to_dict() == other
+        else:
+            raise NotImplementedError('Equality can only be tested with dict or Hdr_Ext object.')

@@ -4,12 +4,11 @@
     Copyright (C) 2021 University of Oxford
 """
 import re
-import json
 
 import numpy as np
-from nibabel.nifti1 import Nifti1Extension
-from fsl_mrs.core.nifti_mrs import NIFTI_MRS, NIFTIMRS_DimDoesntExist
-from fsl_mrs.utils.nifti_mrs_tools import utils
+
+from nifti_mrs.nifti_mrs import NIFTI_MRS, NIFTIMRS_DimDoesntExist
+from nifti_mrs.tools import utils
 
 
 class NIfTI_MRSIncompatible(Exception):
@@ -130,14 +129,22 @@ def _split_dim_header(hdr, dimension, dim_length, index):
             return utils.dim_n_header_long_to_short(long_fmt_1), utils.dim_n_header_long_to_short(long_fmt_2)
 
     key_str = f'dim_{dimension}_header'
+    key_str_tag = f'dim_{dimension}'
+    key_str_info = f'dim_{dimension}_info'
     if key_str in hdr:
         new_h1 = {}
         new_h2 = {}
         for sub_key in hdr[key_str]:
             new_h1[sub_key], new_h2[sub_key] = split_single(hdr[key_str][sub_key])
 
-        hdr1[key_str] = new_h1
-        hdr2[key_str] = new_h2
+        curr_tag = hdr[key_str_tag]
+        if key_str_info in hdr:
+            curr_info = hdr[key_str_info]
+        else:
+            curr_info = None
+        hdr1.set_dim_info(dimension - 5, curr_tag, info=curr_info, hdr=new_h1)
+        hdr2.set_dim_info(dimension - 5, curr_tag, info=curr_info, hdr=new_h2)
+
     return hdr1, hdr2
 
 
@@ -254,7 +261,7 @@ def _merge_dim_header(hdr1, hdr2, dimension, dim_length1, dim_length2):
     def merge_single(hdr_val1, hdr_val2):
         hdr_type = utils.check_type(hdr_val1)
         long_fmt_1 = utils.dim_n_header_short_to_long(hdr_val1, dim_length1)
-        long_fmt_2 = utils.dim_n_header_short_to_long(hdr_val2, dim_length1)
+        long_fmt_2 = utils.dim_n_header_short_to_long(hdr_val2, dim_length2)
         long_fmt = merge_user_or_std(long_fmt_1, long_fmt_2)
         if hdr_type == 'long':
             return long_fmt
@@ -262,6 +269,8 @@ def _merge_dim_header(hdr1, hdr2, dimension, dim_length1, dim_length2):
             return utils.dim_n_header_long_to_short(long_fmt)
 
     key_str = f'dim_{dimension}_header'
+    key_str_tag = f'dim_{dimension}'
+    key_str_info = f'dim_{dimension}_info'
 
     def run_check():
         # Check all other dimension fields are consistent
@@ -283,7 +292,12 @@ def _merge_dim_header(hdr1, hdr2, dimension, dim_length1, dim_length2):
         for sub_key in hdr1[key_str]:
             new_h[sub_key] = merge_single(hdr1[key_str][sub_key], hdr2[key_str][sub_key])
 
-        out_hdr[key_str] = new_h
+        curr_tag = hdr1[key_str_tag]
+        if key_str_info in hdr1:
+            curr_info = hdr1[key_str_info]
+        else:
+            curr_info = None
+        out_hdr.set_dim_info(dimension - 5, curr_tag, info=curr_info, hdr=new_h)
     elif key_str in hdr1 and key_str not in hdr2\
             or key_str not in hdr1 and key_str in hdr2:
         # Incompatible headers
@@ -310,8 +324,9 @@ def reorder(nmrs, dim_tag_list):
     for idx, tag in enumerate(nmrs.dim_tags):
         if tag not in dim_tag_list\
                 and tag is not None:
-            raise NIfTI_MRSIncompatible(f'The existing tag ({tag}) does not appear '
-                                        f'in the requested tag order ({dim_tag_list}).')
+            raise NIfTI_MRSIncompatible(
+                f'The existing tag ({tag}) does not appear '
+                f'in the requested tag order ({dim_tag_list}).')
 
     # Create singleton dimensions if required
     original_dims = nmrs.ndim
@@ -337,28 +352,25 @@ def reorder(nmrs, dim_tag_list):
 
             dest_indicies.append(idx + 4)
 
-    # Sort header_ext dim_tags
+    # Sort header extension dim_tags
     dim_n = re.compile(r'dim_[567].*')
-    new_hdr_dict = {}
+    new_hdr_ext = nmrs.hdr_ext.copy()
+    new_hdr_ext.dimensions = data_with_singleton.ndim
     for key in nmrs.hdr_ext:
         if dim_n.match(key):
             new_index = dest_indicies[source_indicies.index(int(key[4]) - 1)] + 1
-            new_key = 'dim_' + str(new_index) + key[5:]
-            new_hdr_dict.update({new_key: nmrs.hdr_ext[key]})
-        else:
-            new_hdr_dict.update({key: nmrs.hdr_ext[key]})
+            new_ind_str = f'{new_index}th'
+            new_hdr_ext.set_dim_info(new_ind_str, nmrs.hdr_ext[key])
 
     # For any singleton dimensions we've added
     for dim in singleton_tags:
-        new_hdr_dict.update({f'dim_{dim}': singleton_tags[dim]})
+        new_hdr_ext.set_dim_info(f'{dim}th', singleton_tags[dim])
 
     new_header = nmrs.header.copy()
-    json_s = json.dumps(new_hdr_dict)
-    extension = Nifti1Extension(44, json_s.encode('UTF-8'))
-    new_header.extensions.clear()
-    new_header.extensions.append(extension)
+    new_nmrs = NIFTI_MRS(
+        np.moveaxis(data_with_singleton, source_indicies, dest_indicies),
+        header=new_header)
 
-    new_nmrs = NIFTI_MRS(np.moveaxis(data_with_singleton, source_indicies, dest_indicies),
-                         header=new_header)
-
+    # Finaly insert new header extension
+    new_nmrs.hdr_ext = new_hdr_ext
     return new_nmrs
