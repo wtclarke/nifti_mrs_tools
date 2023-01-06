@@ -13,12 +13,8 @@ from nifti_mrs.create_nmrs import gen_nifti_mrs, gen_nifti_mrs_hdr_ext
 
 
 # Files
-testsPath = Path('/Users/wclarke/Documents/Python/fsl_mrs/fsl_mrs/tests')
-# testsPath = Path(__file__).parent
-data = {'metab': testsPath / 'testdata/fsl_mrs/metab.nii.gz',
-        'unprocessed': testsPath / 'testdata/fsl_mrs_preproc/metab_raw.nii.gz',
-        'water': testsPath / 'testdata/fsl_mrs/wref.nii.gz',
-        'basis': testsPath / 'testdata/fsl_mrs/steam_basis'}
+testsPath = Path(__file__).parent
+data = {'metab': testsPath / 'test_data' / 'metab.nii.gz'}
 
 
 def test_gen_new_nifti_mrs(tmp_path):

@@ -10,13 +10,11 @@ from pathlib import Path
 import nibabel as nib
 
 # Files
-testsPath = Path('/Users/wclarke/Documents/Python/fsl_mrs/fsl_mrs/tests')
-# testsPath = Path(__file__).parent
+testsPath = Path(__file__).parent
 
 # Testing vis option
-svs = testsPath / 'testdata/fsl_mrs/metab.nii.gz'
-svs_raw = testsPath / 'testdata/fsl_mrs_preproc/metab_raw.nii.gz'
-basis = testsPath / 'testdata/fsl_mrs/steam_basis'
+svs = testsPath / 'test_data' / 'metab.nii.gz'
+svs_raw = testsPath / 'test_data' / 'metab_raw.nii.gz'
 
 
 def test_vis_svs(tmp_path):
@@ -52,18 +50,18 @@ def test_vis_svs(tmp_path):
     assert (tmp_path / 'svs4.png').exists()
 
 
-def test_vis_basis(tmp_path):
-    subprocess.check_call(['mrs_tools', 'vis',
-                           '--ppmlim', '0.2', '4.2',
-                           '--save', str(tmp_path / 'basis.png'),
-                           basis])
+# def test_vis_basis(tmp_path):
+#     subprocess.check_call(['mrs_tools', 'vis',
+#                            '--ppmlim', '0.2', '4.2',
+#                            '--save', str(tmp_path / 'basis.png'),
+#                            basis])
 
-    assert (tmp_path / 'basis.png').exists()
+#     assert (tmp_path / 'basis.png').exists()
 
 
 # Testing info option
-processed = testsPath / 'testdata/fsl_mrs/metab.nii.gz'
-unprocessed = testsPath / 'testdata/fsl_mrs_preproc/metab_raw.nii.gz'
+processed = testsPath / 'test_data' / 'metab.nii.gz'
+unprocessed = testsPath / 'test_data' / 'metab_raw.nii.gz'
 
 
 def test_single_info(tmp_path):
@@ -75,8 +73,8 @@ def test_multi_info(tmp_path):
 
 
 # Testing merge option
-test_data_merge_1 = testsPath / 'testdata' / 'fsl_mrs_preproc' / 'wref_raw.nii.gz'
-test_data_merge_2 = testsPath / 'testdata' / 'fsl_mrs_preproc' / 'quant_raw.nii.gz'
+test_data_merge_1 = testsPath / 'test_data' / 'wref_raw.nii.gz'
+test_data_merge_2 = testsPath / 'test_data'  / 'quant_raw.nii.gz'
 
 
 def test_merge(tmp_path):
@@ -109,7 +107,7 @@ def test_merge(tmp_path):
 
 
 # Test split option
-test_data_split = testsPath / 'testdata' / 'fsl_mrs_preproc' / 'metab_raw.nii.gz'
+test_data_split = testsPath / 'test_data' / 'metab_raw.nii.gz'
 
 
 def test_split(tmp_path):
@@ -119,7 +117,7 @@ def test_split(tmp_path):
     """
     subprocess.check_call(['mrs_tools', 'split',
                            '--dim', 'DIM_DYN',
-                           '--index', '31',
+                           '--index', '7',
                            '--output', str(tmp_path),
                            '--filename', 'split_file',
                            '--file', str(test_data_split)])
@@ -128,12 +126,12 @@ def test_split(tmp_path):
     assert (tmp_path / 'split_file_high.nii.gz').exists()
     f1 = nib.load(tmp_path / 'split_file_low.nii.gz')
     f2 = nib.load(tmp_path / 'split_file_high.nii.gz')
-    assert f1.shape[5] == 32
-    assert f2.shape[5] == 32
+    assert f1.shape[5] == 8
+    assert f2.shape[5] == 8
 
     subprocess.check_call(['mrs_tools', 'split',
                            '--dim', 'DIM_DYN',
-                           '--index', '31',
+                           '--index', '7',
                            '--output', str(tmp_path),
                            '--file', str(test_data_split)])
 
@@ -141,12 +139,12 @@ def test_split(tmp_path):
     assert (tmp_path / 'metab_raw_high.nii.gz').exists()
     f1 = nib.load(tmp_path / 'metab_raw_low.nii.gz')
     f2 = nib.load(tmp_path / 'metab_raw_high.nii.gz')
-    assert f1.shape[5] == 32
-    assert f2.shape[5] == 32
+    assert f1.shape[5] == 8
+    assert f2.shape[5] == 8
 
     subprocess.check_call(['mrs_tools', 'split',
                            '--dim', 'DIM_DYN',
-                           '--indices', '31', '34', '40',
+                           '--indices', '1', '4', '15',
                            '--filename', 'indicies_select',
                            '--output', str(tmp_path),
                            '--file', str(test_data_split)])
@@ -155,7 +153,7 @@ def test_split(tmp_path):
     assert (tmp_path / 'indicies_select_selected.nii.gz').exists()
     f1 = nib.load(tmp_path / 'indicies_select_others.nii.gz')
     f2 = nib.load(tmp_path / 'indicies_select_selected.nii.gz')
-    assert f1.shape[5] == 61
+    assert f1.shape[5] == 13
     assert f2.shape[5] == 3
 
 

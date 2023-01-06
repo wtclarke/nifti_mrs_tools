@@ -14,19 +14,15 @@ from nifti_mrs.validator import headerExtensionError
 from nifti_mrs.create_nmrs import gen_nifti_mrs, gen_nifti_mrs_hdr_ext
 
 # Files
-testsPath = Path('/Users/wclarke/Documents/Python/fsl_mrs/fsl_mrs/tests')
-# testsPath = Path(__file__).parent
-data = {'metab': testsPath / 'testdata/fsl_mrs/metab.nii.gz',
-        'unprocessed': testsPath / 'testdata/fsl_mrs_preproc/metab_raw.nii.gz',
-        'water': testsPath / 'testdata/fsl_mrs/wref.nii.gz',
-        'basis': testsPath / 'testdata/fsl_mrs/steam_basis'}
+testsPath = Path(__file__).parent
+data = {'unprocessed': testsPath / 'test_data' / 'metab_raw.nii.gz'}
 
 
 def test_nifti_mrs():
     obj = NIFTI_MRS(data['unprocessed'])
 
     assert obj.nifti_mrs_version == '0.2'
-    assert obj.shape == (1, 1, 1, 4096, 32, 64)
+    assert obj.shape == (1, 1, 1, 4096, 4, 16)
     assert obj.ndim == 6
     assert obj.dwelltime == 8.33e-05
     assert obj.nucleus == ['1H']
@@ -35,7 +31,7 @@ def test_nifti_mrs():
     assert obj.dim_tags == ['DIM_COIL', 'DIM_DYN', None]
     assert obj.dim_position('DIM_DYN') == 5
 
-    assert obj.copy(remove_dim='DIM_DYN').shape == (1, 1, 1, 4096, 32)
+    assert obj.copy(remove_dim='DIM_DYN').shape == (1, 1, 1, 4096, 4)
 
 
 def test_copy():
@@ -160,7 +156,7 @@ def test_set_dim_tag():
 
     with pytest.raises(
             ValueError,
-            match='New dim header length must be 64'):
+            match='New dim header length must be 16'):
         nmrs.set_dim_tag(
             'DIM_DYN',
             'DIM_DYN',
@@ -169,20 +165,20 @@ def test_set_dim_tag():
     nmrs.set_dim_tag(
         'DIM_DYN',
         'DIM_DYN',
-        header={'my_hdr': np.arange(64).tolist()})
-    assert nmrs.hdr_ext['dim_6_header'] == {'my_hdr': np.arange(64).tolist()}
+        header={'my_hdr': np.arange(16).tolist()})
+    assert nmrs.hdr_ext['dim_6_header'] == {'my_hdr': np.arange(16).tolist()}
 
 
 def test_nifti_mrs_filename():
     obj = NIFTI_MRS(data['unprocessed'])
     assert obj.filename == 'metab_raw.nii.gz'
 
-#     obj = gen_new_nifti_mrs(np.zeros((1, 1, 1, 2), dtype=complex), 0.0005, 120.0)
-#     assert obj.filename == ''
+    obj = gen_nifti_mrs(np.zeros((1, 1, 1, 2), dtype=complex), 0.0005, 120.0)
+    assert obj.filename == ''
 
 
 def test_nifti_mrs_save(tmp_path):
-    obj = NIFTI_MRS(data['metab'])
+    obj = NIFTI_MRS(data['unprocessed'])
     original = deepcopy(obj[:])
 
     obj.save(tmp_path / 'out')
@@ -207,7 +203,7 @@ def test_nifti_mrs_generator():
         break
 
     for gen_data, slice_idx in obj.iterate_over_dims(dim='DIM_COIL'):
-        assert gen_data.shape == (1, 1, 1, 4096, 32)
+        assert gen_data.shape == (1, 1, 1, 4096, 4)
         assert slice_idx == (slice(None, None, None),
                              slice(None, None, None),
                              slice(None, None, None),
@@ -217,7 +213,7 @@ def test_nifti_mrs_generator():
         break
 
     for gen_data, slice_idx in obj.iterate_over_dims(dim='DIM_DYN'):
-        assert gen_data.shape == (1, 1, 1, 4096, 64)
+        assert gen_data.shape == (1, 1, 1, 4096, 16)
         assert slice_idx == (slice(None, None, None),
                              slice(None, None, None),
                              slice(None, None, None),
@@ -226,13 +222,13 @@ def test_nifti_mrs_generator():
         break
 
     for gen_data, slice_idx in obj.iterate_over_dims(dim='DIM_DYN', iterate_over_space=True):
-        assert gen_data.shape == (4096, 64)
+        assert gen_data.shape == (4096, 16)
         assert slice_idx == (0, 0, 0, slice(None, None, None), 0, slice(None, None, None))
         break
 
     for gen_data, slice_idx in obj.iterate_over_dims(dim='DIM_DYN', iterate_over_space=True,
                                                      reduce_dim_index=True):
-        assert gen_data.shape == (4096, 64)
+        assert gen_data.shape == (4096, 16)
         assert slice_idx == (0, 0, 0, slice(None, None, None), 0)
         break
 
@@ -267,7 +263,7 @@ def test_nifti_mrs_spatial_generator():
     obj = NIFTI_MRS(data['unprocessed'])
 
     for gen_data, slice_idx in obj.iterate_over_spatial():
-        assert gen_data.shape == (4096, 32, 64)
+        assert gen_data.shape == (4096, 4, 16)
         assert slice_idx == (0, 0, 0,
                              slice(None, None, None),
                              slice(None, None, None),

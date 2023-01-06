@@ -16,12 +16,11 @@ from nifti_mrs import tools as nmrs_tools
 from nifti_mrs.create_nmrs import gen_nifti_mrs
 from nifti_mrs.tools.split_merge import NIfTI_MRSIncompatible
 
-testsPath = Path('/Users/wclarke/Documents/Python/fsl_mrs/fsl_mrs/tests')
-# testsPath = Path(__file__).parent
-test_data_split = testsPath / 'testdata' / 'fsl_mrs_preproc' / 'metab_raw.nii.gz'
-test_data_merge_1 = testsPath / 'testdata' / 'fsl_mrs_preproc' / 'wref_raw.nii.gz'
-test_data_merge_2 = testsPath / 'testdata' / 'fsl_mrs_preproc' / 'quant_raw.nii.gz'
-test_data_other = testsPath / 'testdata' / 'fsl_mrs_preproc' / 'ecc.nii.gz'
+testsPath = Path(__file__).parent
+test_data_split = testsPath / 'test_data' / 'metab_raw.nii.gz'
+test_data_merge_1 = testsPath / 'test_data' / 'wref_raw.nii.gz'
+test_data_merge_2 = testsPath / 'test_data' / 'quant_raw.nii.gz'
+test_data_other = testsPath / 'test_data' / 'ecc.nii.gz'
 
 
 def test_split_dim_header():
@@ -375,7 +374,7 @@ def test_split():
 
     assert exc_info.type is ValueError
     assert exc_info.value.args[0] == "index_or_indicies must be between 0 and N-1,"\
-                                     " where N is the size of the specified dimension (64)."
+                                     " where N is the size of the specified dimension (16)."
 
     # Single index - out of range high
     with pytest.raises(ValueError) as exc_info:
@@ -383,7 +382,7 @@ def test_split():
 
     assert exc_info.type is ValueError
     assert exc_info.value.args[0] == "index_or_indicies must be between 0 and N-1,"\
-                                     " where N is the size of the specified dimension (64)."
+                                     " where N is the size of the specified dimension (16)."
 
     # List of indicies - out of range low
     with pytest.raises(ValueError) as exc_info:
@@ -391,7 +390,7 @@ def test_split():
 
     assert exc_info.type is ValueError
     assert exc_info.value.args[0] == "index_or_indicies must have elements between 0 and N,"\
-                                     " where N is the size of the specified dimension (64)."
+                                     " where N is the size of the specified dimension (16)."
 
     # List of indicies - out of range high
     with pytest.raises(ValueError) as exc_info:
@@ -399,7 +398,7 @@ def test_split():
 
     assert exc_info.type is ValueError
     assert exc_info.value.args[0] == "index_or_indicies must have elements between 0 and N,"\
-                                     " where N is the size of the specified dimension (64)."
+                                     " where N is the size of the specified dimension (16)."
 
     # List of indicies - wrong type
     with pytest.raises(TypeError) as exc_info:
@@ -410,23 +409,23 @@ def test_split():
 
     # Functionality testing
 
-    out_1, out_2 = nmrs_tools.split(nmrs, 'DIM_DYN', 31)
-    assert out_1[:].shape == (1, 1, 1, 4096, 32, 32)
-    assert out_2[:].shape == (1, 1, 1, 4096, 32, 32)
-    assert np.allclose(out_1[:], nmrs[:, :, :, :, :, 0:32])
-    assert np.allclose(out_2[:], nmrs[:, :, :, :, :, 32:])
+    out_1, out_2 = nmrs_tools.split(nmrs, 'DIM_DYN', 7)
+    assert out_1[:].shape == (1, 1, 1, 4096, 4, 8)
+    assert out_2[:].shape == (1, 1, 1, 4096, 4, 8)
+    assert np.allclose(out_1[:], nmrs[:, :, :, :, :, 0:8])
+    assert np.allclose(out_2[:], nmrs[:, :, :, :, :, 8:])
     assert out_1.hdr_ext == nmrs.hdr_ext
     assert out_1.hdr_ext == nmrs.hdr_ext
     assert np.allclose(out_1.getAffine('voxel', 'world'), nmrs.getAffine('voxel', 'world'))
     assert np.allclose(out_2.getAffine('voxel', 'world'), nmrs.getAffine('voxel', 'world'))
 
-    out_1, out_2 = nmrs_tools.split(nmrs, 'DIM_DYN', [0, 32, 63])
-    assert out_1[:].shape == (1, 1, 1, 4096, 32, 61)
-    assert out_2[:].shape == (1, 1, 1, 4096, 32, 3)
-    test_list = np.arange(0, 64)
-    test_list = np.delete(test_list, [0, 32, 63])
+    out_1, out_2 = nmrs_tools.split(nmrs, 'DIM_DYN', [0, 4, 15])
+    assert out_1[:].shape == (1, 1, 1, 4096, 4, 13)
+    assert out_2[:].shape == (1, 1, 1, 4096, 4, 3)
+    test_list = np.arange(0, 16)
+    test_list = np.delete(test_list, [0, 4, 15])
     assert np.allclose(out_1[:], nmrs[:][:, :, :, :, :, test_list])
-    assert np.allclose(out_2[:], nmrs[:][:, :, :, :, :, [0, 32, 63]])
+    assert np.allclose(out_2[:], nmrs[:][:, :, :, :, :, [0, 4, 15]])
 
     # Split some synthetic data with header information
     nhdr_1 = gen_nifti_mrs(
@@ -454,7 +453,7 @@ def test_merge():
     nmrs_1 = NIFTI_MRS(test_data_merge_1)
     nmrs_2 = NIFTI_MRS(test_data_merge_2)
 
-    nmrs_bad_shape, _ = nmrs_tools.split(nmrs_2, 'DIM_COIL', 3)
+    nmrs_bad_shape, _ = nmrs_tools.split(nmrs_2, 'DIM_COIL', 1)
     nmrs_no_tag = NIFTI_MRS(test_data_other)
 
     # Error testing
@@ -497,8 +496,8 @@ def test_merge():
 
     assert exc_info.type is NIfTI_MRSIncompatible
     assert exc_info.value.args[0] == "The shape of all concatentated objects must match. "\
-                                     "The shape ((1, 1, 1, 4096, 4, 2)) of the 1 object does "\
-                                     "not match that of the first ((1, 1, 1, 4096, 32, 2))."
+                                     "The shape ((1, 1, 1, 4096, 2, 2)) of the 1 object does "\
+                                     "not match that of the first ((1, 1, 1, 4096, 4, 2))."
 
     # Incompatible tags
     with pytest.raises(NIfTI_MRSIncompatible) as exc_info:
@@ -511,7 +510,7 @@ def test_merge():
 
     # Functionality testing
     out = nmrs_tools.merge((nmrs_1, nmrs_2), 'DIM_DYN')
-    assert out[:].shape == (1, 1, 1, 4096, 32, 4)
+    assert out[:].shape == (1, 1, 1, 4096, 4, 4)
     assert np.allclose(out[:][:, :, :, :, :, 0:2], nmrs_1[:])
     assert np.allclose(out[:][:, :, :, :, :, 2:], nmrs_2[:])
     assert out.hdr_ext == nmrs_1.hdr_ext
@@ -521,7 +520,7 @@ def test_merge():
     nmrs_1_e = nmrs_tools.reorder(nmrs_1, ['DIM_COIL', 'DIM_DYN', 'DIM_EDIT'])
     nmrs_2_e = nmrs_tools.reorder(nmrs_2, ['DIM_COIL', 'DIM_DYN', 'DIM_EDIT'])
     out = nmrs_tools.merge((nmrs_1_e, nmrs_2_e), 'DIM_EDIT')
-    assert out[:].shape == (1, 1, 1, 4096, 32, 2, 2)
+    assert out[:].shape == (1, 1, 1, 4096, 4, 2, 2)
     assert out.hdr_ext['dim_7'] == 'DIM_EDIT'
 
     # Merge some synthetic data with header information
@@ -588,21 +587,21 @@ def test_reorder():
     # Functionality testing
     # Swap order of dimensions
     out = nmrs_tools.reorder(nmrs, ['DIM_DYN', 'DIM_COIL'])
-    assert out[:].shape == (1, 1, 1, 4096, 64, 32)
+    assert out[:].shape == (1, 1, 1, 4096, 16, 4)
     assert np.allclose(np.swapaxes(nmrs[:], 4, 5), out[:])
     assert out.hdr_ext['dim_5'] == 'DIM_DYN'
     assert out.hdr_ext['dim_6'] == 'DIM_COIL'
 
     # # Add an additional singleton at end (not reported in shape)
     out = nmrs_tools.reorder(nmrs, ['DIM_COIL', 'DIM_DYN', 'DIM_EDIT'])
-    assert out[:].shape == (1, 1, 1, 4096, 32, 64)
+    assert out[:].shape == (1, 1, 1, 4096, 4, 16)
     assert out.hdr_ext['dim_5'] == 'DIM_COIL'
     assert out.hdr_ext['dim_6'] == 'DIM_DYN'
     assert out.hdr_ext['dim_7'] == 'DIM_EDIT'
 
     # Add an additional singleton at 5 (not reported in shape)
     out = nmrs_tools.reorder(nmrs, ['DIM_EDIT', 'DIM_COIL', 'DIM_DYN'])
-    assert out[:].shape == (1, 1, 1, 4096, 1, 32, 64)
+    assert out[:].shape == (1, 1, 1, 4096, 1, 4, 16)
     assert out.hdr_ext['dim_5'] == 'DIM_EDIT'
     assert out.hdr_ext['dim_6'] == 'DIM_COIL'
     assert out.hdr_ext['dim_7'] == 'DIM_DYN'

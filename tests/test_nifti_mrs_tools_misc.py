@@ -6,9 +6,8 @@ from nifti_mrs.nifti_mrs import NIFTI_MRS
 from nifti_mrs import tools as nmrs_tools
 
 
-testsPath = Path('/Users/wclarke/Documents/Python/fsl_mrs/fsl_mrs/tests')
-# testsPath = Path(__file__).parent
-test_data = testsPath / 'testdata' / 'fsl_mrs_preproc' / 'metab_raw.nii.gz'
+testsPath = Path(__file__).parent
+test_data = testsPath / 'test_data' / 'metab_raw.nii.gz'
 
 
 def test_conjugate():
