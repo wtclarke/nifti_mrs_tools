@@ -1,3 +1,6 @@
 dependencies:
  - numpy
  - nibabel
+ - fslpy
+ - flake8
+ - pytest

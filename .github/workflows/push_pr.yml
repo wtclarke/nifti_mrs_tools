@@ -25,7 +25,7 @@ jobs:
           auto-update-conda: true
           python-version: ${{ matrix.python-version }}
           activate-environment: test
-          environment-file: .github/workflows/requirements.yml
+          environment-file: .github/requirements.yml
           auto-activate-base: false
           channels: conda-forge
       - shell: bash -l {0}
