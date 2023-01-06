@@ -35,12 +35,10 @@ jobs:
       - name: Lint
         shell: bash -l {0}
         run: |
-            conda install flake8
             python -m flake8 src
       - name: Run pytest
         shell: bash -l {0}
         run: |
-            conda install pytest
             pip install .
             pytest -k "not with_fsl_mrs" tests
             conda install -c conda-forge -c defaults \
