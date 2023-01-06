@@ -1,6 +1,10 @@
 #!/user/bin/env python
 
 from setuptools import setup
+import versioneer
 
 if __name__ == "__main__":
-    setup()
+    setup(
+        version=versioneer.get_version(),
+        cmdclass=versioneer.get_cmdclass(),
+    )
