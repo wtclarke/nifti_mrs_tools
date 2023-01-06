@@ -7,7 +7,9 @@ Copyright Will Clarke, University of Oxford, 2021'''
 # Imports
 import subprocess
 from pathlib import Path
+
 import nibabel as nib
+import pytest
 
 # Files
 testsPath = Path(__file__).parent
@@ -17,7 +19,23 @@ svs = testsPath / 'test_data' / 'metab.nii.gz'
 svs_raw = testsPath / 'test_data' / 'metab_raw.nii.gz'
 
 
+def test_vis_error(tmp_path):
+    try:
+        import fsl_mrs  # noqa: F401
+    except ImportError:
+        import mrs_tools
+        with pytest.raises(
+                ImportError,
+                match="mrs_tools vis requires FSL-MRS tools to be installed. "
+                      "See fsl-mrs.com for installation instructions."):
+            mrs_tools.main(['vis', str(svs)])
+    else:
+        pytest.skip("fsl-mrs present, skipping test")
+
+
+@pytest.mark.with_fsl_mrs
 def test_vis_svs(tmp_path):
+    pytest.importorskip("fsl_mrs")
     subprocess.check_call(['mrs_tools', 'vis',
                            '--ppmlim', '0.2', '4.2',
                            '--save', str(tmp_path / 'svs.png'),

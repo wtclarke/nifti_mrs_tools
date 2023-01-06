@@ -11,7 +11,7 @@ from pathlib import Path
 from nifti_mrs import __version__
 
 
-def main():
+def main(import_args=None):
     # Parse command-line arguments
     p = argparse.ArgumentParser(description="NIfTI-MRS (Magnetic Resonance Spectroscopy) tools")
 
@@ -120,7 +120,7 @@ def main():
     conjparser.set_defaults(func=conj)
 
     # Parse command-line arguments
-    args = p.parse_args()
+    args = p.parse_args(import_args)
 
     # Call function
     args.func(args)
@@ -131,14 +131,14 @@ def info(args):
     :param args: Argparse interpreted arguments
     :type args: Namespace
     """
-    from fsl_mrs.utils.mrs_io import read_FID
-    from fsl_mrs.utils.constants import GYRO_MAG_RATIO
+    from nifti_mrs.nifti_mrs import NIFTI_MRS
+    from mrs_tools.constants import GYRO_MAG_RATIO
 
     for file in args.file:
-        data = read_FID(str(file))
+        data = NIFTI_MRS(file)
 
         print(f'\nRead file {file.name} ({file.parent.resolve()}).')
-        print(f'NIfTI-MRS version {data.mrs_nifti_version}')
+        print(f'NIfTI-MRS version {data.nifti_mrs_version}')
         print(f'Data shape {data.shape}')
         print(f'Dimension tags: {data.dim_tags}')
 
@@ -153,15 +153,26 @@ def info(args):
 
 def vis(args):
     """Visualiser for NIfTI-MRS files
+
+    Visualisation requires FSL-MRS to be installed.
+
+    TO DO: Make fall-back visualisation.
+
     :param args: Argparse interpreted arguments
     :type args: Namespace
     """
-    from fsl_mrs.utils.plotting import plot_spectrum, plot_spectra
-    from fsl_mrs.utils.mrs_io import read_FID, read_basis
-    from fsl_mrs.utils.mrs_io.main import FileNotRecognisedError
-    import matplotlib.pyplot as plt
+    try:
+        from fsl_mrs.utils.plotting import plot_spectrum, plot_spectra
+        from fsl_mrs.utils.mrs_io import read_FID, read_basis
+        from fsl_mrs.utils.mrs_io.main import FileNotRecognisedError
+        import matplotlib.pyplot as plt
+        from fsl_mrs.utils.preproc import nifti_mrs_proc
+    except ImportError:
+        raise ImportError(
+            "mrs_tools vis requires FSL-MRS tools to be installed. "
+            "See fsl-mrs.com for installation instructions.")
+
     import numpy as np
-    from fsl_mrs.utils.preproc import nifti_mrs_proc
     import nibabel as nib
 
     # Single nifti file
@@ -251,8 +262,8 @@ def merge(args):
     :param args: Argparse interpreted arguments
     :type args: Namespace
     """
-    from fsl_mrs.utils import nifti_mrs_tools as nmrs_tools
-    from fsl_mrs.utils import mrs_io
+    import nifti_mrs.tools as nmrs_tools
+    from nifti_mrs.nifti_mrs import NIFTI_MRS
     # 1. Load the files
     if len(args.files) < 2:
         raise ValueError('Files argument must provide two or more files to merge.')
@@ -261,7 +272,7 @@ def merge(args):
     concat_names = []
     for fp in args.files:
         concat_names.append(fp.with_suffix('').with_suffix('').name)
-        to_concat.append(mrs_io.read_FID(str(fp)))
+        to_concat.append(NIFTI_MRS(fp))
 
     # 2. Merge the files
     merged = nmrs_tools.merge(to_concat, args.dim)
@@ -279,10 +290,10 @@ def split(args):
     :param args: Argparse interpreted arguments
     :type args: Namespace
     """
-    from fsl_mrs.utils import nifti_mrs_tools as nmrs_tools
-    from fsl_mrs.utils import mrs_io
+    import nifti_mrs.tools as nmrs_tools
+    from nifti_mrs.nifti_mrs import NIFTI_MRS
     # 1. Load the file
-    to_split = mrs_io.read_FID(str(args.file))
+    to_split = NIFTI_MRS(args.file)
     split_name = args.file.with_suffix('').with_suffix('').name
 
     # 2. Merge the files
@@ -314,10 +325,10 @@ def reorder(args):
     :param args: Argparse interpreted arguments
     :type args: Namespace
     """
-    from fsl_mrs.utils import nifti_mrs_tools as nmrs_tools
-    from fsl_mrs.utils import mrs_io
+    import nifti_mrs.tools as nmrs_tools
+    from nifti_mrs.nifti_mrs import NIFTI_MRS
     # 1. Load the file
-    to_reorder = mrs_io.read_FID(str(args.file))
+    to_reorder = NIFTI_MRS(args.file)
     reorder_name = args.file.with_suffix('').with_suffix('').name
 
     # 2. Merge the files
@@ -340,10 +351,10 @@ def conj(args):
     :param args: Argparse interpreted arguments
     :type args: Namespace
     """
-    from fsl_mrs.utils import nifti_mrs_tools as nmrs_tools
-    from fsl_mrs.utils import mrs_io
+    import nifti_mrs.tools as nmrs_tools
+    from nifti_mrs.nifti_mrs import NIFTI_MRS
     # 1. Load the file
-    infile = mrs_io.read_FID(str(args.file))
+    infile = NIFTI_MRS(args.file)
     name = args.file.with_suffix('').with_suffix('').name
 
     # 2. conjugate the file
