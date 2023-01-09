@@ -1,5 +1,9 @@
 This document contains the nifti_mrs_tools release history in reverse chronological order.
 
+0.0.5 (Monday 9th January 2023)
+-------------------------------
+- Update CI for publication 
+
 0.0.4 (Monday 9th January 2023)
 -------------------------------
 - Update CI publication CI
