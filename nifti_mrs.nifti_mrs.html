@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>nifti_mrs.nifti_mrs &mdash; nifti-mrs 0.0.8 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="nifti_mrs.create_nmrs" href="nifti_mrs.create_nmrs.html" />
+    <link rel="prev" title="nifti_mrs" href="nifti_mrs.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> nifti-mrs
+          </a>
+              <div class="version">
+                0.0.8
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="nifti_mrs.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs</span></code></a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.nifti_mrs</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTIMRS_DimDoesntExist"><code class="docutils literal notranslate"><span class="pre">NIFTIMRS_DimDoesntExist</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NotNIFTI_MRS"><code class="docutils literal notranslate"><span class="pre">NotNIFTI_MRS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.header"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.header</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.shape"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.shape</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.ndim"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.ndim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.nifti_mrs_version"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.nifti_mrs_version</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.set_version_info"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.set_version_info()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.dwelltime"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.dwelltime</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.spectralwidth"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.spectralwidth</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.bandwidth"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.bandwidth</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.nucleus"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.nucleus</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.spectrometer_frequency"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.spectrometer_frequency</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.getAffine"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.getAffine()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.hdr_ext"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.hdr_ext</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.add_hdr_field"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.add_hdr_field()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.remove_hdr_field"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.remove_hdr_field()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.filename"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.filename</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.dim_tags"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.dim_tags</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.dim_position"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.dim_position()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.set_dim_tag"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.set_dim_tag()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.copy"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.save"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.save()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.iterate_over_dims"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.iterate_over_dims()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.iterate_over_spatial"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.iterate_over_spatial()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.dynamic_hdr_vals"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.dynamic_hdr_vals()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nifti_mrs.create_nmrs.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.create_nmrs</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="nifti_mrs.definitions.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.definitions</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="nifti_mrs.validator.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.validator</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="nifti_mrs.hdr_ext.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.hdr_ext</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="nifti_mrs.tools.misc.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.misc</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="nifti_mrs.tools.reshape.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.reshape</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="nifti_mrs.tools.split_merge.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.split_merge</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="nifti_mrs.tools.utils.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.utils</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mrs_tools.html"><code class="docutils literal notranslate"><span class="pre">mrs_tools</span></code></a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">nifti-mrs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="nifti_mrs.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.nifti_mrs</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/nifti_mrs.nifti_mrs.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-nifti_mrs.nifti_mrs">
+<span id="nifti-mrs-nifti-mrs"></span><h1><code class="docutils literal notranslate"><span class="pre">nifti_mrs.nifti_mrs</span></code><a class="headerlink" href="#module-nifti_mrs.nifti_mrs" title="Permalink to this heading"></a></h1>
+<p>Core NIfTI-MRS class.
+For more information on NIfTI-MRS see <a class="reference external" href="https://github.com/wtclarke/mrs_nifti_standard">https://github.com/wtclarke/mrs_nifti_standard</a></p>
+<p>Copyright William Clarke, University of Oxford, 2023</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTIMRS_DimDoesntExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nifti_mrs.nifti_mrs.</span></span><span class="sig-name descname"><span class="pre">NIFTIMRS_DimDoesntExist</span></span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTIMRS_DimDoesntExist" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NotNIFTI_MRS">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nifti_mrs.nifti_mrs.</span></span><span class="sig-name descname"><span class="pre">NotNIFTI_MRS</span></span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NotNIFTI_MRS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nifti_mrs.nifti_mrs.</span></span><span class="sig-name descname"><span class="pre">NIFTI_MRS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS" title="Permalink to this definition"></a></dt>
+<dd><p>A class to load and represent NIfTI-MRS formatted data.
+Utilises the fslpy Image class and nibabel nifti headers.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.header">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">header</span></span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.header" title="Permalink to this definition"></a></dt>
+<dd><p>Returns NIfTI-MRS header object</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.shape">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.shape" title="Permalink to this definition"></a></dt>
+<dd><p>Returns data shape</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.ndim">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ndim</span></span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.ndim" title="Permalink to this definition"></a></dt>
+<dd><p>Returns number of data dimensions</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.nifti_mrs_version">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nifti_mrs_version</span></span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.nifti_mrs_version" title="Permalink to this definition"></a></dt>
+<dd><p>Get NIfTI-MRS version string.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.set_version_info">
+<span class="sig-name descname"><span class="pre">set_version_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">major</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.set_version_info" title="Permalink to this definition"></a></dt>
+<dd><p>Puts mrs_v{major}_{minor} into intent_name</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.dwelltime">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dwelltime</span></span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.dwelltime" title="Permalink to this definition"></a></dt>
+<dd><p>Return dwelltime in seconds</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.spectralwidth">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">spectralwidth</span></span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.spectralwidth" title="Permalink to this definition"></a></dt>
+<dd><p>Return spectral width in Hz</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.bandwidth">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bandwidth</span></span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.bandwidth" title="Permalink to this definition"></a></dt>
+<dd><p>Alias for spectralwidth (Hz)</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.nucleus">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nucleus</span></span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.nucleus" title="Permalink to this definition"></a></dt>
+<dd><p>Returns resonant nucleus string(s) - returns list</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.spectrometer_frequency">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">spectrometer_frequency</span></span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.spectrometer_frequency" title="Permalink to this definition"></a></dt>
+<dd><p>Central or spectrometer frequency in MHz - returns list</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.getAffine">
+<span class="sig-name descname"><span class="pre">getAffine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.getAffine" title="Permalink to this definition"></a></dt>
+<dd><p>Return an affine transformation which can be used to transform
+coordinates from <code class="docutils literal notranslate"><span class="pre">from_</span></code> to <code class="docutils literal notranslate"><span class="pre">to</span></code>.</p>
+<p>Valid values for the <code class="docutils literal notranslate"><span class="pre">from_</span></code> and <code class="docutils literal notranslate"><span class="pre">to</span></code> arguments are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'voxel'</span></code>: The voxel coordinate system</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'world'</span></code>: The world coordinate system, as defined by the image
+sform/qform</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'fsl'</span></code>: The FSL coordinate system (scaled voxels, with a
+left-right flip if the sform/qform has a positive determinant)</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>from</strong> – Source coordinate system</p></li>
+<li><p><strong>to</strong> – Destination coordinate system</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A <code class="docutils literal notranslate"><span class="pre">numpy</span></code> array of shape <code class="docutils literal notranslate"><span class="pre">(4,</span> <span class="pre">4)</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.hdr_ext">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hdr_ext</span></span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.hdr_ext" title="Permalink to this definition"></a></dt>
+<dd><p>Return MRS JSON header extension object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.add_hdr_field">
+<span class="sig-name descname"><span class="pre">add_hdr_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.add_hdr_field" title="Permalink to this definition"></a></dt>
+<dd><p>Add a field to the header extension</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>str</em>) – Field key</p></li>
+<li><p><strong>value</strong> – Value of field to add</p></li>
+<li><p><strong>doc</strong> (<em>optional</em><em>, </em><em>str</em>) – Use to convey meaning of user-defined header value.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.remove_hdr_field">
+<span class="sig-name descname"><span class="pre">remove_hdr_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.remove_hdr_field" title="Permalink to this definition"></a></dt>
+<dd><p>Remove a field from the header extension</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> (<em>str</em>) – Key to remove</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.filename">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">filename</span></span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.filename" title="Permalink to this definition"></a></dt>
+<dd><p>Name of file object was generated from.
+Returns empty string if N/A.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.dim_tags">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dim_tags</span></span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.dim_tags" title="Permalink to this definition"></a></dt>
+<dd><p>Return the three higher dimension tags</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.dim_position">
+<span class="sig-name descname"><span class="pre">dim_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim_tag</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.dim_position" title="Permalink to this definition"></a></dt>
+<dd><p>Return position of dim if it exists.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.set_dim_tag">
+<span class="sig-name descname"><span class="pre">set_dim_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.set_dim_tag" title="Permalink to this definition"></a></dt>
+<dd><p>Set or update the dim_N, dim_N_info, and dim_N_header fields</p>
+<p>Tag must be one of the standard-defined tags (e.g. DIM_DYN)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dim</strong> (<em>str</em><em> or </em><em>int</em>) – The existing dim tag or python dimension index (i.e. N-1)</p></li>
+<li><p><strong>tag</strong> (<em>str</em>) – New tag</p></li>
+<li><p><strong>info</strong> (<em>str</em>) – New info string</p></li>
+<li><p><strong>header</strong> (<em>dict</em>) – dict containing the dimension headers</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">remove_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.copy" title="Permalink to this definition"></a></dt>
+<dd><p>Return a copy of this image, optionally with a dimension removed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>remove_dim</strong> (<em>str</em><em> or </em><em>int</em><em>, </em><em>optional</em>) – dimension index (4, 5, 6) or tag. None iterates over all indices., defaults to None</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Copy of object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS" title="nifti_mrs.nifti_mrs.NIFTI_MRS">NIFTI_MRS</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.save" title="Permalink to this definition"></a></dt>
+<dd><p>Save NIfTI-MRS to file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<em>str</em><em> or </em><em>pathlib.Path</em>) – Name and path of save loaction</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.iterate_over_dims">
+<span class="sig-name descname"><span class="pre">iterate_over_dims</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterate_over_space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduce_dim_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voxel_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.iterate_over_dims" title="Permalink to this definition"></a></dt>
+<dd><p>Return generator to iterate over all indices or one dimension (and FID).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dim</strong> (<em>str</em><em> or </em><em>int</em><em>, </em><em>optional</em>) – None, dimension index (4, 5, 6) or tag. None iterates over all indices. Defaults to None</p></li>
+<li><p><strong>iterate_over_space</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True also iterate over spatial dimension, defaults to False</p></li>
+<li><p><strong>reduce_dim_index</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True the returned slice index will have the selected dimension removed.
+Defaults to False.</p></li>
+<li><p><strong>voxel_index</strong> (<em>slice</em><em> or </em><em>tuple</em><em>, </em><em>optional</em>) – slice or tuple of first three spatial dimensions., defaults to None</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>yeildsarray of sliced data</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>data location slice object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>slice</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.iterate_over_spatial">
+<span class="sig-name descname"><span class="pre">iterate_over_spatial</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.iterate_over_spatial" title="Permalink to this definition"></a></dt>
+<dd><p>Iterate over spatial voxels yeilding a data array the shape of the FID and any higher dimensions + index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Yield</dt>
+<dd class="field-odd"><p>Complex FID data with any higher dimensions. Index to data.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.dynamic_hdr_vals">
+<span class="sig-name descname"><span class="pre">dynamic_hdr_vals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.dynamic_hdr_vals" title="Permalink to this definition"></a></dt>
+<dd><p>Return representations of the dynamic header values</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of dicts containing labeled header parameters</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of tuples containing header values</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Flattened numpy array for each generated spectrum containing header values</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="nifti_mrs.html" class="btn btn-neutral float-left" title="nifti_mrs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="nifti_mrs.create_nmrs.html" class="btn btn-neutral float-right" title="nifti_mrs.create_nmrs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, William Clarke, University of Oxford, Oxford, UK.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
