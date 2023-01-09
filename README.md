@@ -2,11 +2,15 @@
 
 ![PyPI](https://img.shields.io/pypi/v/nifti-mrs)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/nifti-mrs)
-
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7517423.svg)](https://doi.org/10.5281/zenodo.7517423)
+![PyPI - License](https://img.shields.io/pypi/l/nifti-mrs)
 
 This package contains python-based tools for representing, validating, and manipulating the [NIfTI-MRS format](https://github.com/wtclarke/mrs_nifti_standard/blob/master/specification.MD). [NIfTI-MRS](https://github.com/wtclarke/mrs_nifti_standard) is a standardised format for storing Magnetic Resonance Spectroscopy data. 
 
 These tools are used extensively in the [spec2nii](https://github.com/wtclarke/spec2nii) format conversion program and the [FSL-MRS](fsl-mrs.com) analysis software. However, this library can also be used as a stand-alone set of tools.
+
+If you use these tools please cite:
+_Clarke, WT, Bell, TK, Emir, UE, et al. NIfTI-MRS: A standard data format for magnetic resonance spectroscopy. Magn Reson Med. 2022; 88: 2358- 2370. doi:[10.1002/mrm.29418](https://doi.org/10.1002/mrm.29418)_
 
 ## Installation
 Installation is via [conda(-forge)]() or [Pypi](https://pypi.org/project/nifti-mrs/).
