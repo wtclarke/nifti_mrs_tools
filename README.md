@@ -1,5 +1,9 @@
 # Python Tools for NIfTI-MRS
 
+![PyPI](https://img.shields.io/pypi/v/nifti-mrs)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/nifti-mrs)
+
+
 This package contains python-based tools for representing, validating, and manipulating the [NIfTI-MRS format](https://github.com/wtclarke/mrs_nifti_standard/blob/master/specification.MD). [NIfTI-MRS](https://github.com/wtclarke/mrs_nifti_standard) is a standardised format for storing Magnetic Resonance Spectroscopy data. 
 
 These tools are used extensively in the [spec2nii](https://github.com/wtclarke/spec2nii) format conversion program and the [FSL-MRS](fsl-mrs.com) analysis software. However, this library can also be used as a stand-alone set of tools.
@@ -18,8 +22,6 @@ Note this package is a requirement of _spec2nii_ (>v0.4.9) and _FSL-MRS_ (>v2.0.
 ## Using the package
 ### Command-line tool - _mrs_tools_
 
-
-
 MRS data stored in NIfTI-MRS format can contain multiple higher dimensions. For example it might contain dimensions encoding multiple receive coils, multiple temporal averages, or even a spectral editing dimension.
 
 Data might need to be manipulated within the NIfTI-MRS storage framework before, after, or during preprocessing. For this, FLS-MRS provides the `mrs_tools` command line script. `mrs_tools` has the ability to merge and split NIfTI-MRS files along the higher encoding dimensions. It can also reorder the higher dimensions, or create a new singleton dimension for further manipulation.
@@ -32,7 +34,7 @@ Data might need to be manipulated within the NIfTI-MRS storage framework before,
 
 `mrs_tools` also contains the `mrs_tools vis` and `mrs_tools info` options to provide quick visualisation and information on the command line. See the [FSL-MRS Visualisation documentation](https://open.win.ox.ac.uk/pages/fsl/fsl_mrs/visualisation.html#quick-glance) for more information on `mrs_tools vis/info`.
 
-__Note: visualisation of NIfTI-MRS data using `mrs_tools` requires the installation of the fsl-mrs package (fsl-mrs.com)__
+__Note: visualisation of NIfTI-MRS data using `mrs_tools` requires the installation of the [FSL-MRS package](fsl-mrs.com)__
 
 ### As a code library
 The command-line tools presents an interface to the underlying code library. The library can be used directly in interactive or scripted python. For example:
@@ -51,7 +53,7 @@ part_1.save('output/location/part_1.nii.gz')
 
 ```
 
-See the [API documentation]() for details.
+See the [API documentation](https://wtclarke.github.io/nifti_mrs_tools/index.html) for details.
 
 ## Contributing and tests
 Contributions to improve or extend these tools via pull requests are extremely welcome. Contributors, please take time to develop tests to continually validate new features or changes.
