@@ -10,11 +10,14 @@ class Hdr_Ext:
     set_user_def respectively.
     """
     def __init__(self, spec_frequency, resonant_nucleus, dimensions=7):
-        """Initialise class object with the two required bits of meta-data
-        Set default dimension information.
-        Inputs:
-            spec_frequency: Spectrometer frequency in MHz,
-            resonant_nucleus: Resonant nucleus string e.g. '1H'
+        """Initialise NIfTI-MRS header extension object with the two mandatory bits of meta-data.
+
+        :param spec_frequency: Spectrometer frequency in MHz
+        :type spec_frequency: float
+        :param resonant_nucleus: Resonant nucleus e.g. '1H'
+        :type resonant_nucleus: str
+        :param dimensions: Number of dimensions in image. Controls number of dim tags in extension. Defaults to 7
+        :type dimensions: int, optional
         """
         if isinstance(spec_frequency, float):
             self.SpectrometerFrequency = [spec_frequency, ]
@@ -77,12 +80,16 @@ class Hdr_Ext:
         return obj
 
     def set_dim_info(self, dim, tag, info=None, hdr=None):
-        """Set information associated with the optional data dimensions.
-        Inputs:
-            dim: May be (0,1,2) or ("5th","6th","7th")
-            tag: Must be one of the defined dimension tag strings.
-            info: Optional, free-form use string.
-            hdr: Dict containing relevant header value names and values.
+        """Set information associated with the optional, higher data dimensions.
+
+        :param dim:  May be (0,1,2) or ("5th","6th","7th")
+        :type dim: str or int
+        :param tag: Must be one of the defined dimension tag strings. E.g. DIM_DYN
+        :type tag: str
+        :param info: Optional, free-form for documentation, defaults to None
+        :type info: str, optional
+        :param hdr: Dict containing relevant header value names and values. Defaults to None
+        :type hdr: dict, optional
         """
         if tag not in dimension_tags:
             raise ValueError("tag must be one of the defined dimension tag.")

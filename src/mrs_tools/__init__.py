@@ -18,7 +18,7 @@ def main(import_args=None):
     p.add_argument('-v', '--version', action='version', version=__version__)
 
     sp = p.add_subparsers(title='subcommands',
-                          description='Availible tools',
+                          description='Available tools',
                           required=True,
                           dest='subcommand')
 
