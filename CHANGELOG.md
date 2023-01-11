@@ -1,5 +1,9 @@
 This document contains the nifti_mrs_tools release history in reverse chronological order.
 
+0.1.1 (Wednesday 11th January 2023)
+-----------------------------------
+- Make compliant with NIfTI-MRS V0.6
+
 0.1.0 (Monday 9th January 2023)
 -------------------------------
 - First full release
