@@ -2,3 +2,5 @@ __pycache__/
 *.egg-info/
 .vscode
 tmp_notes
+build
+

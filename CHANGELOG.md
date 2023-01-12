@@ -1,5 +1,9 @@
 This document contains the nifti_mrs_tools release history in reverse chronological order.
 
+0.1.2 (Thursday 12th January 2023)
+----------------------------------
+- Add option to prevent conjugation with numpy data. For spec2nii compatibility.
+
 0.1.1 (Wednesday 11th January 2023)
 -----------------------------------
 - Make compliant with NIfTI-MRS V0.6

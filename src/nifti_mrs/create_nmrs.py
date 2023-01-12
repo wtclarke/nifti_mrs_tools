@@ -37,7 +37,15 @@ def _default_affine():
     return default
 
 
-def gen_nifti_mrs(data, dwelltime, spec_freq, nucleus='1H', affine=None, dim_tags=[None, None, None], nifti_version=2):
+def gen_nifti_mrs(
+        data,
+        dwelltime,
+        spec_freq,
+        nucleus='1H',
+        affine=None,
+        dim_tags=[None, None, None],
+        nifti_version=2,
+        no_conj=False):
     """Generate NIfTI-MRS from data and required metadata
 
     :param data: Complex-typed numpy array of at least 4 dimensions (max 7)
@@ -54,6 +62,8 @@ def gen_nifti_mrs(data, dwelltime, spec_freq, nucleus='1H', affine=None, dim_tag
     :type dim_tags: list, optional
     :param nifti_version: Version of NIfTI header format, defaults to 2
     :type nifti_version: int, optional
+    :param no_conj: If true stops conjugation of data on creation, defaults to False
+    :type no_conj: bool, optional
     :return: NIfTI-MRS object
     :rtype: nifti_mrs.nifti_mrs.NIFTI_MRS
     """
@@ -74,10 +84,11 @@ def gen_nifti_mrs(data, dwelltime, spec_freq, nucleus='1H', affine=None, dim_tag
         dwelltime,
         hdr_ext,
         affine=affine,
-        nifti_version=nifti_version)
+        nifti_version=nifti_version,
+        no_conj=no_conj)
 
 
-def gen_nifti_mrs_hdr_ext(data, dwelltime, hdr_ext, affine=None, nifti_version=2):
+def gen_nifti_mrs_hdr_ext(data, dwelltime, hdr_ext, affine=None, nifti_version=2, no_conj=False):
     """Generate NIfTI-MRS from data and header extension object
 
     :param data: Complex-typed numpy array of at least 4 dimensions (max 7)
@@ -92,6 +103,8 @@ def gen_nifti_mrs_hdr_ext(data, dwelltime, hdr_ext, affine=None, nifti_version=2
     :type dim_tags: list, optional
     :param nifti_version: Version of NIfTI header format, defaults to 2
     :type nifti_version: int, optional
+    :param no_conj: If true stops conjugation of data on creation, defaults to False
+    :type no_conj: bool, optional
     :return: NIfTI-MRS object
     :rtype: nifti_mrs.nifti_mrs.NIFTI_MRS
     """
@@ -133,4 +146,7 @@ def gen_nifti_mrs_hdr_ext(data, dwelltime, hdr_ext, affine=None, nifti_version=2
     extension = nib.nifti1.Nifti1Extension(44, json_s.encode('UTF-8'))
     header.extensions.append(extension)
 
-    return NIFTI_MRS(data, header=header)
+    if no_conj:
+        return NIFTI_MRS(data.conj(), header=header)
+    else:
+        return NIFTI_MRS(data, header=header)

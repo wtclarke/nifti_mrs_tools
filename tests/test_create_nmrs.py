@@ -72,3 +72,11 @@ def test_gen_new_nifti_mrs_conj(tmp_path):
                          nucleus='1H')
 
     assert np.allclose(nmrs[:], obj_in[:])
+
+    nmrs = gen_nifti_mrs(obj_in[:],
+                         obj_in.dwelltime,
+                         obj_in.spectrometer_frequency[0],
+                         nucleus='1H',
+                         no_conj=True)
+
+    assert np.allclose(nmrs[:], obj_in[:].conj())
