@@ -130,6 +130,7 @@ class Hdr_Ext:
 
         self._dim_info.pop(dim)
         self._dim_info.append({"tag": None, "info": None, "hdr": None})
+        self.dimensions -= 1
 
     def set_standard_def(self, key, value):
         """Add a single standard-defined bit of meta-data to the object."""
