@@ -31,7 +31,10 @@ def test_nifti_mrs():
     assert obj.dim_tags == ['DIM_COIL', 'DIM_DYN', None]
     assert obj.dim_position('DIM_DYN') == 5
 
-    assert obj.copy(remove_dim='DIM_DYN').shape == (1, 1, 1, 4096, 4)
+    copy_obj = obj.copy(remove_dim='DIM_DYN')
+    assert copy_obj.shape == (1, 1, 1, 4096, 4)
+    assert copy_obj.dim_tags == ['DIM_COIL', None, None]
+    assert copy_obj.hdr_ext.dimensions == 5
 
 
 def test_copy():

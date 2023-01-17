@@ -1,5 +1,9 @@
 This document contains the nifti_mrs_tools release history in reverse chronological order.
 
+0.1.4 (Tuesday 17th January 2023)
+---------------------------------
+- Fix bug in NIFTI_MRS.copy() when reducing dimensionality
+
 0.1.3 (Tuesday 17th January 2023)
 ---------------------------------
 - Increment definitions to match standard V0.7
