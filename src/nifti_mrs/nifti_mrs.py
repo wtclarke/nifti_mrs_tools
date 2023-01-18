@@ -27,7 +27,10 @@ class NotNIFTI_MRS(Exception):
 
 class NIFTI_MRS():
     """A class to load and represent NIfTI-MRS formatted data.
-    Utilises the fslpy Image class and nibabel nifti headers."""
+    Utilises the fslpy Image class and nibabel nifti headers.
+
+    Access the underlying fslpy Image object for useful attributes using obj.image.
+    """
 
     def __init__(self, *args, **kwargs):
         """Create a NIFTI_MRS object with the given image data or file name.
@@ -73,6 +76,7 @@ class NIFTI_MRS():
         (if it is called).
         """
         # Handle various options for the first (data source) argument
+        input_hdr_ext = None
         if isinstance(args[0], np.ndarray):
             # If generated from np.array include conjugation
             # to make sure generation from data of existing NIfTI-MRS
@@ -90,10 +94,11 @@ class NIFTI_MRS():
         elif isinstance(args[0], NIFTI_MRS):
             args = list(args)
             filename = args[0].filename
-            args[0] = args[0]._image
+            input_hdr_ext = args[0].hdr_ext
+            args[0] = args[0].image
 
         # Instantiate Image object
-        self._image = Image(*args, **kwargs)
+        self.image = Image(*args, **kwargs)
 
         # Store original filename for reports etc
         self._filename = filename
@@ -105,14 +110,17 @@ class NIFTI_MRS():
         except IndexError:
             raise NotNIFTI_MRS('NIFTI-MRS intent code not set.')
 
-        hdr_ext_codes = self.header.extensions.get_codes()
-        if 44 not in hdr_ext_codes:
-            raise NotNIFTI_MRS('NIFTI-MRS must have a header extension.')
+        if input_hdr_ext is not None:
+            self._hdr_ext = input_hdr_ext
+        else:
+            hdr_ext_codes = self.header.extensions.get_codes()
+            if 44 not in hdr_ext_codes:
+                raise NotNIFTI_MRS('NIFTI-MRS must have a header extension.')
 
-        self._hdr_ext = Hdr_Ext.from_header_ext(
-            json.loads(
-                self.header.extensions[hdr_ext_codes.index(44)].get_content()),
-            dimensions=self.ndim)
+            self._hdr_ext = Hdr_Ext.from_header_ext(
+                json.loads(
+                    self.header.extensions[hdr_ext_codes.index(44)].get_content()),
+                dimensions=self.ndim)
 
         try:
             self.nucleus
@@ -125,7 +133,7 @@ class NIFTI_MRS():
         NIFTI-MRS and Levvit inspired right-handed reference frame
         to a left-handed one, which FSL-MRS development started in.'''
         # print(f'getting {sliceobj} to conjugate {super().__getitem__(sliceobj)}')
-        return self._image[sliceobj].conj()
+        return self.image[sliceobj].conj()
 
     def __setitem__(self, sliceobj, values):
         '''Apply conjugation back at write. This swaps from the
@@ -133,29 +141,34 @@ class NIFTI_MRS():
         inspired right-handed reference frame.'''
         # print(f'setting {sliceobj} to conjugate of {values[0]}')
         # print(super().__getitem__(sliceobj)[0])
-        self._image[sliceobj] = values.conj()
+        self.image[sliceobj] = values.conj()
         # print(super().__getitem__(sliceobj)[0])
 
     # Implement useful calls to attributes of the image class object. Should I just be using inheretence here? Not sure.
     @property
     def header(self):
         """Returns NIfTI-MRS header object"""
-        return self._image.header
+        return self.image.header
 
     @property
     def shape(self):
         """Returns data shape"""
-        return self._image.shape
+        return self.image.shape
 
     @property
     def ndim(self):
         """Returns number of data dimensions"""
-        return self._image.ndim
+        return self.image.ndim
+
+    @property
+    def dtype(self):
+        """Returns data type"""
+        return self.image.dtype
 
     @property
     def nifti_mrs_version(self):
         """Get NIfTI-MRS version string."""
-        tmp_vstr = self._image.header.get_intent()[2].split('_')
+        tmp_vstr = self.image.header.get_intent()[2].split('_')
         return tmp_vstr[1].lstrip('v') + '.' + tmp_vstr[2]
 
     def set_version_info(self, major, minor):
@@ -208,7 +221,21 @@ class NIFTI_MRS():
         :arg to:    Destination coordinate system
         :returns:   A ``numpy`` array of shape ``(4, 4)``
         """
-        return self._image.getAffine(*args)
+        return self.image.getAffine(*args)
+
+    @property
+    def worldToVoxMat(self):
+        """Returns a ``numpy`` array of shape ``(4, 4)`` containing an
+        affine transformation from world coordinates to voxel coordinates.
+        """
+        return self.getAffine('world', 'voxel')
+
+    @property
+    def voxToWorldMat(self):
+        """Returns a ``numpy`` array of shape ``(4, 4)`` containing an
+        affine transformation from voxel coordinates to world coordinates.
+        """
+        return self.getAffine('voxel', 'world')
 
     @property
     def hdr_ext(self):
@@ -322,6 +349,8 @@ class NIFTI_MRS():
             if dim in self.dim_tags:
                 dim = self.dim_tags.index(dim)
                 dim += 4
+            else:
+                raise NIFTIMRS_DimDoesntExist(f"{dim} doesn't exist in list of tags: {self.dim_tags}")
         return dim
 
     def set_dim_tag(self, dim, tag, info=None, header=None):
@@ -380,7 +409,7 @@ class NIFTI_MRS():
             new_obj._filename = self.filename
 
             # Modify the dim information in
-            hdr_ext = self.hdr_ext
+            hdr_ext = self.hdr_ext.copy()
             hdr_ext.remove_dim_info(dim - 4)
             new_obj.hdr_ext = hdr_ext.to_dict()
 
@@ -398,10 +427,10 @@ class NIFTI_MRS():
         self._save_hdr_ext()
 
         # Run validation
-        validator.validate_nifti_mrs(self._image)
+        validator.validate_nifti_mrs(self.image)
 
         # Save underlying image object to file
-        self._image.save(filepath)
+        self.image.save(filepath)
 
     # Methods for iteration over dimensions
     def iterate_over_dims(self, dim=None, iterate_over_space=False, reduce_dim_index=False, voxel_index=None):
