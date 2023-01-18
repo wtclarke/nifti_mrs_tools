@@ -2,7 +2,10 @@ This document contains the nifti_mrs_tools release history in reverse chronologi
 
 0.1.4 (Tuesday 17th January 2023)
 ---------------------------------
-- Fix bug in NIFTI_MRS.copy() when reducing dimensionality
+- Fixed a bug in NIFTI_MRS.copy() when reducing dimensionality
+- Fixed type of ProcessingApplied key in definitions
+- Fixed bug in hdr_ext dimensions when creating NIFTI_MRS from NIFTI_MRS
+- Added utility members to NIFTI_MRS class
 
 0.1.3 (Tuesday 17th January 2023)
 ---------------------------------

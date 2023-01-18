@@ -253,7 +253,7 @@ standard_defined = {
          False),
     # 5.8 Processing Provenance
     'ProcessingApplied':
-        (dict,
+        (list,
          None,
          "Describes and records the processing steps applied to the data.",
          False)}
