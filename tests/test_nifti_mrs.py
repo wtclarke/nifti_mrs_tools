@@ -345,4 +345,4 @@ def test_getaffine():
     obj = NIFTI_MRS(data['unprocessed'])
     assert np.allclose(
         obj.getAffine('voxel', 'world'),
-        obj._image.getAffine('voxel', 'world'))
+        obj.image.getAffine('voxel', 'world'))
