@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>nifti_mrs.nifti_mrs &mdash; nifti-mrs 0.1.4 documentation</title>
+  <title>nifti_mrs.nifti_mrs &mdash; nifti-mrs 0.1.5 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,9 +12,6 @@
   <![endif]-->
   
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -29,14 +26,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> nifti-mrs
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            nifti-mrs
           </a>
               <div class="version">
-                0.1.4
+                0.1.5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -105,7 +106,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="nifti_mrs.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs</span></code></a></li>
       <li class="breadcrumb-item active"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.nifti_mrs</span></code></li>
       <li class="wy-breadcrumbs-aside">
@@ -220,13 +221,13 @@ left-right flip if the sform/qform has a positive determinant)</p></li>
 </ul>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>from</strong> – Source coordinate system</p></li>
 <li><p><strong>to</strong> – Destination coordinate system</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A <code class="docutils literal notranslate"><span class="pre">numpy</span></code> array of shape <code class="docutils literal notranslate"><span class="pre">(4,</span> <span class="pre">4)</span></code></p>
 </dd>
 </dl>
@@ -257,7 +258,7 @@ affine transformation from voxel coordinates to world coordinates.</p>
 <span class="sig-name descname"><span class="pre">add_hdr_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.add_hdr_field" title="Permalink to this definition"></a></dt>
 <dd><p>Add a field to the header extension</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>key</strong> (<em>str</em>) – Field key</p></li>
 <li><p><strong>value</strong> – Value of field to add</p></li>
@@ -272,7 +273,7 @@ affine transformation from voxel coordinates to world coordinates.</p>
 <span class="sig-name descname"><span class="pre">remove_hdr_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.remove_hdr_field" title="Permalink to this definition"></a></dt>
 <dd><p>Remove a field from the header extension</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>key</strong> (<em>str</em>) – Key to remove</p>
 </dd>
 </dl>
@@ -303,7 +304,7 @@ Returns empty string if N/A.</p>
 <dd><p>Set or update the dim_N, dim_N_info, and dim_N_header fields</p>
 <p>Tag must be one of the standard-defined tags (e.g. DIM_DYN)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dim</strong> (<em>str</em><em> or </em><em>int</em>) – The existing dim tag or python dimension index (i.e. N-1)</p></li>
 <li><p><strong>tag</strong> (<em>str</em>) – New tag</p></li>
@@ -319,13 +320,13 @@ Returns empty string if N/A.</p>
 <span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">remove_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.copy" title="Permalink to this definition"></a></dt>
 <dd><p>Return a copy of this image, optionally with a dimension removed.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>remove_dim</strong> (<em>str</em><em> or </em><em>int</em><em>, </em><em>optional</em>) – dimension index (4, 5, 6) or tag. None iterates over all indices., defaults to None</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Copy of object</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS" title="nifti_mrs.nifti_mrs.NIFTI_MRS">NIFTI_MRS</a></p>
 </dd>
 </dl>
@@ -336,7 +337,7 @@ Returns empty string if N/A.</p>
 <span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.save" title="Permalink to this definition"></a></dt>
 <dd><p>Save NIfTI-MRS to file</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>filepath</strong> (<em>str</em><em> or </em><em>pathlib.Path</em>) – Name and path of save loaction</p>
 </dd>
 </dl>
@@ -347,7 +348,7 @@ Returns empty string if N/A.</p>
 <span class="sig-name descname"><span class="pre">iterate_over_dims</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterate_over_space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduce_dim_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voxel_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.iterate_over_dims" title="Permalink to this definition"></a></dt>
 <dd><p>Return generator to iterate over all indices or one dimension (and FID).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dim</strong> (<em>str</em><em> or </em><em>int</em><em>, </em><em>optional</em>) – None, dimension index (4, 5, 6) or tag. None iterates over all indices. Defaults to None</p></li>
 <li><p><strong>iterate_over_space</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True also iterate over spatial dimension, defaults to False</p></li>
@@ -356,16 +357,16 @@ Defaults to False.</p></li>
 <li><p><strong>voxel_index</strong> (<em>slice</em><em> or </em><em>tuple</em><em>, </em><em>optional</em>) – slice or tuple of first three spatial dimensions., defaults to None</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>yeildsarray of sliced data</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.array</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>data location slice object.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>slice</p>
 </dd>
 </dl>
@@ -376,10 +377,10 @@ Defaults to False.</p></li>
 <span class="sig-name descname"><span class="pre">iterate_over_spatial</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.iterate_over_spatial" title="Permalink to this definition"></a></dt>
 <dd><p>Iterate over spatial voxels yeilding a data array the shape of the FID and any higher dimensions + index.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Yield</dt>
+<dt class="field-odd">Yield<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Complex FID data with any higher dimensions. Index to data.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>tuple</p>
 </dd>
 </dl>
@@ -390,13 +391,13 @@ Defaults to False.</p></li>
 <span class="sig-name descname"><span class="pre">dynamic_hdr_vals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.dynamic_hdr_vals" title="Permalink to this definition"></a></dt>
 <dd><p>Return representations of the dynamic header values</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>List of dicts containing labeled header parameters</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>List of tuples containing header values</p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flattened numpy array for each generated spectrum containing header values</p>
 </dd>
 </dl>
