@@ -1,5 +1,10 @@
 This document contains the nifti_mrs_tools release history in reverse chronological order.
 
+0.1.5 (Wednesday 22nd March 2023)
+---------------------------------
+- Fixed `mrs_tools vis` with `--display_dim` option as the last dimension
+- Fixed `mrs_tools vis` ppm limit not being applied to MRSI code.
+
 0.1.4 (Tuesday 17th January 2023)
 ---------------------------------
 - Fixed a bug in NIFTI_MRS.copy() when reducing dimensionality

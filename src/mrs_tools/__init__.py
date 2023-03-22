@@ -187,17 +187,20 @@ def vis(args):
         if np.prod(data.shape[:3]) == 1:
             # SVS
             if args.display_dim:
-                for idx in range(data.ndim - 4):
-                    if data.dim_tags[idx] != args.display_dim:
-                        print(f'Averaging {data.dim_tags[idx]}')
-                        data = nifti_mrs_proc.average(data, data.dim_tags[idx])
-
+                for dim in data.dim_tags:
+                    if dim is None:
+                        continue
+                    if dim != args.display_dim:
+                        print(f'Averaging {dim}')
+                        data = nifti_mrs_proc.average(data, dim)
                 fig = plot_spectra(data.mrs(), ppmlim=args.ppmlim, plot_avg=args.no_mean)
+
             else:
                 while data.ndim > 4:
                     print(f'Averaging {data.dim_tags[0]}')
                     data = nifti_mrs_proc.average(data, data.dim_tags[0])
                 fig = plot_spectrum(data.mrs(), ppmlim=args.ppmlim)
+
             if args.save is not None:
                 fig.savefig(args.save)
             else:
@@ -215,7 +218,7 @@ def vis(args):
                 if mask.ndim == 2:
                     mask = np.expand_dims(mask, 2)
                 mrsi.set_mask(mask)
-            mrsi.plot()
+            mrsi.plot(ppmlim=args.ppmlim)
 
     # Some logic to figure out what we are dealing with
     p = args.file
