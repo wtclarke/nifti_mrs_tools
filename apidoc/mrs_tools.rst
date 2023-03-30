@@ -106,6 +106,26 @@ required arguments:
   --dim_order DIM_ORDER [DIM_ORDER ...]
                         NIFTI-MRS dimension tags in desired order. Enter as strings (min:1, max:3). Can create singleton dimension at end.
 
+reshape
+-------
+Reshapes the higher dimensions of a NIfTI-MRS file.
+
+:code:`usage: mrs_tools reshape [-h] --file FILE --shape SHAPE [SHAPE ...] [--d5 D5] [--d6 D6] [--d7 D7] [--output OUTPUT] [--filename FILENAME]`
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --d5 D5               5th dimension tag (e.g. DIM_DYN).
+  --d6 D6               6th dimension tag (e.g. DIM_DYN).
+  --d7 D7               7th dimension tag (e.g. DIM_DYN).
+  --output OUTPUT       output folder (defaults to current directory)
+  --filename FILENAME   Override output file names.
+
+required arguments:
+  --file FILE           File to reshape
+  --shape SHAPE [SHAPE ...]
+                        Numpy-like target shape.Enter as integers, -1 is used for any. Only enter shape for higher
+                        (5th-7th) dimensions.
+
 conjugate
 ---------
 Conjugate data to correct phase/frequency convention in a NIfTI-MRS file.

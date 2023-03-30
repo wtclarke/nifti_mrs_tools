@@ -105,6 +105,33 @@ def main(import_args=None):
                                help='Override output file names.')
     reorderparser.set_defaults(func=reorder)
 
+    # Reshape tool
+    reshapeparser = sp.add_parser(
+        'reshape',
+        help='Reorder higher dimensions of NIfTI-MRS.')
+    resh_req = reshapeparser.add_argument_group('required arguments')
+    resh_req.add_argument('--file', type=Path, required=True,
+                          help='File to reshape')
+    resh_req.add_argument('--shape', type=int, nargs='+', required=True,
+                          help='Numpy-like target shape.'
+                               'Enter as integers, -1 is used for any. '
+                               'Only enter shape for higher (5th-7th) dimensions.')
+    reshapeparser.add_argument('--d5',
+                               required=False, type=str,
+                               help='5th dimension tag (e.g. DIM_DYN).')
+    reshapeparser.add_argument('--d6',
+                               required=False, type=str,
+                               help='6th dimension tag (e.g. DIM_DYN).')
+    reshapeparser.add_argument('--d7',
+                               required=False, type=str,
+                               help='7th dimension tag (e.g. DIM_DYN).')
+    reshapeparser.add_argument('--output',
+                               required=False, type=Path, default=Path('.'),
+                               help='output folder (defaults to current directory)')
+    reshapeparser.add_argument('--filename', type=str,
+                               help='Override output file names.')
+    reshapeparser.set_defaults(func=reshape)
+
     # conjugate tool
     conjparser = sp.add_parser(
         'conjugate',
@@ -346,6 +373,33 @@ def reorder(args):
     else:
         file_out = args.output / (reorder_name + '_reordered')
     reordered.save(file_out)
+
+
+def reshape(args):
+    """Reshapes the higher dimensions of a NIfTI-MRS file
+    :param args: Argparse interpreted arguments
+    :type args: Namespace
+    """
+    import nifti_mrs.tools as nmrs_tools
+    from nifti_mrs.nifti_mrs import NIFTI_MRS
+    # 1. Load the file
+    to_reshape = NIFTI_MRS(args.file)
+    reshape_name = args.file.with_suffix('').with_suffix('').name
+
+    # 2. Reshape
+    reshaped = nmrs_tools.reshape(
+        to_reshape,
+        tuple(args.shape),
+        d5=args.d5,
+        d6=args.d6,
+        d7=args.d7)
+
+    # 3. Save the output file
+    if args.filename:
+        file_out = args.output / args.filename
+    else:
+        file_out = args.output / (reshape_name + '_reshaped')
+    reshaped.save(file_out)
 
 
 def conj(args):
