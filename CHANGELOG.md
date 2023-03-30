@@ -1,5 +1,9 @@
 This document contains the nifti_mrs_tools release history in reverse chronological order.
 
+0.1.6 (Thursday 30th March 2023)
+--------------------------------
+- Fixed `mrs_tools reshape` option to allow Numpy-style reshaping of higher dimensions.
+
 0.1.5 (Wednesday 22nd March 2023)
 ---------------------------------
 - Fixed `mrs_tools vis` with `--display_dim` option as the last dimension

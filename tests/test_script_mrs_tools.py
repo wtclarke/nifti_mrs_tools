@@ -7,6 +7,7 @@ Copyright Will Clarke, University of Oxford, 2021'''
 # Imports
 import subprocess
 from pathlib import Path
+import json
 
 import nibabel as nib
 import pytest
@@ -199,6 +200,50 @@ def test_reorder(tmp_path):
                            '--file', str(test_data_split)])
 
     assert (tmp_path / 'reordered_file.nii.gz').exists()
+
+
+# Test reshape option
+def test_reshape(tmp_path):
+    subprocess.run([
+        'mrs_tools', 'reshape',
+        '--shape', '4', '4', '4',
+        '--d6', 'DIM_DYN',
+        '--d7', 'DIM_EDIT',
+        '--output', tmp_path,
+        '--filename', 'reshaped_file',
+        '--file', test_data_split],
+        check=True)
+
+    assert (tmp_path / 'reshaped_file.nii.gz').exists()
+    f1 = nib.load(tmp_path / 'reshaped_file.nii.gz')
+    assert f1.shape == (1, 1, 1, 4096, 4, 4, 4)
+
+    hdr_ext_codes = f1.header.extensions.get_codes()
+    hdr_ext = json.loads(
+        f1.header.extensions[hdr_ext_codes.index(44)].get_content())
+
+    assert hdr_ext['dim_5'] == 'DIM_COIL'
+    assert hdr_ext['dim_6'] == 'DIM_DYN'
+    assert hdr_ext['dim_7'] == 'DIM_EDIT'
+
+    subprocess.run([
+        'mrs_tools', 'reshape',
+        '--shape', '-1', '8',
+        '--output', tmp_path,
+        '--filename', 'reshaped_file2',
+        '--file', test_data_split],
+        check=True)
+
+    assert (tmp_path / 'reshaped_file2.nii.gz').exists()
+    f2 = nib.load(tmp_path / 'reshaped_file2.nii.gz')
+    assert f2.shape == (1, 1, 1, 4096, 8, 8)
+
+    hdr_ext_codes = f2.header.extensions.get_codes()
+    hdr_ext = json.loads(
+        f2.header.extensions[hdr_ext_codes.index(44)].get_content())
+
+    assert hdr_ext['dim_5'] == 'DIM_COIL'
+    assert hdr_ext['dim_6'] == 'DIM_DYN'
 
 
 # Test conjugate option
