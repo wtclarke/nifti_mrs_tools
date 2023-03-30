@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>mrs_tools &mdash; nifti-mrs 0.1.5 documentation</title>
+  <title>mrs_tools &mdash; nifti-mrs 0.1.6 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -32,7 +32,7 @@
             nifti-mrs
           </a>
               <div class="version">
-                0.1.5
+                0.1.6
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -51,6 +51,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#merge">merge</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#split">split</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#reorder">reorder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reshape">reshape</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#conjugate">conjugate</a></li>
 </ul>
 </li>
@@ -240,6 +241,45 @@
 </dl>
 <dl class="simple">
 <dt>–dim_order DIM_ORDER [DIM_ORDER …]</dt><dd><p>NIFTI-MRS dimension tags in desired order. Enter as strings (min:1, max:3). Can create singleton dimension at end.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="reshape">
+<h2>reshape<a class="headerlink" href="#reshape" title="Permalink to this heading"></a></h2>
+<p>Reshapes the higher dimensions of a NIfTI-MRS file.</p>
+<p><code class="code docutils literal notranslate"><span class="pre">usage:</span> <span class="pre">mrs_tools</span> <span class="pre">reshape</span> <span class="pre">[-h]</span> <span class="pre">--file</span> <span class="pre">FILE</span> <span class="pre">--shape</span> <span class="pre">SHAPE</span> <span class="pre">[SHAPE</span> <span class="pre">...]</span> <span class="pre">[--d5</span> <span class="pre">D5]</span> <span class="pre">[--d6</span> <span class="pre">D6]</span> <span class="pre">[--d7</span> <span class="pre">D7]</span> <span class="pre">[--output</span> <span class="pre">OUTPUT]</span> <span class="pre">[--filename</span> <span class="pre">FILENAME]</span></code></p>
+<dl>
+<dt>optional arguments:</dt><dd><dl class="option-list">
+<dt><kbd><span class="option">-h</span>, <span class="option">--help</span></kbd></dt>
+<dd><p>show this help message and exit</p>
+</dd>
+<dt><kbd><span class="option">--d5 <var>D5</var></span></kbd></dt>
+<dd><p>5th dimension tag (e.g. DIM_DYN).</p>
+</dd>
+<dt><kbd><span class="option">--d6 <var>D6</var></span></kbd></dt>
+<dd><p>6th dimension tag (e.g. DIM_DYN).</p>
+</dd>
+<dt><kbd><span class="option">--d7 <var>D7</var></span></kbd></dt>
+<dd><p>7th dimension tag (e.g. DIM_DYN).</p>
+</dd>
+<dt><kbd><span class="option">--output <var>OUTPUT</var></span></kbd></dt>
+<dd><p>output folder (defaults to current directory)</p>
+</dd>
+<dt><kbd><span class="option">--filename <var>FILENAME</var></span></kbd></dt>
+<dd><p>Override output file names.</p>
+</dd>
+</dl>
+</dd>
+<dt>required arguments:</dt><dd><dl class="option-list">
+<dt><kbd><span class="option">--file <var>FILE</var></span></kbd></dt>
+<dd><p>File to reshape</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>–shape SHAPE [SHAPE …]</dt><dd><p>Numpy-like target shape.Enter as integers, -1 is used for any. Only enter shape for higher
+(5th-7th) dimensions.</p>
 </dd>
 </dl>
 </dd>
