@@ -59,6 +59,8 @@ def main(import_args=None):
                            help='List of files to merge')
     merge_req.add_argument('--dim', type=str, required=True,
                            help='NIFTI-MRS dimension tag to merge across.')
+    mergeparser.add_argument('--newaxis', action="store_true",
+                             help='Join files along a new axis (tag specified by --dim).')
     mergeparser.add_argument('--output', type=Path, default=Path('.'),
                              help='output folder (defaults to current directory)')
     mergeparser.add_argument('--filename', type=str,
@@ -302,7 +304,18 @@ def merge(args):
     concat_names = []
     for fp in args.files:
         concat_names.append(fp.with_suffix('').with_suffix('').name)
-        to_concat.append(NIFTI_MRS(fp))
+        curr_file = NIFTI_MRS(fp)
+
+        # Merging along a new axis
+        if args.newaxis:
+            if args.dim in curr_file.dim_tags:
+                raise ValueError(f'--dim ({args.dim}) must be different from existing tags: {curr_file.dim_tags}.')
+            if curr_file.ndim == 7:
+                raise ValueError('Inputs use all three higher dimension already, cannot add new axis.')
+            new_order = curr_file.dim_tags
+            new_order[curr_file.ndim - 4] = args.dim
+            curr_file = nmrs_tools.reorder(curr_file, new_order)
+        to_concat.append(curr_file)
 
     # 2. Merge the files
     merged = nmrs_tools.merge(to_concat, args.dim)

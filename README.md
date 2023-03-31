@@ -32,9 +32,11 @@ Data might need to be manipulated within the NIfTI-MRS storage framework before,
 
 `mrs_tools split` takes a single file and splits it along a specified dimension e.g. `--dim DIM_DYN`, at a single point (`--index 8`) or extracting multiple elements into a second file (`--indices 8 9 10`).
 
-`mrs_tools merge` takes two or more files and merges them along a specified dimension e.g. `--dim DIM_EDIT`.
+`mrs_tools merge` takes two or more files and merges them along a specified dimension e.g. `--dim DIM_EDIT`. Use `--newaxis` if that dimension doesn't exist in the files already.
 
-`mrs_tools reorder` permutes the dimensions of an existing NIfTI-MRS file. For example, the 5th through 7th dimensions can be changed from `DIM_COIL, DIM_DYN, DIM_EDIT` to `DIM_DYN, DIM_EDIT, DIM_COIL` using `--dim_order DIM_DYN DIM_EDIT DIM_COIL`.
+`mrs_tools reorder` permutes the dimensions of an existing NIfTI-MRS file. For example, the 5th through 7th dimensions can be changed from `DIM_COIL, DIM_DYN, DIM_EDIT` to `DIM_DYN, DIM_EDIT, DIM_COIL` using `--dim_order DIM_DYN DIM_EDIT DIM_COIL`. Reorder can be used to add a tag to a singleton dimension.
+
+`mrs_tools reshape` allows Numpy-style reshaping of the higher dimensions. For example if two editing conditions are interleaved you can reshape a file from (32, 128) to (32, 64, 2), and by specifying `-d6 DIM_DYN -d7 DIM_EDIT` you can tag the new dimensions appropriately.
 
 `mrs_tools` also contains the `mrs_tools vis` and `mrs_tools info` options to provide quick visualisation and information on the command line. See the [FSL-MRS Visualisation documentation](https://open.win.ox.ac.uk/pages/fsl/fsl_mrs/visualisation.html#quick-glance) for more information on `mrs_tools vis/info`.
 
