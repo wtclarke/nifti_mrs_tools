@@ -1,5 +1,9 @@
 This document contains the nifti_mrs_tools release history in reverse chronological order.
 
+0.1.7 (Friday 31st March 2023)
+--------------------------------
+- Added `--newaxis` option to `mrs_tools merge` allowing the user to merge files along a previously non-existant dimension (without using `reorder` first).
+
 0.1.6 (Thursday 30th March 2023)
 --------------------------------
 - Fixed `mrs_tools reshape` option to allow Numpy-style reshaping of higher dimensions.

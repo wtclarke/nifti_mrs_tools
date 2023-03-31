@@ -55,10 +55,11 @@ merge
 -----
 Merge NIfTI-MRS along higher dimensions.
 
-:code:`usage: mrs_tools merge [-h] --files FILES [FILES ...] --dim DIM [--output OUTPUT][--filename FILENAME]`
+:code:`usage: mrs_tools merge [-h] --files FILES [FILES ...] --dim DIM [--newaxis] [--output OUTPUT][--filename FILENAME]`
 
 optional arguments:
   -h, --help            show this help message and exit
+  --newaxis             Join files along a new axis (tag specified by --dim).
   --output OUTPUT       output folder (defaults to current directory)
   --filename FILENAME   Override output file name.
 

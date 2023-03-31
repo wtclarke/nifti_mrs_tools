@@ -124,6 +124,25 @@ def test_merge(tmp_path):
 
     assert (tmp_path / 'wref_raw_quant_raw_merged.nii.gz').exists()
 
+    subprocess.check_call(['mrs_tools', 'merge',
+                           '--dim', 'DIM_EDIT',
+                           '--newaxis',
+                           '--output', str(tmp_path),
+                           '--filename', 'test_newaxis_merge',
+                           '--files', str(test_data_merge_1), str(test_data_merge_2)])
+
+    assert (tmp_path / 'test_newaxis_merge.nii.gz').exists()
+    fna = nib.load(tmp_path / 'test_newaxis_merge.nii.gz')
+    hdr_ext_codes = fna.header.extensions.get_codes()
+    hdr_ext = json.loads(
+        fna.header.extensions[hdr_ext_codes.index(44)].get_content())
+
+    assert fna.ndim == 7
+    assert fna.shape == (1, 1, 1, 4096, 4, 2, 2)
+    assert hdr_ext['dim_5'] == 'DIM_COIL'
+    assert hdr_ext['dim_6'] == 'DIM_DYN'
+    assert hdr_ext['dim_7'] == 'DIM_EDIT'
+
 
 # Test split option
 test_data_split = testsPath / 'test_data' / 'metab_raw.nii.gz'
