@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>mrs_tools &mdash; nifti-mrs 0.1.6 documentation</title>
+  <title>mrs_tools &mdash; nifti-mrs 0.1.7 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -32,7 +32,7 @@
             nifti-mrs
           </a>
               <div class="version">
-                0.1.6
+                0.1.7
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -154,11 +154,14 @@
 <section id="merge">
 <h2>merge<a class="headerlink" href="#merge" title="Permalink to this heading"></a></h2>
 <p>Merge NIfTI-MRS along higher dimensions.</p>
-<p><code class="code docutils literal notranslate"><span class="pre">usage:</span> <span class="pre">mrs_tools</span> <span class="pre">merge</span> <span class="pre">[-h]</span> <span class="pre">--files</span> <span class="pre">FILES</span> <span class="pre">[FILES</span> <span class="pre">...]</span> <span class="pre">--dim</span> <span class="pre">DIM</span> <span class="pre">[--output</span> <span class="pre">OUTPUT][--filename</span> <span class="pre">FILENAME]</span></code></p>
+<p><code class="code docutils literal notranslate"><span class="pre">usage:</span> <span class="pre">mrs_tools</span> <span class="pre">merge</span> <span class="pre">[-h]</span> <span class="pre">--files</span> <span class="pre">FILES</span> <span class="pre">[FILES</span> <span class="pre">...]</span> <span class="pre">--dim</span> <span class="pre">DIM</span> <span class="pre">[--newaxis]</span> <span class="pre">[--output</span> <span class="pre">OUTPUT][--filename</span> <span class="pre">FILENAME]</span></code></p>
 <dl>
 <dt>optional arguments:</dt><dd><dl class="option-list">
 <dt><kbd><span class="option">-h</span>, <span class="option">--help</span></kbd></dt>
 <dd><p>show this help message and exit</p>
+</dd>
+<dt><kbd><span class="option">--newaxis</span></kbd></dt>
+<dd><p>Join files along a new axis (tag specified by –dim).</p>
 </dd>
 <dt><kbd><span class="option">--output <var>OUTPUT</var></span></kbd></dt>
 <dd><p>output folder (defaults to current directory)</p>
