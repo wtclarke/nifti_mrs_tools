@@ -12,4 +12,4 @@
    nifti_mrs.tools.misc
    nifti_mrs.tools.reshape
    nifti_mrs.tools.split_merge
-   nifti_mrs.tools.utils
+   nifti_mrs.utils
