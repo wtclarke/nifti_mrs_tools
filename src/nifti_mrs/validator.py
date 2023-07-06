@@ -36,7 +36,6 @@ def validate_nifti_mrs(nifti_mrs):
     # Validate header extension
     validate_hdr_ext(
         nifti_mrs.header.extensions[0].get_content(),
-        nifti_mrs.ndim,
         nifti_mrs.shape)
 
 
@@ -76,7 +75,7 @@ def validate_nifti_header(nifti_header):
         raise niftiHeaderError(f'Intent string ({intent_str}) does not match "mrs_vMajor_minor".')
 
 
-def validate_hdr_ext(header_ex, data_dimensions, dimension_sizes):
+def validate_hdr_ext(header_ex, dimension_sizes, data_dimensions=None):
     """ Validate the header extension
     1. Check that it is json formatted string.
     2. Check that it contains the required meta-data
@@ -85,10 +84,11 @@ def validate_hdr_ext(header_ex, data_dimensions, dimension_sizes):
 
     :param header_ex: NIfTI-MRS header extensions as a json deserialisable string
     :type header_ex: str
-    :param data_dimensions: Total number of data dimensions in corresponding nifti-mrs data
-    :type data_dimensions: int
     :param dimension_sizes: Size of the NIfTI-MRS dimensions
     :type dimension_sizes: tuple of ints
+    :param data_dimensions: Total number of data dimensions in corresponding nifti-mrs data, defaults to None
+        When None the dimensions are inferred from the tags
+    :type data_dimensions: int, optional
     """
     # 1. Check that header_ext is json
     try:
@@ -114,6 +114,16 @@ def validate_hdr_ext(header_ex, data_dimensions, dimension_sizes):
         raise headerExtensionError("Header extension must contain ResonantNucleus.")
 
     # 3. Dimension information
+    # Calculate the implied size unless passed explicitly
+    if data_dimensions is None:
+        data_dimensions = 4
+        for ddx in range(5, 8):
+            if f"dim_{ddx}" in json_dict:
+                data_dimensions = ddx
+    # Ensure dimension_sizes is consistent with this
+    for _ in range(len(dimension_sizes), data_dimensions):
+        dimension_sizes += (1, )
+
     for ddx in range(5, 8):
         if data_dimensions > (ddx - 1):
             if f"dim_{ddx}" in json_dict:
