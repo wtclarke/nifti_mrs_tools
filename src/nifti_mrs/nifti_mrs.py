@@ -123,14 +123,10 @@ class NIFTI_MRS():
                     self.header.extensions[hdr_ext_codes.index(44)].get_content()))
 
         # Some validation upon creation
-        shape = self.image.shape
-        for _ in range(self.image.ndim, self._hdr_ext.ndim):
-            shape += (1, )
-
         validator.validate_hdr_ext(
             self._hdr_ext.to_json(),
-            np.max((self._hdr_ext.ndim, self.image.ndim)),
-            shape)
+            self.image.shape,
+            np.max((self._hdr_ext.ndim, self.image.ndim)))
 
         try:
             self.nucleus
@@ -268,10 +264,10 @@ class NIFTI_MRS():
     def hdr_ext(self, new_hdr):
         '''Update MRS JSON header extension from python dict or Hdr_Ext object'''
         if isinstance(new_hdr, dict):
-            validator.validate_hdr_ext(json.dumps(new_hdr), self.ndim, self.shape)
+            validator.validate_hdr_ext(json.dumps(new_hdr), self.shape)
             self._hdr_ext = Hdr_Ext.from_header_ext(new_hdr)
         elif isinstance(new_hdr, Hdr_Ext):
-            validator.validate_hdr_ext(new_hdr.to_json(), self.ndim, self.shape)
+            validator.validate_hdr_ext(new_hdr.to_json(), self.shape)
             self._hdr_ext = new_hdr
         else:
             raise TypeError('Passed header extension must be a dict or Hdr_Ext object')
@@ -438,11 +434,11 @@ class NIFTI_MRS():
         :param filepath: Name and path of save loaction
         :type filepath: str or pathlib.Path
         """
-        # Run validation
-        validator.validate_nifti_mrs(self)
-
         # Ensure final copy of header extension is loaded into Image object
         self._save_hdr_ext()
+
+        # Run validation
+        validator.validate_nifti_mrs(self.image)
 
         # Save underlying image object to file
         self.image.save(filepath)
