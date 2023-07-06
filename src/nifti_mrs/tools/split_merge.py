@@ -1,4 +1,4 @@
-"""Tools for merging, splitting and reordering the dimensions of NIfTI-MRS
+"""Tools for merging and splitting the dimensions of NIfTI-MRS
 
     Author: Will Clarke <william.clarke@ndcn.ox.ac.uk>
     Copyright (C) 2021 University of Oxford
@@ -8,11 +8,7 @@ import re
 import numpy as np
 
 from nifti_mrs.nifti_mrs import NIFTI_MRS, NIFTIMRS_DimDoesntExist
-from nifti_mrs.tools import utils
-
-
-class NIfTI_MRSIncompatible(Exception):
-    pass
+from nifti_mrs import utils
 
 
 def split(nmrs, dimension, index_or_indicies):
@@ -194,16 +190,18 @@ def merge(array_of_nmrs, dimension):
     for idx, nmrs in enumerate(array_of_nmrs):
         # Check shape
         if not check_shape(nmrs):
-            raise NIfTI_MRSIncompatible('The shape of all concatentated objects must match.'
-                                        f' The shape ({nmrs.shape}) of the {idx} object does'
-                                        f' not match that of the first ({array_of_nmrs[0].shape}).')
+            raise utils.NIfTI_MRSIncompatible(
+                'The shape of all concatenated objects must match.'
+                f' The shape ({nmrs.shape}) of the {idx} object does'
+                f' not match that of the first ({array_of_nmrs[0].shape}).')
         # Check dim tags for compatibility
         if not check_tag(nmrs):
-            raise NIfTI_MRSIncompatible('The tags of all concatentated objects must match.'
-                                        f' The tags ({nmrs.dim_tags}) of the {idx} object does'
-                                        f' not match that of the first ({array_of_nmrs[0].dim_tags}).')
+            raise utils.NIfTI_MRSIncompatible(
+                'The tags of all concatenated objects must match.'
+                f' The tags ({nmrs.dim_tags}) of the {idx} object does'
+                f' not match that of the first ({array_of_nmrs[0].dim_tags}).')
 
-        if nmrs.ndim == dim_index:
+        if nmrs.shape[-1] == 1:
             # If a squeezed singleton on the end.
             to_concat.append(np.expand_dims(nmrs[:], -1))
         else:
@@ -278,16 +276,18 @@ def _merge_dim_header(hdr1, hdr2, dimension, dim_length1, dim_length2):
         for key in hdr1:
             if dim_n.match(key) and key != key_str:
                 if hdr1[key] != hdr2[key]:
-                    raise NIfTI_MRSIncompatible(f'Both files must have matching dimension headers apart from the '
-                                                f'one being merged. {key} does not match.')
+                    raise utils.NIfTI_MRSIncompatible(
+                        f'Both files must have matching dimension headers apart from the '
+                        f'one being merged. {key} does not match.')
 
     if key_str in hdr1 and key_str in hdr2:
         run_check()
         # Check the subfields of the header to merge are consistent
         if not hdr1[key_str].keys() == hdr2[key_str].keys():
-            raise NIfTI_MRSIncompatible(f'Both NIfTI-MRS files must have matching dim {dimension} header fields.'
-                                        f'The first header contains {hdr1[key_str].keys()}. '
-                                        f'The second header contains {hdr2[key_str].keys()}.')
+            raise utils.NIfTI_MRSIncompatible(
+                f'Both NIfTI-MRS files must have matching dim {dimension} header fields.'
+                f'The first header contains {hdr1[key_str].keys()}. '
+                f'The second header contains {hdr2[key_str].keys()}.')
         new_h = {}
         for sub_key in hdr1[key_str]:
             new_h[sub_key] = merge_single(hdr1[key_str][sub_key], hdr2[key_str][sub_key])
@@ -301,76 +301,8 @@ def _merge_dim_header(hdr1, hdr2, dimension, dim_length1, dim_length2):
     elif key_str in hdr1 and key_str not in hdr2\
             or key_str not in hdr1 and key_str in hdr2:
         # Incompatible headers
-        raise NIfTI_MRSIncompatible(f'Both NIfTI-MRS files must have matching dim {dimension} header fields')
+        raise utils.NIfTI_MRSIncompatible(f'Both NIfTI-MRS files must have matching dim {dimension} header fields')
     elif key_str not in hdr1 and key_str not in hdr2:
         # Nothing to merge - still run check
         run_check()
     return out_hdr
-
-
-def reorder(nmrs, dim_tag_list):
-    """Reorder the higher dimensions of a NIfTI-MRS object.
-    Can force a singleton dimension with new tag.
-
-    :param nmrs: NIFTI-MRS object to reorder.
-    :type nmrs: fsl_mrs.core.nifti_mrs.NIFTI_MRS
-    :param dim_tag_list: List of dimension tags in desired order
-    :type dim_tag_list: List of str
-    :return: Reordered NIfTI-MRS object.
-    :rtype: fsl_mrs.core.nifti_mrs.NIFTI_MRS
-    """
-
-    # Check existing tags are in the list of desired tags
-    for idx, tag in enumerate(nmrs.dim_tags):
-        if tag not in dim_tag_list\
-                and tag is not None:
-            raise NIfTI_MRSIncompatible(
-                f'The existing tag ({tag}) does not appear '
-                f'in the requested tag order ({dim_tag_list}).')
-
-    # Create singleton dimensions if required
-    original_dims = nmrs.ndim
-    new_dim = sum(x is not None for x in nmrs.dim_tags) + 4
-    dims_to_add = tuple(range(original_dims, new_dim + 1))
-    data_with_singleton = np.expand_dims(nmrs[:], dims_to_add)
-
-    # Create list of source indicies
-    # Create list of destination indicies
-    # Keep track of singleton tags
-    source_indicies = []
-    dest_indicies = []
-    singleton_tags = {}
-    counter = 0
-    for idx, tag in enumerate(dim_tag_list):
-        if tag is not None:
-            if tag in nmrs.dim_tags:
-                source_indicies.append(nmrs.dim_tags.index(tag) + 4)
-            else:
-                source_indicies.append(nmrs.ndim + counter)
-                counter += 1
-                singleton_tags.update({(idx + 5): tag})
-
-            dest_indicies.append(idx + 4)
-
-    # Sort header extension dim_tags
-    dim_n = re.compile(r'dim_[567].*')
-    new_hdr_ext = nmrs.hdr_ext.copy()
-    new_hdr_ext.dimensions = data_with_singleton.ndim
-    for key in nmrs.hdr_ext:
-        if dim_n.match(key):
-            new_index = dest_indicies[source_indicies.index(int(key[4]) - 1)] + 1
-            new_ind_str = f'{new_index}th'
-            new_hdr_ext.set_dim_info(new_ind_str, nmrs.hdr_ext[key])
-
-    # For any singleton dimensions we've added
-    for dim in singleton_tags:
-        new_hdr_ext.set_dim_info(f'{dim}th', singleton_tags[dim])
-
-    new_header = nmrs.header.copy()
-    new_nmrs = NIFTI_MRS(
-        np.moveaxis(data_with_singleton, source_indicies, dest_indicies),
-        header=new_header)
-
-    # Finaly insert new header extension
-    new_nmrs.hdr_ext = new_hdr_ext
-    return new_nmrs

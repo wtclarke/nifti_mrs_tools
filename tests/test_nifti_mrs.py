@@ -18,7 +18,7 @@ testsPath = Path(__file__).parent
 data = {'unprocessed': testsPath / 'test_data' / 'metab_raw.nii.gz'}
 
 
-def test_nifti_mrs():
+def test_nifti_mrs_class():
     obj = NIFTI_MRS(data['unprocessed'])
 
     assert obj.nifti_mrs_version == '0.2'
@@ -34,7 +34,8 @@ def test_nifti_mrs():
     copy_obj = obj.copy(remove_dim='DIM_DYN')
     assert copy_obj.shape == (1, 1, 1, 4096, 4)
     assert copy_obj.dim_tags == ['DIM_COIL', None, None]
-    assert copy_obj.hdr_ext.dimensions == 5
+    assert copy_obj.hdr_ext.ndim == 5
+    assert copy_obj.ndim == 5
 
 
 def test_copy():
@@ -65,9 +66,7 @@ def test_hdr_ext():
     assert obj.hdr_ext['EchoTime'] == 0.011
 
     # Test direct manipulation of hdr_ext
-    obj.hdr_ext.set_user_def(
-        key='bogus',
-        value='test')
+    obj.hdr_ext.set_user_def('bogus', 'test', 'Description')
     assert 'bogus' in obj.hdr_ext
 
     # Test external manipulation
@@ -163,13 +162,13 @@ def test_set_dim_tag():
         nmrs.set_dim_tag(
             'DIM_DYN',
             'DIM_DYN',
-            header={'my_hdr': np.arange(10).tolist()})
+            header={'EchoTime': np.arange(10).tolist()})
 
     nmrs.set_dim_tag(
         'DIM_DYN',
         'DIM_DYN',
-        header={'my_hdr': np.arange(16).tolist()})
-    assert nmrs.hdr_ext['dim_6_header'] == {'my_hdr': np.arange(16).tolist()}
+        header={'EchoTime': np.arange(16).tolist()})
+    assert nmrs.hdr_ext['dim_6_header'] == {'EchoTime': np.arange(16).tolist()}
 
 
 def test_nifti_mrs_filename():
@@ -287,7 +286,9 @@ def test_dynamic_headers():
         info="Incremented echo time for j-evolution",
         hdr={
             "EchoTime": np.linspace(0.03, 0.12, 10).tolist(),
-            "EchoTime2": {"start": 0.03, "increment": 0.01},
+            "EchoTime2": {
+                'Value': {"start": 0.03, "increment": 0.01},
+                'Description': "second echo time"},
             "RepetitionTime": np.linspace(1.0, 1.9, 10).tolist()})
 
     nmrs = gen_nifti_mrs_hdr_ext(

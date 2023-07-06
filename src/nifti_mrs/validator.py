@@ -30,12 +30,14 @@ def validate_nifti_mrs(nifti_mrs):
     # Validate data
     validate_nifti_data(nifti_mrs[:])
 
-    # Validate nifit header
+    # Validate nifti header
     validate_nifti_header(nifti_mrs.header)
 
     # Validate header extension
-    validate_hdr_ext(nifti_mrs.header.extensions[0].get_content(),
-                     nifti_mrs.ndim)
+    validate_hdr_ext(
+        nifti_mrs.header.extensions[0].get_content(),
+        nifti_mrs.ndim,
+        nifti_mrs.shape)
 
 
 def validate_nifti_data(nifti_img_data):
@@ -74,14 +76,19 @@ def validate_nifti_header(nifti_header):
         raise niftiHeaderError(f'Intent string ({intent_str}) does not match "mrs_vMajor_minor".')
 
 
-def validate_hdr_ext(header_ex, data_dimensions):
+def validate_hdr_ext(header_ex, data_dimensions, dimension_sizes):
     """ Validate the header extension
     1. Check that it is json formatted string.
     2. Check that it contains the required meta-data
     3. Check that it contains any required dimension information.
     4. Check that standard-defined data is of correct type.
-    Inputs:
 
+    :param header_ex: NIfTI-MRS header extensions as a json deserialisable string
+    :type header_ex: str
+    :param data_dimensions: Total number of data dimensions in corresponding nifti-mrs data
+    :type data_dimensions: int
+    :param dimension_sizes: Size of the NIfTI-MRS dimensions
+    :type dimension_sizes: tuple of ints
     """
     # 1. Check that header_ext is json
     try:
@@ -92,7 +99,7 @@ def validate_hdr_ext(header_ex, data_dimensions):
     # 2. Check the two required bits of meta-data
     if "SpectrometerFrequency" in json_dict:
         if not isinstance(json_dict["SpectrometerFrequency"], (list, tuple))\
-                and not isinstance(json_dict["SpectrometerFrequency"][0], float):
+                or not isinstance(json_dict["SpectrometerFrequency"][0], float):
 
             raise headerExtensionError("SpectrometerFrequency must be list of floats.")
     else:
@@ -100,7 +107,7 @@ def validate_hdr_ext(header_ex, data_dimensions):
 
     if "ResonantNucleus" in json_dict:
         if not isinstance(json_dict["ResonantNucleus"], (list, tuple))\
-                and not isinstance(json_dict["ResonantNucleus"][0], str):
+                or not isinstance(json_dict["ResonantNucleus"][0], str):
 
             raise headerExtensionError("ResonantNucleus must be list of strings.")
     else:
@@ -123,6 +130,19 @@ def validate_hdr_ext(header_ex, data_dimensions):
             else:
                 raise headerExtensionError(f" With {data_dimensions} dimensions the header extension"
                                            f" must contain 'dim_{ddx}'.")
+        else:
+            # This information shouldn't exist as it refers to data in a dimension higher than that specified
+            for hstr in [f"dim_{ddx}", f"dim_{ddx}_info", f"dim_{ddx}_header"]:
+                if hstr in json_dict:
+                    raise headerExtensionError(
+                        f"{hstr} tag exceeds specified dimensions {data_dimensions}.")
+
+    # Additional check that dim_{0-4} tags don't exist
+    for ddx in range(0, 5):
+        for hstr in [f"dim_{ddx}", f"dim_{ddx}_info", f"dim_{ddx}_header"]:
+            if hstr in json_dict:
+                raise headerExtensionError(
+                    f"{hstr} tag is forbidden `dim_N...` can only take the values 5-7.")
 
     # 4. Check standard-defined data types
     for key in json_dict:
@@ -130,6 +150,52 @@ def validate_hdr_ext(header_ex, data_dimensions):
             raise headerExtensionError(f'{key} must be a {standard_defined[key][0]}. '
                                        f'{key} is a {type(json_dict[key])}, with value {json_dict[key]}.')
 
+    # 5. Check user-defined format
+    dim_re = re.compile(r"^dim_[567](_((info)|(header)))?$")
+    for key in json_dict:
+        if key not in standard_defined\
+                and key != "SpectrometerFrequency"\
+                and key != "ResonantNucleus"\
+                and not dim_re.match(key):
+            # Must be user-defined
+            if not isinstance(key, dict)\
+                    and 'Description' not in json_dict[key]:
+                raise headerExtensionError('User-defined must be a JSON object and include a "Description".')
+
+    # 6. Check dynamic header validity
+    for ddx in range(5, 8):
+        if f"dim_{ddx}_header" in json_dict:
+            # Allowed formats:
+            # - Array, of the same length as the dimension
+            # - dict with 'start' and 'increment' fields
+            # - If non-standard header require a nested 'Value' + 'Description' dict
+            def test_dyn_header_format(x):
+                if not isinstance(x, (dict, list)):
+                    raise headerExtensionError(
+                        f"dim_{ddx}_header not an array or dict/object"
+                    )
+                if isinstance(x, dict):
+                    if not ('start' in x and 'increment' in x):
+                        raise headerExtensionError(
+                            f"dim_{ddx}_header is a dict/object but does not contain 'start' or 'increment'")
+                if isinstance(x, list):
+                    dim_size = dimension_sizes[ddx - 1]
+                    if len(x) != dim_size:
+                        raise headerExtensionError(
+                            f"dim_{ddx}_header is an array but the size "
+                            f"({len(x)}) does not match the dimension size ({dim_size})'")
+
+            for key in json_dict[f"dim_{ddx}_header"]:
+                if key in standard_defined:
+                    test_dyn_header_format(json_dict[f"dim_{ddx}_header"][key])
+                else:
+                    if 'Value' in json_dict[f"dim_{ddx}_header"][key]\
+                            and 'Description' in json_dict[f"dim_{ddx}_header"][key]:
+                        test_dyn_header_format(json_dict[f"dim_{ddx}_header"][key]['Value'])
+                    else:
+                        raise headerExtensionError(
+                            f"dim_{ddx}_header with non-standard tag must contain a 'Value' and 'Description' key"
+                        )
     # print('Header extension validated!')
 
 

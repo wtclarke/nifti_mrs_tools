@@ -15,6 +15,7 @@ from fsl.data.image import Image
 from . import validator
 from .hdr_ext import Hdr_Ext
 from .definitions import dimension_tags, standard_defined
+import nifti_mrs.utils as utils
 
 
 class NIFTIMRS_DimDoesntExist(Exception):
@@ -35,7 +36,7 @@ class NIFTI_MRS():
     def __init__(self, *args, **kwargs):
         """Create a NIFTI_MRS object with the given image data or file name.
 
-        Aguments mirror those of the leveraged fsl.data.image.IMage class.
+        Arguments mirror those of the leveraged fsl.data.image.IMage class.
 
         :arg image:      A string containing the name of an image file to load,
                          or a Path object pointing to an image file, or a
@@ -119,8 +120,17 @@ class NIFTI_MRS():
 
             self._hdr_ext = Hdr_Ext.from_header_ext(
                 json.loads(
-                    self.header.extensions[hdr_ext_codes.index(44)].get_content()),
-                dimensions=self.ndim)
+                    self.header.extensions[hdr_ext_codes.index(44)].get_content()))
+
+        # Some validation upon creation
+        shape = self.image.shape
+        for _ in range(self.image.ndim, self._hdr_ext.ndim):
+            shape += (1, )
+
+        validator.validate_hdr_ext(
+            self._hdr_ext.to_json(),
+            np.max((self._hdr_ext.ndim, self.image.ndim)),
+            shape)
 
         try:
             self.nucleus
@@ -151,14 +161,18 @@ class NIFTI_MRS():
         return self.image.header
 
     @property
-    def shape(self):
-        """Returns data shape"""
-        return self.image.shape
+    def ndim(self):
+        """Returns number of dimensions in the NIfTI-MRS object"""
+        return self.hdr_ext.ndim
 
     @property
-    def ndim(self):
-        """Returns number of data dimensions"""
-        return self.image.ndim
+    def shape(self):
+        """Returns the data shape. Singleton dimensions implied by header extension keys are included.
+        Use obj.image.shape to get the shape of the stored data"""
+        base_shape = self.image.shape
+        for _ in range(self.image.ndim, self.hdr_ext.ndim):
+            base_shape += (1, )
+        return base_shape
 
     @property
     def dtype(self):
@@ -254,10 +268,10 @@ class NIFTI_MRS():
     def hdr_ext(self, new_hdr):
         '''Update MRS JSON header extension from python dict or Hdr_Ext object'''
         if isinstance(new_hdr, dict):
-            validator.validate_hdr_ext(json.dumps(new_hdr), self.ndim)
-            self._hdr_ext = Hdr_Ext.from_header_ext(new_hdr, dimensions=self.ndim)
+            validator.validate_hdr_ext(json.dumps(new_hdr), self.ndim, self.shape)
+            self._hdr_ext = Hdr_Ext.from_header_ext(new_hdr)
         elif isinstance(new_hdr, Hdr_Ext):
-            validator.validate_hdr_ext(new_hdr.to_json(), self.ndim)
+            validator.validate_hdr_ext(new_hdr.to_json(), self.ndim, self.shape)
             self._hdr_ext = new_hdr
         else:
             raise TypeError('Passed header extension must be a dict or Hdr_Ext object')
@@ -397,7 +411,7 @@ class NIFTI_MRS():
     def copy(self, remove_dim=None):
         """Return a copy of this image, optionally with a dimension removed.
 
-        :param remove_dim: dimension index (4, 5, 6) or tag. None iterates over all indices., defaults to None
+        :param remove_dim: dimension index (4, 5, 6) or tag to remove. Takes first index. Defaults to None/no removal
         :type remove_dim: str or int, optional
         :return: Copy of object
         :rtype: NIFTI_MRS
@@ -405,13 +419,14 @@ class NIFTI_MRS():
         if remove_dim:
             dim = self._dim_tag_to_index(remove_dim)
             reduced_data = self[:].take(0, axis=dim)
-            new_obj = NIFTI_MRS(reduced_data, header=self.header)
-            new_obj._filename = self.filename
+            new_hdr_ext = self.hdr_ext.copy()
+            new_hdr_ext.remove_dim_info(dim - 4)
+            new_hd = utils.modify_hdr_ext(
+                new_hdr_ext,
+                self.header)
 
-            # Modify the dim information in
-            hdr_ext = self.hdr_ext.copy()
-            hdr_ext.remove_dim_info(dim - 4)
-            new_obj.hdr_ext = hdr_ext.to_dict()
+            new_obj = NIFTI_MRS(reduced_data, header=new_hd)
+            new_obj._filename = self.filename
 
             return new_obj
         else:
@@ -423,11 +438,11 @@ class NIFTI_MRS():
         :param filepath: Name and path of save loaction
         :type filepath: str or pathlib.Path
         """
+        # Run validation
+        validator.validate_nifti_mrs(self)
+
         # Ensure final copy of header extension is loaded into Image object
         self._save_hdr_ext()
-
-        # Run validation
-        validator.validate_nifti_mrs(self.image)
 
         # Save underlying image object to file
         self.image.save(filepath)
@@ -533,7 +548,7 @@ class NIFTI_MRS():
     def dynamic_hdr_vals(self):
         """Return representations of the dynamic header values
 
-        :return: List of dicts containing labeled header parameters
+        :return: List of dicts containing labelled header parameters
         :return: List of tuples containing header values
         :return: Flattened numpy array for each generated spectrum containing header values
         """
@@ -543,13 +558,18 @@ class NIFTI_MRS():
             for idx in range(size):
                 tmp_dict = {}
                 for key in dim_hdr:
+                    # Handle the non-standard case with an extra level
+                    if 'Value' in dim_hdr[key]:
+                        curr_val = dim_hdr[key]['Value']
+                    else:
+                        curr_val = dim_hdr[key]
                     # Handle the short form!
-                    if 'increment' in dim_hdr[key]:
-                        start = dim_hdr[key]['start']
-                        inc = dim_hdr[key]['increment']
+                    if 'increment' in curr_val:
+                        start = curr_val['start']
+                        inc = curr_val['increment']
                         tmp_dict.update({key: start + inc * idx})
                     else:
-                        tmp_dict.update({key: dim_hdr[key][idx]})
+                        tmp_dict.update({key: curr_val[idx]})
                 out.append(tmp_dict)
             return out
 

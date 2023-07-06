@@ -1,5 +1,9 @@
 This document contains the nifti_mrs_tools release history in reverse chronological order.
 
+0.1.8 (Thursday 6th July 2023)
+------------------------------
+- Under the hood rework of the validator and how the main classes handle dimensionality.
+
 0.1.7 (Friday 31st March 2023)
 --------------------------------
 - Added `--newaxis` option to `mrs_tools merge` allowing the user to merge files along a previously non-existant dimension (without using `reorder` first).

@@ -4,6 +4,7 @@
     Copyright (C) 2021 University of Oxford
 """
 from nifti_mrs.nifti_mrs import NIFTI_MRS
+from nifti_mrs import utils
 
 import numpy as np
 
@@ -35,25 +36,30 @@ def reshape(nmrs, reshape, d5=None, d6=None, d7=None):
 
     shape = nmrs[:].shape[0:4]
     shape += reshape
-    nmrs_reshaped = NIFTI_MRS(np.reshape(nmrs[:], shape), header=nmrs.header)
-
-    # reshpaed_hrd = _reshape_hdr(nmrs_reshaped.dynamic_hdr_vals[2],)
+    reshaped_data = np.reshape(nmrs[:], shape)
+    new_hdr_ext = nmrs.hdr_ext.copy()
 
     # Note numerical index is N-1
     if d5:
-        nmrs_reshaped.set_dim_tag(4, d5)
-    elif nmrs_reshaped.ndim > 4\
+        new_hdr_ext.set_dim_info('5th', d5)
+    elif reshaped_data.ndim > 4\
             and nmrs.dim_tags[0] is None:
-        raise TypeError(f'An appropriate d5 dim tag must be given as ndim = {nmrs_reshaped.ndim}.')
+        raise TypeError(f'An appropriate d5 dim tag must be given as ndim = {reshaped_data.ndim}.')
     if d6:
-        nmrs_reshaped.set_dim_tag(5, d6)
-    elif nmrs_reshaped.ndim > 5\
+        new_hdr_ext.set_dim_info('6th', d6)
+    elif reshaped_data.ndim > 5\
             and nmrs.dim_tags[1] is None:
-        raise TypeError(f'An appropriate d6 dim tag must be given as ndim = {nmrs_reshaped.ndim}.')
+        raise TypeError(f'An appropriate d6 dim tag must be given as ndim = {reshaped_data.ndim}.')
     if d7:
-        nmrs_reshaped.set_dim_tag(6, d7)
-    elif nmrs_reshaped.ndim > 6\
+        new_hdr_ext.set_dim_info('7th', d7)
+    elif reshaped_data.ndim > 6\
             and nmrs.dim_tags[2] is None:
-        raise TypeError(f'An appropriate d7 dim tag must be given as ndim = {nmrs_reshaped.ndim}.')
+        raise TypeError(f'An appropriate d7 dim tag must be given as ndim = {reshaped_data.ndim}.')
+
+    new_header = utils.modify_hdr_ext(new_hdr_ext, nmrs.header)
+
+    nmrs_reshaped = NIFTI_MRS(reshaped_data, header=new_header)
+
+    # reshpaed_hrd = _reshape_hdr(nmrs_reshaped.dynamic_hdr_vals[2],)
 
     return nmrs_reshaped

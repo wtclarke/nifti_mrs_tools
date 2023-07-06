@@ -374,7 +374,7 @@ def reorder(args):
     to_reorder = NIFTI_MRS(args.file)
     reorder_name = args.file.with_suffix('').with_suffix('').name
 
-    # 2. Merge the files
+    # 2. Reorder the files
     dim_order = args.dim_order
     while len(dim_order) < 3:
         dim_order.append(None)

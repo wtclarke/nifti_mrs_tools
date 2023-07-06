@@ -1,4 +1,4 @@
-"""Test the split, merge and reorder tools for NIFTI-MRS
+"""Test the split and merge tools for NIFTI-MRS
 
 Author: Will Clarke <william.clarke@ndcn.ox.ac.uk>
 Copyright (C) 2021 University of Oxford
@@ -14,7 +14,7 @@ from nifti_mrs.nifti_mrs import NIFTI_MRS
 from nifti_mrs.hdr_ext import Hdr_Ext
 from nifti_mrs import tools as nmrs_tools
 from nifti_mrs.create_nmrs import gen_nifti_mrs
-from nifti_mrs.tools.split_merge import NIfTI_MRSIncompatible
+from nifti_mrs.utils import NIfTI_MRSIncompatible
 
 testsPath = Path(__file__).parent
 test_data_split = testsPath / 'test_data' / 'metab_raw.nii.gz'
@@ -38,7 +38,7 @@ def test_split_dim_header():
                           'p2': [0.1, 0.2, 0.3, 0.4]},
          'dim_7': 'DIM_USER_0',
          'dim_7_info': 'other',
-         'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'description': 'user'},
+         'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'Description': 'user'},
                           'p2': [0.1, 0.2, 0.3, 0.4]}})
 
     # Headers occuring as a list.
@@ -55,7 +55,7 @@ def test_split_dim_header():
                                      'p2': [0.1, 0.2, 0.3, 0.4]},
                     'dim_7': 'DIM_USER_0',
                     'dim_7_info': 'other',
-                    'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'description': 'user'},
+                    'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'Description': 'user'},
                                      'p2': [0.1, 0.2, 0.3, 0.4]}}
     assert hdr2 == {'SpectrometerFrequency': [100.0, ],
                     'ResonantNucleus': ['1H', ],
@@ -69,7 +69,7 @@ def test_split_dim_header():
                                      'p2': [0.1, 0.2, 0.3, 0.4]},
                     'dim_7': 'DIM_USER_0',
                     'dim_7_info': 'other',
-                    'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'description': 'user'},
+                    'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'Description': 'user'},
                                      'p2': [0.1, 0.2, 0.3, 0.4]}}
 
     hdr1, hdr2 = nmrs_tools.split_merge._split_dim_header(hdr_in, 5, 4, [1, 3])
@@ -85,7 +85,7 @@ def test_split_dim_header():
                                      'p2': [0.1, 0.2, 0.3, 0.4]},
                     'dim_7': 'DIM_USER_0',
                     'dim_7_info': 'other',
-                    'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'description': 'user'},
+                    'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'Description': 'user'},
                                      'p2': [0.1, 0.2, 0.3, 0.4]}}
     assert hdr2 == {'SpectrometerFrequency': [100.0, ],
                     'ResonantNucleus': ['1H', ],
@@ -99,7 +99,7 @@ def test_split_dim_header():
                                      'p2': [0.1, 0.2, 0.3, 0.4]},
                     'dim_7': 'DIM_USER_0',
                     'dim_7_info': 'other',
-                    'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'description': 'user'},
+                    'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'Description': 'user'},
                                      'p2': [0.1, 0.2, 0.3, 0.4]}}
 
     # Headers as a dict
@@ -116,7 +116,7 @@ def test_split_dim_header():
                                      'p2': [0.1, 0.2]},
                     'dim_7': 'DIM_USER_0',
                     'dim_7_info': 'other',
-                    'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'description': 'user'},
+                    'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'Description': 'user'},
                                      'p2': [0.1, 0.2, 0.3, 0.4]}}
     assert hdr2 == {'SpectrometerFrequency': [100.0, ],
                     'ResonantNucleus': ['1H', ],
@@ -130,7 +130,7 @@ def test_split_dim_header():
                                      'p2': [0.3, 0.4]},
                     'dim_7': 'DIM_USER_0',
                     'dim_7_info': 'other',
-                    'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'description': 'user'},
+                    'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'Description': 'user'},
                                      'p2': [0.1, 0.2, 0.3, 0.4]}}
 
     hdr1, hdr2 = nmrs_tools.split_merge._split_dim_header(hdr_in, 6, 4, [1, ])
@@ -146,7 +146,7 @@ def test_split_dim_header():
                                      'p2': [0.1, 0.3, 0.4]},
                     'dim_7': 'DIM_USER_0',
                     'dim_7_info': 'other',
-                    'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'description': 'user'},
+                    'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'Description': 'user'},
                                      'p2': [0.1, 0.2, 0.3, 0.4]}}
     assert hdr2 == {'SpectrometerFrequency': [100.0, ],
                     'ResonantNucleus': ['1H', ],
@@ -160,7 +160,7 @@ def test_split_dim_header():
                                      'p2': [0.2, ]},
                     'dim_7': 'DIM_USER_0',
                     'dim_7_info': 'other',
-                    'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'description': 'user'},
+                    'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'Description': 'user'},
                                      'p2': [0.1, 0.2, 0.3, 0.4]}}
 
     # User defined structures
@@ -177,7 +177,7 @@ def test_split_dim_header():
                                      'p2': [0.1, 0.2, 0.3, 0.4]},
                     'dim_7': 'DIM_USER_0',
                     'dim_7_info': 'other',
-                    'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'description': 'user'},
+                    'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'Description': 'user'},
                                      'p2': [0.1, 0.2]}}
     assert hdr2 == {'SpectrometerFrequency': [100.0, ],
                     'ResonantNucleus': ['1H', ],
@@ -191,7 +191,7 @@ def test_split_dim_header():
                                      'p2': [0.1, 0.2, 0.3, 0.4]},
                     'dim_7': 'DIM_USER_0',
                     'dim_7_info': 'other',
-                    'dim_7_header': {'p1': {'Value': {'start': 3, 'increment': 1}, 'description': 'user'},
+                    'dim_7_header': {'p1': {'Value': {'start': 3, 'increment': 1}, 'Description': 'user'},
                                      'p2': [0.3, 0.4]}}
 
 
@@ -210,7 +210,7 @@ def test_merge_dim_header():
                           'p2': [0.1, 0.2, 0.3, 0.4]},
          'dim_7': 'DIM_USER_0',
          'dim_7_info': 'other',
-         'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'description': 'user'},
+         'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'Description': 'user'},
                           'p2': [0.1, 0.2, 0.3, 0.4]}})
     hdr_in_2 = Hdr_Ext.from_header_ext(
         {'SpectrometerFrequency': [100.0, ],
@@ -225,7 +225,7 @@ def test_merge_dim_header():
                           'p2': [0.1, 0.2, 0.3, 0.4]},
          'dim_7': 'DIM_USER_0',
          'dim_7_info': 'other',
-         'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'description': 'user'},
+         'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'Description': 'user'},
                           'p2': [0.1, 0.2, 0.3, 0.4]}})
 
     hdr_out = nmrs_tools.split_merge._merge_dim_header(hdr_in_1, hdr_in_2, 5, 4, 3)
@@ -241,7 +241,7 @@ def test_merge_dim_header():
                                         'p2': [0.1, 0.2, 0.3, 0.4]},
                        'dim_7': 'DIM_USER_0',
                        'dim_7_info': 'other',
-                       'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'description': 'user'},
+                       'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'Description': 'user'},
                                         'p2': [0.1, 0.2, 0.3, 0.4]}}
 
     hdr_in_2 = Hdr_Ext.from_header_ext(
@@ -257,7 +257,7 @@ def test_merge_dim_header():
                           'p2': [0.1, 0.2, 0.3, 0.4]},
          'dim_7': 'DIM_USER_0',
          'dim_7_info': 'other',
-         'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'description': 'user'},
+         'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'Description': 'user'},
                           'p2': [0.1, 0.2, 0.3, 0.4]}})
     hdr_out = nmrs_tools.split_merge._merge_dim_header(hdr_in_1, hdr_in_2, 6, 4, 4)
     assert hdr_out == {'SpectrometerFrequency': [100.0, ],
@@ -272,7 +272,7 @@ def test_merge_dim_header():
                                         'p2': [0.1, 0.2, 0.3, 0.4, 0.1, 0.2, 0.3, 0.4]},
                        'dim_7': 'DIM_USER_0',
                        'dim_7_info': 'other',
-                       'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'description': 'user'},
+                       'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'Description': 'user'},
                                         'p2': [0.1, 0.2, 0.3, 0.4]}}
 
     hdr_out = nmrs_tools.split_merge._merge_dim_header(hdr_in_2, hdr_in_1, 6, 4, 4)
@@ -288,7 +288,7 @@ def test_merge_dim_header():
                                         'p2': [0.1, 0.2, 0.3, 0.4, 0.1, 0.2, 0.3, 0.4]},
                        'dim_7': 'DIM_USER_0',
                        'dim_7_info': 'other',
-                       'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'description': 'user'},
+                       'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'Description': 'user'},
                                         'p2': [0.1, 0.2, 0.3, 0.4]}}
 
     hdr_in_2 = Hdr_Ext.from_header_ext(
@@ -304,7 +304,7 @@ def test_merge_dim_header():
                           'p2': [0.1, 0.2, 0.3, 0.4]},
          'dim_7': 'DIM_USER_0',
          'dim_7_info': 'other',
-         'dim_7_header': {'p1': {'Value': {'start': 5, 'increment': 1}, 'description': 'user'},
+         'dim_7_header': {'p1': {'Value': {'start': 5, 'increment': 1}, 'Description': 'user'},
                           'p2': [0.1, 0.2, 0.3, 0.4]}})
     hdr_out = nmrs_tools.split_merge._merge_dim_header(hdr_in_1, hdr_in_2, 7, 4, 4)
     assert hdr_out == {'SpectrometerFrequency': [100.0, ],
@@ -319,7 +319,7 @@ def test_merge_dim_header():
                                         'p2': [0.1, 0.2, 0.3, 0.4]},
                        'dim_7': 'DIM_USER_0',
                        'dim_7_info': 'other',
-                       'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'description': 'user'},
+                       'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'Description': 'user'},
                                         'p2': [0.1, 0.2, 0.3, 0.4, 0.1, 0.2, 0.3, 0.4]}}
 
     with pytest.raises(NIfTI_MRSIncompatible) as exc_info:
@@ -495,7 +495,7 @@ def test_merge():
         nmrs_tools.merge((nmrs_1, nmrs_bad_shape), 'DIM_DYN')
 
     assert exc_info.type is NIfTI_MRSIncompatible
-    assert exc_info.value.args[0] == "The shape of all concatentated objects must match. "\
+    assert exc_info.value.args[0] == "The shape of all concatenated objects must match. "\
                                      "The shape ((1, 1, 1, 4096, 2, 2)) of the 1 object does "\
                                      "not match that of the first ((1, 1, 1, 4096, 4, 2))."
 
@@ -504,7 +504,7 @@ def test_merge():
         nmrs_tools.merge((nmrs_1, nmrs_no_tag), 'DIM_DYN')
 
     assert exc_info.type is NIfTI_MRSIncompatible
-    assert exc_info.value.args[0] == "The tags of all concatentated objects must match. "\
+    assert exc_info.value.args[0] == "The tags of all concatenated objects must match. "\
                                      "The tags (['DIM_COIL', None, None]) of the 1 object does "\
                                      "not match that of the first (['DIM_COIL', 'DIM_DYN', None])."
 
@@ -561,47 +561,10 @@ def test_merge():
 
     nhdr_1_e.set_dim_tag('DIM_DYN', 'DIM_DYN', header={'RepetitionTime': {'start': 1, 'increment': 1}})
     nhdr_2_e.set_dim_tag('DIM_DYN', 'DIM_DYN', header={'RepetitionTime': {'start': 1, 'increment': 1}})
-    nhdr_1_e.set_dim_tag('DIM_EDIT', 'DIM_EDIT', header={'OtherTime': [0.1, ]})
-    nhdr_2_e.set_dim_tag('DIM_EDIT', 'DIM_EDIT', header={'OtherTime': [0.2, ]})
+    nhdr_1_e.set_dim_tag('DIM_EDIT', 'DIM_EDIT', header={'OtherTime': {'Value': [0.1, ], 'Description': 'N/A'}})
+    nhdr_2_e.set_dim_tag('DIM_EDIT', 'DIM_EDIT', header={'OtherTime': {'Value': [0.2, ], 'Description': 'N/A'}})
 
     out = nmrs_tools.merge((nhdr_1_e, nhdr_2_e), 'DIM_EDIT')
     assert out[:].shape == (1, 1, 1, 10, 4, 2)
     assert out.hdr_ext['dim_6'] == 'DIM_EDIT'
-    assert out.hdr_ext['dim_6_header'] == {'OtherTime': [0.1, 0.2, ]}
-
-
-def test_reorder():
-    """Test the reorder functionality
-    """
-    nmrs = NIFTI_MRS(test_data_split)
-
-    # Error testing
-    # Miss existing tag
-    with pytest.raises(NIfTI_MRSIncompatible) as exc_info:
-        nmrs_tools.reorder(nmrs, ['DIM_COIL', 'DIM_EDIT'])
-
-    assert exc_info.type is NIfTI_MRSIncompatible
-    assert exc_info.value.args[0] == "The existing tag (DIM_DYN) does not appear"\
-                                     " in the requested tag order (['DIM_COIL', 'DIM_EDIT'])."
-
-    # Functionality testing
-    # Swap order of dimensions
-    out = nmrs_tools.reorder(nmrs, ['DIM_DYN', 'DIM_COIL'])
-    assert out[:].shape == (1, 1, 1, 4096, 16, 4)
-    assert np.allclose(np.swapaxes(nmrs[:], 4, 5), out[:])
-    assert out.hdr_ext['dim_5'] == 'DIM_DYN'
-    assert out.hdr_ext['dim_6'] == 'DIM_COIL'
-
-    # # Add an additional singleton at end (not reported in shape)
-    out = nmrs_tools.reorder(nmrs, ['DIM_COIL', 'DIM_DYN', 'DIM_EDIT'])
-    assert out[:].shape == (1, 1, 1, 4096, 4, 16)
-    assert out.hdr_ext['dim_5'] == 'DIM_COIL'
-    assert out.hdr_ext['dim_6'] == 'DIM_DYN'
-    assert out.hdr_ext['dim_7'] == 'DIM_EDIT'
-
-    # Add an additional singleton at 5 (not reported in shape)
-    out = nmrs_tools.reorder(nmrs, ['DIM_EDIT', 'DIM_COIL', 'DIM_DYN'])
-    assert out[:].shape == (1, 1, 1, 4096, 1, 4, 16)
-    assert out.hdr_ext['dim_5'] == 'DIM_EDIT'
-    assert out.hdr_ext['dim_6'] == 'DIM_COIL'
-    assert out.hdr_ext['dim_7'] == 'DIM_DYN'
+    assert out.hdr_ext['dim_6_header'] == {'OtherTime': {'Description': 'N/A', 'Value': [0.1, 0.2]}}

@@ -9,14 +9,17 @@ class Hdr_Ext:
     Standard defined meta-data and user-defined data can be added using set_standard_def and
     set_user_def respectively.
     """
-    def __init__(self, spec_frequency, resonant_nucleus, dimensions=7):
+    def __init__(self, spec_frequency, resonant_nucleus, dimensions=None):
         """Initialise NIfTI-MRS header extension object with the two mandatory bits of meta-data.
+
+        Use the dimensions kwarg to initialise with the default dimension tags (DIM_COIL, DIM_DYN,
+        DIM_INDIRECT_0) for values for 5, 6, and 7 respectively.
 
         :param spec_frequency: Spectrometer frequency in MHz
         :type spec_frequency: float
         :param resonant_nucleus: Resonant nucleus e.g. '1H'
         :type resonant_nucleus: str
-        :param dimensions: Number of dimensions in image. Controls number of dim tags in extension. Defaults to 7
+        :param dimensions: Number of dimensions in image. Defaults to None
         :type dimensions: int, optional
         """
         if isinstance(spec_frequency, float):
@@ -35,17 +38,31 @@ class Hdr_Ext:
         else:
             raise ValueError('resonant_nucleus must be a string or array of strings.')
 
-        self._dim_info = [{"tag": "DIM_COIL", "info": None, "hdr": None},
-                          {"tag": "DIM_DYN", "info": None, "hdr": None},
-                          {"tag": "DIM_INDIRECT_0", "info": None, "hdr": None}]
+        # Standard tags definition
+        standard_tags = [{"tag": "DIM_COIL", "info": None, "hdr": None},
+                         {"tag": "DIM_DYN", "info": None, "hdr": None},
+                         {"tag": "DIM_INDIRECT_0", "info": None, "hdr": None}]
+        if dimensions is None or dimensions <= 4:
+            self._dim_info = [{"tag": None, "info": None, "hdr": None}, ] * 3
+        elif dimensions > 4 and dimensions <= 7:
+            self._dim_info = [{"tag": None, "info": None, "hdr": None}, ] * 3
+            dim_higher = dimensions - 4
+            self._dim_info[:dim_higher] = standard_tags[:dim_higher]
+        else:
+            raise ValueError('dimensions kwarg must be None or an int from 4 to 7.')
 
         self._standard_data = {}
         self._user_data = {}
-        self.dimensions = dimensions
 
     @classmethod
-    def from_header_ext(cls, hdr_ext_dict, dimensions=7):
+    def from_header_ext(cls, hdr_ext_dict):
+        """Create a Hdr_Ext object from a json string deserialised into a python dict
 
+        :param hdr_ext_dict: header extension as a dict.
+        :type hdr_ext_dict: dict
+        :return: Class object
+        :rtype: Hdr_Ext
+        """
         optional_dict = dict(hdr_ext_dict)
         obj = cls(
             hdr_ext_dict['SpectrometerFrequency'],
@@ -73,11 +90,31 @@ class Hdr_Ext:
             if key in standard_defined:
                 obj.set_standard_def(key, hdr_ext_dict[key])
             else:
-                obj.set_user_def(key=key, value=hdr_ext_dict[key])
-
-        obj.dimensions = dimensions
+                if 'Value' in hdr_ext_dict[key]\
+                        and 'Description' in hdr_ext_dict[key]:
+                    obj.set_user_def(
+                        key,
+                        hdr_ext_dict[key]['Value'],
+                        hdr_ext_dict[key]['Description'])
+                elif isinstance(hdr_ext_dict[key], dict)\
+                        and 'Description' in hdr_ext_dict[key]:
+                    obj.set_user_def(
+                        key,
+                        hdr_ext_dict[key],
+                        hdr_ext_dict[key]['Description'])
+                else:
+                    raise ValueError(f'User-defined key {key} must contain a "Description" field"')
 
         return obj
+
+    @property
+    def ndim(self):
+        """Returns the number of dimensions implied by the 'dim_{5,6,7}' tags"""
+        ndim = 4
+        for ddx in range(5, 8):
+            if f'dim_{ddx}' in self.current_keys:
+                ndim += 1
+        return ndim
 
     def set_dim_info(self, dim, tag, info=None, hdr=None):
         """Set information associated with the optional, higher data dimensions.
@@ -130,7 +167,6 @@ class Hdr_Ext:
 
         self._dim_info.pop(dim)
         self._dim_info.append({"tag": None, "info": None, "hdr": None})
-        self.dimensions -= 1
 
     def set_standard_def(self, key, value):
         """Add a single standard-defined bit of meta-data to the object."""
@@ -139,25 +175,21 @@ class Hdr_Ext:
 
         self._standard_data[key] = value
 
-    def set_user_def(self, all_keys=None, key=None, value=None, doc=None):
-        """Add user defined meta data keys to the header extension.
-        Pass dict as kwarg all_keys to set all key/value pairs, or
+    def set_user_def(self, key, value, doc):
+        """Add user-defined metadata keys to the header extension.
         add keys and values one at a time using key, value and doc.
         """
 
-        if all_keys is not None:
-            self._user_data = all_keys
-        else:
-            if key in standard_defined:
-                raise ValueError("key must not be one of the standard-defined keys.")
+        if key in standard_defined:
+            raise ValueError("key must not be one of the standard-defined keys.")
 
-            if isinstance(value, dict):
-                self._user_data[key] = value
-                self._user_data[key].update({'Description': doc})
-            else:
-                self._user_data[key] = {
-                    'Value': value,
-                    'Description': doc}
+        if isinstance(value, dict):
+            self._user_data[key] = value
+            self._user_data[key].update({'Description': doc})
+        else:
+            self._user_data[key] = {
+                'Value': value,
+                'Description': doc}
 
     def remove_standard_def(self, key):
         """Remove key from list of standard defined key-value pairs
@@ -180,27 +212,22 @@ class Hdr_Ext:
         self._user_data.pop(key)
 
     def to_dict(self):
-        """Generate dictionay representation from properties."""
+        """Generate dictionary representation from properties."""
 
         # Required meta-data
         out_dict = {'SpectrometerFrequency': self.SpectrometerFrequency,
                     'ResonantNucleus': self.ResonantNucleus}
 
         # Dimension information
-        if self.dimensions < 4:
-            raise ValueError('dimensions must be 4 or greater')
-        elif self.dimensions == 4:
-            pass
-        else:
-            update_dict = {}
-            for idx in range(5, self.dimensions + 1):
+        update_dict = {}
+        for idx in range(5, 8):
+            if self._dim_info[idx - 5]['tag'] is not None:
                 update_dict[f'dim_{idx}'] = self._dim_info[idx - 5]['tag']
-                if self._dim_info[idx - 5]['info'] is not None:
-                    update_dict[f'dim_{idx}_info'] = self._dim_info[idx - 5]['info']
-                if self._dim_info[idx - 5]['hdr'] is not None:
-                    update_dict[f'dim_{idx}_header'] = self._dim_info[idx - 5]['hdr']
-
-            out_dict.update(update_dict)
+            if self._dim_info[idx - 5]['info'] is not None:
+                update_dict[f'dim_{idx}_info'] = self._dim_info[idx - 5]['info']
+            if self._dim_info[idx - 5]['hdr'] is not None:
+                update_dict[f'dim_{idx}_header'] = self._dim_info[idx - 5]['hdr']
+        out_dict.update(update_dict)
 
         # Add standard defined
         out_dict.update(self._standard_data)

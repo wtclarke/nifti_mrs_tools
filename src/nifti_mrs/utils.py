@@ -8,21 +8,29 @@ import numpy as np
 from nibabel.nifti1 import Nifti1Extension
 
 
-def modify_hdr_ext(new_hdr_ext, hdr):
+class NIfTI_MRSIncompatible(Exception):
+    pass
+
+
+def modify_hdr_ext(new_hdr_ext, nifti_header):
     """Generate a new NIfTI header with a modified header extension.
     New header is a copy of the one passed
 
     :param new_hdr_ext: Modified header extension
-    :type new_hdr_ext: dict
-    :param hdr: NIfTI header
-    :type hdr: nibabel.nifti2.Nifti2Header
+    :type new_hdr_ext: Hdr_Ext object
+    :param nifti_header: NIfTI header
+    :type nifti_header: nibabel.nifti2.Nifti2Header
     :return: Copied header with modified hdr extension
     :rtype: nibabel.nifti2.Nifti2Header
     """
-    modded_hdr = hdr.copy()
-    json_s = new_hdr_ext.to_json()
-    extension = Nifti1Extension(44, json_s.encode('UTF-8'))
-    modded_hdr.extensions.clear()
+    modded_hdr = nifti_header.copy()
+    extension = Nifti1Extension(
+        44,
+        new_hdr_ext.to_json().encode('UTF-8'))
+
+    hdr_ext_codes = modded_hdr.extensions.get_codes()
+    if 44 in hdr_ext_codes:
+        modded_hdr.extensions.pop(hdr_ext_codes.index(44))
     modded_hdr.extensions.append(extension)
 
     return modded_hdr
