@@ -1,8 +1,11 @@
 This document contains the nifti_mrs_tools release history in reverse chronological order.
 
-0.1.8 (Thursday 6th July 2023)
-------------------------------
+1.0.0 (Friday 7th July 2023)
+----------------------------
+- Major version increment due to breaking API changes.
 - Under the hood rework of the validator and how the main classes handle dimensionality.
+- Reordering should better handle dim_N_header fields.
+- Validation is now much stricter.
 
 0.1.7 (Friday 31st March 2023)
 --------------------------------
