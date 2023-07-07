@@ -4,13 +4,15 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>nifti_mrs.nifti_mrs &mdash; nifti-mrs 0.1.7 documentation</title>
+  <title>nifti_mrs.nifti_mrs &mdash; nifti-mrs 1.0.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -33,7 +35,7 @@
             nifti-mrs
           </a>
               <div class="version">
-                0.1.7
+                1.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -51,8 +53,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NotNIFTI_MRS"><code class="docutils literal notranslate"><span class="pre">NotNIFTI_MRS</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.header"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.header</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.shape"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.shape</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.ndim"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.ndim</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.shape"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.shape</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.dtype"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.dtype</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.nifti_mrs_version"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.nifti_mrs_version</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.set_version_info"><code class="docutils literal notranslate"><span class="pre">NIFTI_MRS.set_version_info()</span></code></a></li>
@@ -87,7 +89,7 @@
 <li class="toctree-l2"><a class="reference internal" href="nifti_mrs.tools.misc.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.misc</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="nifti_mrs.tools.reshape.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.reshape</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="nifti_mrs.tools.split_merge.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.split_merge</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="nifti_mrs.tools.utils.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.utils</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="nifti_mrs.utils.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.utils</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="mrs_tools.html"><code class="docutils literal notranslate"><span class="pre">mrs_tools</span></code></a></li>
@@ -146,15 +148,16 @@ Utilises the fslpy Image class and nibabel nifti headers.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.shape">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.shape" title="Permalink to this definition"></a></dt>
-<dd><p>Returns data shape</p>
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.ndim">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ndim</span></span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.ndim" title="Permalink to this definition"></a></dt>
+<dd><p>Returns number of dimensions in the NIfTI-MRS object</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.ndim">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ndim</span></span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.ndim" title="Permalink to this definition"></a></dt>
-<dd><p>Returns number of data dimensions</p>
+<dt class="sig sig-object py" id="nifti_mrs.nifti_mrs.NIFTI_MRS.shape">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#nifti_mrs.nifti_mrs.NIFTI_MRS.shape" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the data shape. Singleton dimensions implied by header extension keys are included.
+Use obj.image.shape to get the shape of the stored data</p>
 </dd></dl>
 
 <dl class="py property">
@@ -321,7 +324,7 @@ Returns empty string if N/A.</p>
 <dd><p>Return a copy of this image, optionally with a dimension removed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>remove_dim</strong> (<em>str</em><em> or </em><em>int</em><em>, </em><em>optional</em>) – dimension index (4, 5, 6) or tag. None iterates over all indices., defaults to None</p>
+<dd class="field-odd"><p><strong>remove_dim</strong> (<em>str</em><em> or </em><em>int</em><em>, </em><em>optional</em>) – dimension index (4, 5, 6) or tag to remove. Takes first index. Defaults to None/no removal</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Copy of object</p>
@@ -392,7 +395,7 @@ Defaults to False.</p></li>
 <dd><p>Return representations of the dynamic header values</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List of dicts containing labeled header parameters</p>
+<dd class="field-odd"><p>List of dicts containing labelled header parameters</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>List of tuples containing header values</p>

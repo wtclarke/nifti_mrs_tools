@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>nifti_mrs &mdash; nifti-mrs 1.0.0 documentation</title>
+  <title>nifti_mrs.tools.reorder &mdash; nifti-mrs 1.0.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,9 +18,7 @@
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="nifti_mrs.nifti_mrs" href="nifti_mrs.nifti_mrs.html" />
-    <link rel="prev" title="NIfTI-MRS API Documentation" href="index.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,19 +44,8 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">nifti_mrs</span></code></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="nifti_mrs.nifti_mrs.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.nifti_mrs</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="nifti_mrs.create_nmrs.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.create_nmrs</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="nifti_mrs.definitions.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.definitions</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="nifti_mrs.validator.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.validator</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="nifti_mrs.hdr_ext.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.hdr_ext</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="nifti_mrs.tools.misc.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.misc</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="nifti_mrs.tools.reshape.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.reshape</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="nifti_mrs.tools.split_merge.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.split_merge</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="nifti_mrs.utils.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.utils</span></code></a></li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="nifti_mrs.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="mrs_tools.html"><code class="docutils literal notranslate"><span class="pre">mrs_tools</span></code></a></li>
 </ul>
 
@@ -76,9 +63,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active"><code class="docutils literal notranslate"><span class="pre">nifti_mrs</span></code></li>
+      <li class="breadcrumb-item active"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.reorder</span></code></li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/nifti_mrs.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/nifti_mrs.tools.reorder.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -86,19 +73,38 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="nifti-mrs">
-<h1><code class="docutils literal notranslate"><span class="pre">nifti_mrs</span></code><a class="headerlink" href="#nifti-mrs" title="Permalink to this heading"></a></h1>
-<div class="toctree-wrapper compound">
-</div>
+  <section id="module-nifti_mrs.tools.reorder">
+<span id="nifti-mrs-tools-reorder"></span><h1><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.reorder</span></code><a class="headerlink" href="#module-nifti_mrs.tools.reorder" title="Permalink to this heading"></a></h1>
+<p>Tools for reordering the dimensions of NIfTI-MRS</p>
+<p>Author: Will Clarke &lt;<a class="reference external" href="mailto:william&#46;clarke&#37;&#52;&#48;ndcn&#46;ox&#46;ac&#46;uk">william<span>&#46;</span>clarke<span>&#64;</span>ndcn<span>&#46;</span>ox<span>&#46;</span>ac<span>&#46;</span>uk</a>&gt;
+Copyright (C) 2021 University of Oxford</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="nifti_mrs.tools.reorder.reorder">
+<span class="sig-prename descclassname"><span class="pre">nifti_mrs.tools.reorder.</span></span><span class="sig-name descname"><span class="pre">reorder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nmrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim_tag_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.tools.reorder.reorder" title="Permalink to this definition"></a></dt>
+<dd><p>Reorder the higher dimensions of a NIfTI-MRS object.
+Can force a singleton dimension with new tag.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nmrs</strong> (<em>fsl_mrs.core.nifti_mrs.NIFTI_MRS</em>) – NIFTI-MRS object to reorder.</p></li>
+<li><p><strong>dim_tag_list</strong> (<em>List</em><em> of </em><em>str</em>) – List of dimension tags in desired order</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Reordered NIfTI-MRS object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>fsl_mrs.core.nifti_mrs.NIFTI_MRS</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="NIfTI-MRS API Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="nifti_mrs.nifti_mrs.html" class="btn btn-neutral float-right" title="nifti_mrs.nifti_mrs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+          <footer>
 
   <hr/>
 

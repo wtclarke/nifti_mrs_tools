@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>nifti_mrs.tools.split_merge &mdash; nifti-mrs 1.0.0 documentation</title>
+  <title>nifti_mrs.utils &mdash; nifti-mrs 1.0.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -19,8 +19,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="nifti_mrs.utils" href="nifti_mrs.utils.html" />
-    <link rel="prev" title="nifti_mrs.tools.reshape" href="nifti_mrs.tools.reshape.html" /> 
+    <link rel="next" title="mrs_tools" href="mrs_tools.html" />
+    <link rel="prev" title="nifti_mrs.tools.split_merge" href="nifti_mrs.tools.split_merge.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -55,12 +55,15 @@
 <li class="toctree-l2"><a class="reference internal" href="nifti_mrs.hdr_ext.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.hdr_ext</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="nifti_mrs.tools.misc.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.misc</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="nifti_mrs.tools.reshape.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.reshape</span></code></a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.split_merge</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#nifti_mrs.tools.split_merge.split"><code class="docutils literal notranslate"><span class="pre">split()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#nifti_mrs.tools.split_merge.merge"><code class="docutils literal notranslate"><span class="pre">merge()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="nifti_mrs.tools.split_merge.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.split_merge</span></code></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.utils</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nifti_mrs.utils.NIfTI_MRSIncompatible"><code class="docutils literal notranslate"><span class="pre">NIfTI_MRSIncompatible</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nifti_mrs.utils.modify_hdr_ext"><code class="docutils literal notranslate"><span class="pre">modify_hdr_ext()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nifti_mrs.utils.check_type"><code class="docutils literal notranslate"><span class="pre">check_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nifti_mrs.utils.dim_n_header_short_to_long"><code class="docutils literal notranslate"><span class="pre">dim_n_header_short_to_long()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nifti_mrs.utils.dim_n_header_long_to_short"><code class="docutils literal notranslate"><span class="pre">dim_n_header_long_to_short()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="nifti_mrs.utils.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.utils</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="mrs_tools.html"><code class="docutils literal notranslate"><span class="pre">mrs_tools</span></code></a></li>
@@ -81,9 +84,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="nifti_mrs.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs</span></code></a></li>
-      <li class="breadcrumb-item active"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.split_merge</span></code></li>
+      <li class="breadcrumb-item active"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.utils</span></code></li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/nifti_mrs.tools.split_merge.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/nifti_mrs.utils.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -91,59 +94,63 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-nifti_mrs.tools.split_merge">
-<span id="nifti-mrs-tools-split-merge"></span><h1><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.split_merge</span></code><a class="headerlink" href="#module-nifti_mrs.tools.split_merge" title="Permalink to this heading"></a></h1>
-<p>Tools for merging and splitting the dimensions of NIfTI-MRS</p>
+  <section id="module-nifti_mrs.utils">
+<span id="nifti-mrs-utils"></span><h1><code class="docutils literal notranslate"><span class="pre">nifti_mrs.utils</span></code><a class="headerlink" href="#module-nifti_mrs.utils" title="Permalink to this heading"></a></h1>
+<p>Utility functions for NIfTI-MRS utilities</p>
 <p>Author: Will Clarke &lt;<a class="reference external" href="mailto:william&#46;clarke&#37;&#52;&#48;ndcn&#46;ox&#46;ac&#46;uk">william<span>&#46;</span>clarke<span>&#64;</span>ndcn<span>&#46;</span>ox<span>&#46;</span>ac<span>&#46;</span>uk</a>&gt;
 Copyright (C) 2021 University of Oxford</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="nifti_mrs.utils.NIfTI_MRSIncompatible">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nifti_mrs.utils.</span></span><span class="sig-name descname"><span class="pre">NIfTI_MRSIncompatible</span></span><a class="headerlink" href="#nifti_mrs.utils.NIfTI_MRSIncompatible" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py function">
-<dt class="sig sig-object py" id="nifti_mrs.tools.split_merge.split">
-<span class="sig-prename descclassname"><span class="pre">nifti_mrs.tools.split_merge.</span></span><span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nmrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_or_indicies</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.tools.split_merge.split" title="Permalink to this definition"></a></dt>
-<dd><p>Splits, or extracts indices from, a specified dimension of a
-NIFTI_MRS object. Output is two NIFTI_MRS objects. Header information preserved.</p>
+<dt class="sig sig-object py" id="nifti_mrs.utils.modify_hdr_ext">
+<span class="sig-prename descclassname"><span class="pre">nifti_mrs.utils.</span></span><span class="sig-name descname"><span class="pre">modify_hdr_ext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_hdr_ext</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nifti_header</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.utils.modify_hdr_ext" title="Permalink to this definition"></a></dt>
+<dd><p>Generate a new NIfTI header with a modified header extension.
+New header is a copy of the one passed</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>nmrs</strong> (<em>fsl_mrs.core.nifti_mrs.NIFTI_MRS</em>) – Input nifti_mrs object to split</p></li>
-<li><p><strong>dimension</strong> (<em>str</em><em> or </em><em>int</em>) – Dimension along which to split.
-Dimension tag or one of 4, 5, 6 (for 0-indexed 5th, 6th, and 7th)</p></li>
-<li><p><strong>index_or_indicies</strong> (<em>int</em><em> or </em><em>[</em><em>int</em><em>]</em>) – Single integer index to split after,
-or list of interger indices to insert into second array.
-E.g. ‘0’ will place the first index into the first output
-and 1 -&gt; N in the second.
-‘[1, 5, 10]’ will place 1, 5 and 10 into the second output
-and all other will remain in the first.</p></li>
+<li><p><strong>new_hdr_ext</strong> (<em>Hdr_Ext object</em>) – Modified header extension</p></li>
+<li><p><strong>nifti_header</strong> (<em>nibabel.nifti2.Nifti2Header</em>) – NIfTI header</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Two NIFTI_MRS object containing the split files</p>
+<dd class="field-even"><p>Copied header with modified hdr extension</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>fsl_mrs.core.nifti_mrs.NIFTI_MRS</p>
+<dd class="field-odd"><p>nibabel.nifti2.Nifti2Header</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="nifti_mrs.tools.split_merge.merge">
-<span class="sig-prename descclassname"><span class="pre">nifti_mrs.tools.split_merge.</span></span><span class="sig-name descname"><span class="pre">merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_of_nmrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.tools.split_merge.merge" title="Permalink to this definition"></a></dt>
-<dd><p>Concatenate NIfTI-MRS objects along specified higher dimension</p>
+<dt class="sig sig-object py" id="nifti_mrs.utils.check_type">
+<span class="sig-prename descclassname"><span class="pre">nifti_mrs.utils.</span></span><span class="sig-name descname"><span class="pre">check_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_format</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.utils.check_type" title="Permalink to this definition"></a></dt>
+<dd><p>Return type of header: long (list) or short (dict)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>array_of_nmrs</strong> (<em>tuple</em><em> or </em><em>list</em><em> of </em><em>fsl_mrs.core.nifti_mrs.NIFTI_MRS</em>) – Array of NIFTI-MRS objects to concatenate</p></li>
-<li><p><strong>dimension</strong> (<em>int</em><em> or </em><em>str</em>) – Dimension along which to concatenate.
-Dimension tag or one of 4, 5, 6 (for 0-indexed 5th, 6th, and 7th).</p></li>
-</ul>
+<dd class="field-odd"><p><strong>in_format</strong> (<em>list</em><em> or </em><em>dict</em>) – Value of header key</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Concatenated NIFTI-MRS object</p>
+<dd class="field-even"><p>‘long’ or ‘short’</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>fsl_mrs.core.nifti_mrs.NIFTI_MRS</p>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nifti_mrs.utils.dim_n_header_short_to_long">
+<span class="sig-prename descclassname"><span class="pre">nifti_mrs.utils.</span></span><span class="sig-name descname"><span class="pre">dim_n_header_short_to_long</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_format</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elements</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.utils.dim_n_header_short_to_long" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nifti_mrs.utils.dim_n_header_long_to_short">
+<span class="sig-prename descclassname"><span class="pre">nifti_mrs.utils.</span></span><span class="sig-name descname"><span class="pre">dim_n_header_long_to_short</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_format</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.utils.dim_n_header_long_to_short" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 </section>
 
@@ -151,8 +158,8 @@ Dimension tag or one of 4, 5, 6 (for 0-indexed 5th, 6th, and 7th).</p></li>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="nifti_mrs.tools.reshape.html" class="btn btn-neutral float-left" title="nifti_mrs.tools.reshape" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="nifti_mrs.utils.html" class="btn btn-neutral float-right" title="nifti_mrs.utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="nifti_mrs.tools.split_merge.html" class="btn btn-neutral float-left" title="nifti_mrs.tools.split_merge" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mrs_tools.html" class="btn btn-neutral float-right" title="mrs_tools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

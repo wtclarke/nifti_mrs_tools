@@ -4,13 +4,15 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>nifti_mrs.validator &mdash; nifti-mrs 0.1.7 documentation</title>
+  <title>nifti_mrs.validator &mdash; nifti-mrs 1.0.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -33,7 +35,7 @@
             nifti-mrs
           </a>
               <div class="version">
-                0.1.7
+                1.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -65,7 +67,7 @@
 <li class="toctree-l2"><a class="reference internal" href="nifti_mrs.tools.misc.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.misc</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="nifti_mrs.tools.reshape.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.reshape</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="nifti_mrs.tools.split_merge.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.split_merge</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="nifti_mrs.tools.utils.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.utils</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="nifti_mrs.utils.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.utils</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="mrs_tools.html"><code class="docutils literal notranslate"><span class="pre">mrs_tools</span></code></a></li>
@@ -148,13 +150,22 @@ Check intent name</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="nifti_mrs.validator.validate_hdr_ext">
-<span class="sig-prename descclassname"><span class="pre">nifti_mrs.validator.</span></span><span class="sig-name descname"><span class="pre">validate_hdr_ext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">header_ex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dimensions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.validator.validate_hdr_ext" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">nifti_mrs.validator.</span></span><span class="sig-name descname"><span class="pre">validate_hdr_ext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">header_ex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension_sizes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dimensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.validator.validate_hdr_ext" title="Permalink to this definition"></a></dt>
 <dd><p>Validate the header extension
 1. Check that it is json formatted string.
 2. Check that it contains the required meta-data
 3. Check that it contains any required dimension information.
-4. Check that standard-defined data is of correct type.
-Inputs:</p>
+4. Check that standard-defined data is of correct type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>header_ex</strong> (<em>str</em>) – NIfTI-MRS header extensions as a json deserialisable string</p></li>
+<li><p><strong>dimension_sizes</strong> (<em>tuple</em><em> of </em><em>ints</em>) – Size of the NIfTI-MRS dimensions</p></li>
+<li><p><strong>data_dimensions</strong> (<em>int</em><em>, </em><em>optional</em>) – Total number of data dimensions in corresponding nifti-mrs data, defaults to None
+When None the dimensions are inferred from the tags</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">

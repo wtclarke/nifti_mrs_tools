@@ -3,13 +3,15 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; nifti-mrs 0.1.7 documentation</title>
+  <title>Index &mdash; nifti-mrs 1.0.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -30,7 +32,7 @@
             nifti-mrs
           </a>
               <div class="version">
-                0.1.7
+                1.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -110,7 +112,7 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="nifti_mrs.tools.utils.html#nifti_mrs.tools.utils.check_type">check_type() (in module nifti_mrs.tools.utils)</a>
+      <li><a href="nifti_mrs.utils.html#nifti_mrs.utils.check_type">check_type() (in module nifti_mrs.utils)</a>
 
       <ul>
         <li><a href="nifti_mrs.validator.html#nifti_mrs.validator.check_type">(in module nifti_mrs.validator)</a>
@@ -134,9 +136,9 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="nifti_mrs.tools.utils.html#nifti_mrs.tools.utils.dim_n_header_long_to_short">dim_n_header_long_to_short() (in module nifti_mrs.tools.utils)</a>
+      <li><a href="nifti_mrs.utils.html#nifti_mrs.utils.dim_n_header_long_to_short">dim_n_header_long_to_short() (in module nifti_mrs.utils)</a>
 </li>
-      <li><a href="nifti_mrs.tools.utils.html#nifti_mrs.tools.utils.dim_n_header_short_to_long">dim_n_header_short_to_long() (in module nifti_mrs.tools.utils)</a>
+      <li><a href="nifti_mrs.utils.html#nifti_mrs.utils.dim_n_header_short_to_long">dim_n_header_short_to_long() (in module nifti_mrs.utils)</a>
 </li>
       <li><a href="nifti_mrs.nifti_mrs.html#nifti_mrs.nifti_mrs.NIFTI_MRS.dim_position">dim_position() (nifti_mrs.nifti_mrs.NIFTI_MRS method)</a>
 </li>
@@ -220,7 +222,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nifti_mrs.tools.split_merge.html#nifti_mrs.tools.split_merge.merge">merge() (in module nifti_mrs.tools.split_merge)</a>
 </li>
-      <li><a href="nifti_mrs.tools.utils.html#nifti_mrs.tools.utils.modify_hdr_ext">modify_hdr_ext() (in module nifti_mrs.tools.utils)</a>
+      <li><a href="nifti_mrs.utils.html#nifti_mrs.utils.modify_hdr_ext">modify_hdr_ext() (in module nifti_mrs.utils)</a>
 </li>
       <li>
     module
@@ -236,11 +238,13 @@
 </li>
         <li><a href="nifti_mrs.tools.misc.html#module-nifti_mrs.tools.misc">nifti_mrs.tools.misc</a>
 </li>
+        <li><a href="nifti_mrs.tools.reorder.html#module-nifti_mrs.tools.reorder">nifti_mrs.tools.reorder</a>
+</li>
         <li><a href="nifti_mrs.tools.reshape.html#module-nifti_mrs.tools.reshape">nifti_mrs.tools.reshape</a>
 </li>
         <li><a href="nifti_mrs.tools.split_merge.html#module-nifti_mrs.tools.split_merge">nifti_mrs.tools.split_merge</a>
 </li>
-        <li><a href="nifti_mrs.tools.utils.html#module-nifti_mrs.tools.utils">nifti_mrs.tools.utils</a>
+        <li><a href="nifti_mrs.utils.html#module-nifti_mrs.utils">nifti_mrs.utils</a>
 </li>
         <li><a href="nifti_mrs.validator.html#module-nifti_mrs.validator">nifti_mrs.validator</a>
 </li>
@@ -251,8 +255,12 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="nifti_mrs.nifti_mrs.html#nifti_mrs.nifti_mrs.NIFTI_MRS.ndim">ndim (nifti_mrs.nifti_mrs.NIFTI_MRS property)</a>
+      <li><a href="nifti_mrs.hdr_ext.html#nifti_mrs.hdr_ext.Hdr_Ext.ndim">ndim (nifti_mrs.hdr_ext.Hdr_Ext property)</a>
+
+      <ul>
+        <li><a href="nifti_mrs.nifti_mrs.html#nifti_mrs.nifti_mrs.NIFTI_MRS.ndim">(nifti_mrs.nifti_mrs.NIFTI_MRS property)</a>
 </li>
+      </ul></li>
       <li><a href="nifti_mrs.nifti_mrs.html#nifti_mrs.nifti_mrs.NIFTI_MRS">NIFTI_MRS (class in nifti_mrs.nifti_mrs)</a>
 </li>
       <li>
@@ -291,14 +299,21 @@
 </li>
       </ul></li>
       <li>
+    nifti_mrs.tools.reorder
+
+      <ul>
+        <li><a href="nifti_mrs.tools.reorder.html#module-nifti_mrs.tools.reorder">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
     nifti_mrs.tools.reshape
 
       <ul>
         <li><a href="nifti_mrs.tools.reshape.html#module-nifti_mrs.tools.reshape">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     nifti_mrs.tools.split_merge
 
@@ -307,10 +322,10 @@
 </li>
       </ul></li>
       <li>
-    nifti_mrs.tools.utils
+    nifti_mrs.utils
 
       <ul>
-        <li><a href="nifti_mrs.tools.utils.html#module-nifti_mrs.tools.utils">module</a>
+        <li><a href="nifti_mrs.utils.html#module-nifti_mrs.utils">module</a>
 </li>
       </ul></li>
       <li>
@@ -322,7 +337,7 @@
       </ul></li>
       <li><a href="nifti_mrs.nifti_mrs.html#nifti_mrs.nifti_mrs.NIFTI_MRS.nifti_mrs_version">nifti_mrs_version (nifti_mrs.nifti_mrs.NIFTI_MRS property)</a>
 </li>
-      <li><a href="nifti_mrs.tools.split_merge.html#nifti_mrs.tools.split_merge.NIfTI_MRSIncompatible">NIfTI_MRSIncompatible</a>
+      <li><a href="nifti_mrs.utils.html#nifti_mrs.utils.NIfTI_MRSIncompatible">NIfTI_MRSIncompatible</a>
 </li>
       <li><a href="nifti_mrs.validator.html#nifti_mrs.validator.niftiDataError">niftiDataError</a>
 </li>
@@ -350,7 +365,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="nifti_mrs.hdr_ext.html#nifti_mrs.hdr_ext.Hdr_Ext.remove_user_def">remove_user_def() (nifti_mrs.hdr_ext.Hdr_Ext method)</a>
 </li>
-      <li><a href="nifti_mrs.tools.split_merge.html#nifti_mrs.tools.split_merge.reorder">reorder() (in module nifti_mrs.tools.split_merge)</a>
+      <li><a href="nifti_mrs.tools.reorder.html#nifti_mrs.tools.reorder.reorder">reorder() (in module nifti_mrs.tools.reorder)</a>
 </li>
       <li><a href="nifti_mrs.tools.reshape.html#nifti_mrs.tools.reshape.reshape">reshape() (in module nifti_mrs.tools.reshape)</a>
 </li>
