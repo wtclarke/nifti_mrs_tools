@@ -33,7 +33,7 @@ class NIFTI_MRS():
     Access the underlying fslpy Image object for useful attributes using obj.image.
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, validate_on_creation=True, **kwargs):
         """Create a NIFTI_MRS object with the given image data or file name.
 
         Arguments mirror those of the leveraged fsl.data.image.IMage class.
@@ -75,6 +75,10 @@ class NIFTI_MRS():
 
         All other arguments are passed through to the ``nibabel.load`` function
         (if it is called).
+
+        :arg validate_on_creation:   If True (default) then the header extension will
+                                     be validated on creation of the NIfTI-MRS object.
+                                     Use False to just print warnings.
         """
         # Handle various options for the first (data source) argument
         input_hdr_ext = None
@@ -123,10 +127,19 @@ class NIFTI_MRS():
                     self.header.extensions[hdr_ext_codes.index(44)].get_content()))
 
         # Some validation upon creation
-        validator.validate_hdr_ext(
-            self._hdr_ext.to_json(),
-            self.image.shape,
-            np.max((self._hdr_ext.ndim, self.image.ndim)))
+        if validate_on_creation:
+            validator.validate_hdr_ext(
+                self._hdr_ext.to_json(),
+                self.image.shape,
+                np.max((self._hdr_ext.ndim, self.image.ndim)))
+        else:
+            try:
+                validator.validate_hdr_ext(
+                    self._hdr_ext.to_json(),
+                    self.image.shape,
+                    np.max((self._hdr_ext.ndim, self.image.ndim)))
+            except validator.headerExtensionError as exc:
+                print(f"This file's header extension is currently invalid. Reason: {str(exc)}")
 
         try:
             self.nucleus
