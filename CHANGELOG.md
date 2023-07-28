@@ -2,7 +2,9 @@ This document contains the nifti_mrs_tools release history in reverse chronologi
 
 1.0.1 (Friday 28th July 2023)
 -----------------------------
-- Ensure that the xyzt_units header is correctly set to (mm, s)
+- Ensure that the xyzt_units header is correctly set to (mm, s).
+- Validation on creation of a NIfTI-MRS object can now be turned off.
+- Python 3.7 now in [end of life](https://devguide.python.org/versions/) status and is no longer supported.
 
 1.0.0 (Friday 7th July 2023)
 ----------------------------

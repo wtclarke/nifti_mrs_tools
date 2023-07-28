@@ -5,9 +5,11 @@ Copyright Will Clarke, University of Oxford, 2023'''
 # Imports
 from pathlib import Path
 from copy import deepcopy
+import json
 
 import pytest
 import numpy as np
+from nibabel.nifti1 import Nifti1Extension
 
 from nifti_mrs.nifti_mrs import NIFTI_MRS
 from nifti_mrs.validator import headerExtensionError
@@ -61,7 +63,7 @@ def test_modification_mrs_meta():
 def test_hdr_ext():
     obj = NIFTI_MRS(data['unprocessed'])
 
-    # Test dictionay like access of keys
+    # Test dictionary like access of keys
     assert 'EchoTime' in obj.hdr_ext
     assert obj.hdr_ext['EchoTime'] == 0.011
 
@@ -347,3 +349,27 @@ def test_getaffine():
     assert np.allclose(
         obj.getAffine('voxel', 'world'),
         obj.image.getAffine('voxel', 'world'))
+
+
+def test_on_load_validator(capsys):
+    obj = NIFTI_MRS(data['unprocessed'])
+    hdr_ext = obj.hdr_ext.to_dict()
+    hdr_ext.pop('dim_5')
+    header = obj.header
+
+    bad_extension = Nifti1Extension(
+        44,
+        json.dumps(hdr_ext).encode('UTF-8'))
+    header.extensions.clear()
+    header.extensions.append(bad_extension)
+
+    with pytest.raises(
+            headerExtensionError,
+            match="With 6 dimensions the header extension must contain 'dim_5'."):
+        NIFTI_MRS(obj[:], header=header)
+
+    NIFTI_MRS(obj[:], header=header, validate_on_creation=False)
+    captured = capsys.readouterr()
+    assert captured.out == \
+        "This file's header extension is currently invalid. "\
+        "Reason:  With 6 dimensions the header extension must contain 'dim_5'.\n"
