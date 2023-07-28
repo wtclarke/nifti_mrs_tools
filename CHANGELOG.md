@@ -1,5 +1,9 @@
 This document contains the nifti_mrs_tools release history in reverse chronological order.
 
+1.0.2 (Friday 28th July 2023)
+-----------------------------
+- Bugfix release for NIfTI-MRS header extension validator.
+
 1.0.1 (Friday 28th July 2023)
 -----------------------------
 - Ensure that the xyzt_units header is correctly set to (mm, s).
