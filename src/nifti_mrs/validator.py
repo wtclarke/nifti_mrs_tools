@@ -87,7 +87,7 @@ def validate_hdr_ext(header_ex, dimension_sizes, data_dimensions=None):
     :param dimension_sizes: Size of the NIfTI-MRS dimensions
     :type dimension_sizes: tuple of ints
     :param data_dimensions: Total number of data dimensions in corresponding nifti-mrs data, defaults to None
-        When None the dimensions are inferred from the tags
+        When None the dimensions are inferred from the tags and size
     :type data_dimensions: int, optional
     """
     # 1. Check that header_ext is json
@@ -116,11 +116,12 @@ def validate_hdr_ext(header_ex, dimension_sizes, data_dimensions=None):
     # 3. Dimension information
     # Calculate the implied size unless passed explicitly
     if data_dimensions is None:
-        data_dimensions = 4
-        for ddx in range(5, 8):
+        # Implied data dimensions at least as big as data.
+        data_dimensions = len(dimension_sizes)
+        for ddx in range(data_dimensions + 1, 8):
             if f"dim_{ddx}" in json_dict:
                 data_dimensions = ddx
-    # Ensure dimension_sizes is consistent with this
+    # Ensure dimension_sizes is consistent with this by adding singletons if smaller
     for _ in range(len(dimension_sizes), data_dimensions):
         dimension_sizes += (1, )
 
