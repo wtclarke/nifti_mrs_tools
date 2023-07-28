@@ -141,6 +141,11 @@ def gen_nifti_mrs_hdr_ext(data, dwelltime, hdr_ext, affine=None, nifti_version=2
     v_minor = nifti_mrs_version[1]
     header['intent_name'] = f'mrs_v{v_major}_{v_minor}'.encode()
 
+    # Ensure that xyzt_units is set correctly
+    # define NIFTI_UNITS_MM      2 /! NIFTI code for millimeters. /
+    # define NIFTI_UNITS_SEC     8 /! NIFTI code for seconds. /
+    header.set_xyzt_units(xyz=2, t=8)
+
     # Add header extension to header
     json_s = hdr_ext.to_json()
     extension = nib.nifti1.Nifti1Extension(44, json_s.encode('UTF-8'))

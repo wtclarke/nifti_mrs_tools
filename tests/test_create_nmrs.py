@@ -36,6 +36,8 @@ def test_gen_new_nifti_mrs(tmp_path):
     assert nmrs.dim_tags == ['DIM_COIL', None, None]
     assert 'dim_5' in nmrs.hdr_ext
 
+    assert nmrs.header.get_xyzt_units() == ('mm', 'sec')
+
     nmrs.save(tmp_path / 'out')
     assert (tmp_path / 'out.nii.gz').exists()
 
