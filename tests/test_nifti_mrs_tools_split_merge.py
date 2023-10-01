@@ -41,7 +41,7 @@ def test_split_dim_header():
          'dim_7_header': {'p1': {'Value': {'start': 1, 'increment': 1}, 'Description': 'user'},
                           'p2': [0.1, 0.2, 0.3, 0.4]}})
 
-    # Headers occuring as a list.
+    # Headers occurring as a list.
     hdr1, hdr2 = nmrs_tools.split_merge._split_dim_header(hdr_in, 5, 4, 1)
     assert hdr1 == {'SpectrometerFrequency': [100.0, ],
                     'ResonantNucleus': ['1H', ],
@@ -373,7 +373,7 @@ def test_split():
         nmrs_tools.split(nmrs, 'DIM_DYN', -1)
 
     assert exc_info.type is ValueError
-    assert exc_info.value.args[0] == "index_or_indicies must be between 0 and N-1,"\
+    assert exc_info.value.args[0] == "index_or_indices must be between 0 and N-1,"\
                                      " where N is the size of the specified dimension (16)."
 
     # Single index - out of range high
@@ -381,31 +381,31 @@ def test_split():
         nmrs_tools.split(nmrs, 'DIM_DYN', 64)
 
     assert exc_info.type is ValueError
-    assert exc_info.value.args[0] == "index_or_indicies must be between 0 and N-1,"\
+    assert exc_info.value.args[0] == "index_or_indices must be between 0 and N-1,"\
                                      " where N is the size of the specified dimension (16)."
 
-    # List of indicies - out of range low
+    # List of indices - out of range low
     with pytest.raises(ValueError) as exc_info:
         nmrs_tools.split(nmrs, 'DIM_DYN', [-1, 0, 1])
 
     assert exc_info.type is ValueError
-    assert exc_info.value.args[0] == "index_or_indicies must have elements between 0 and N,"\
+    assert exc_info.value.args[0] == "index_or_indices must have elements between 0 and N,"\
                                      " where N is the size of the specified dimension (16)."
 
-    # List of indicies - out of range high
+    # List of indices - out of range high
     with pytest.raises(ValueError) as exc_info:
         nmrs_tools.split(nmrs, 'DIM_DYN', [0, 65])
 
     assert exc_info.type is ValueError
-    assert exc_info.value.args[0] == "index_or_indicies must have elements between 0 and N,"\
+    assert exc_info.value.args[0] == "index_or_indices must have elements between 0 and N,"\
                                      " where N is the size of the specified dimension (16)."
 
-    # List of indicies - wrong type
+    # List of indices - wrong type
     with pytest.raises(TypeError) as exc_info:
         nmrs_tools.split(nmrs, 'DIM_DYN', '1')
 
     assert exc_info.type is TypeError
-    assert exc_info.value.args[0] == "index_or_indicies must be single index or list of indicies"
+    assert exc_info.value.args[0] == "index_or_indices must be single index or list of indices"
 
     # Functionality testing
 

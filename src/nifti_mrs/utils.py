@@ -103,7 +103,7 @@ def _list_to_dict(list_desc):
 
     If conversion is not possible return the passed list.
 
-    :param list_desc: List of header indicies
+    :param list_desc: List of header indices
     :type list_desc: list
     :return: Dict representation or unmodified list
     :rtype: Dict or list

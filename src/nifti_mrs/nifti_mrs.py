@@ -444,7 +444,7 @@ class NIFTI_MRS():
     def save(self, filepath):
         """Save NIfTI-MRS to file
 
-        :param filepath: Name and path of save loaction
+        :param filepath: Name and path of save location
         :type filepath: str or pathlib.Path
         """
         # Ensure final copy of header extension is loaded into Image object
@@ -478,7 +478,7 @@ class NIFTI_MRS():
         data = self[:]
         dim = self._dim_tag_to_index(dim)
 
-        # Convert indicies to slices to preserve singleton dimensions
+        # Convert indices to slices to preserve singleton dimensions
         if voxel_index is not None:
             tmp = []
             for vi in voxel_index:
@@ -540,7 +540,7 @@ class NIFTI_MRS():
             raise TypeError('dim should be int or a string matching one of the dim tags.')
 
     def iterate_over_spatial(self):
-        """Iterate over spatial voxels yeilding a data array the shape of the FID and any higher dimensions + index.
+        """Iterate over spatial voxels yielding a data array the shape of the FID and any higher dimensions + index.
 
         :yield: Complex FID data with any higher dimensions. Index to data.
         :rtype: tuple

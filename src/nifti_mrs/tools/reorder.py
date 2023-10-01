@@ -37,23 +37,23 @@ def reorder(nmrs, dim_tag_list):
     dims_to_add = tuple(range(original_dims, new_dim + 1))
     data_with_singleton = np.expand_dims(nmrs[:], dims_to_add)
 
-    # Create list of source indicies
-    # Create list of destination indicies
+    # Create list of source indices
+    # Create list of destination indices
     # Keep track of singleton tags
-    source_indicies = []
-    dest_indicies = []
+    source_indices = []
+    dest_indices = []
     singleton_tags = {}
     counter = 0
     for idx, tag in enumerate(dim_tag_list):
         if tag is not None:
             if tag in nmrs.dim_tags:
-                source_indicies.append(nmrs.dim_tags.index(tag) + 4)
+                source_indices.append(nmrs.dim_tags.index(tag) + 4)
             else:
-                source_indicies.append(nmrs.ndim + counter)
+                source_indices.append(nmrs.ndim + counter)
                 counter += 1
                 singleton_tags.update({(idx + 5): tag})
 
-            dest_indicies.append(idx + 4)
+            dest_indices.append(idx + 4)
 
     # Sort header extension dim_tags
     dim_n = re.compile(r'^dim_[567]$')
@@ -70,7 +70,7 @@ def reorder(nmrs, dim_tag_list):
             else:
                 tmp_header = None
 
-            new_index = dest_indicies[source_indicies.index(int(key[4]) - 1)] + 1
+            new_index = dest_indices[source_indicies.index(int(key[4]) - 1)] + 1
             new_ind_str = f'{new_index}th'
             new_hdr_ext.set_dim_info(
                 new_ind_str,
@@ -87,7 +87,7 @@ def reorder(nmrs, dim_tag_list):
         nmrs.header)
 
     new_nmrs = NIFTI_MRS(
-        np.moveaxis(data_with_singleton, source_indicies, dest_indicies),
+        np.moveaxis(data_with_singleton, source_indices, dest_indicies),
         header=new_header)
 
     return new_nmrs
