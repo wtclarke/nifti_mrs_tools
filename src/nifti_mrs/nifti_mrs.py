@@ -595,19 +595,13 @@ class NIFTI_MRS():
             return tvar
 
         def convert_to_tuples(dict_list):
-            out_list = []
-            for dl in dict_list:
-                tl = []
-                for key in dl:
-                    tl.append(dl[key])
-                out_list.append(tuple(tl))
-            return out_list
+            return [tuple(dl.values()) for dl in dict_list]
 
-        all_dim_hdrs_dict = []
-        for dim in range(5, 8):
-            if f'dim_{dim}_header' in self.hdr_ext:
-                all_dim_hdrs_dict.append(
-                    list_of_dict_from_dim(self.hdr_ext[f'dim_{dim}_header'], self.shape[dim - 1]))
+        all_dim_hdrs_dict = [
+            list_of_dict_from_dim(self.hdr_ext[f'dim_{dim}_header'], self.shape[dim - 1])
+            for dim in range(5, 8)
+            if f'dim_{dim}_header' in self.hdr_ext
+        ]
 
         tvar_dict = sort_output(all_dim_hdrs_dict)
         tvar_tuple = convert_to_tuples(tvar_dict)
