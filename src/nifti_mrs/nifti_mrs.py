@@ -318,7 +318,7 @@ class NIFTI_MRS():
         :param key: Key to remove
         :type key: str
         """
-        if key == 'SpectrometerFrequency' or key == 'ResonantNucleus':
+        if key in ('SpectrometerFrequency', 'ResonantNucleus'):
             raise ValueError('You cannot remove the required metadata.')
 
         dim_n = re.compile(r'dim_[567].*')
