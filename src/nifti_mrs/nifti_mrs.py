@@ -139,7 +139,7 @@ class NIFTI_MRS():
                     self.image.shape,
                     np.max((self._hdr_ext.ndim, self.image.ndim)))
             except validator.headerExtensionError as exc:
-                print(f"This file's header extension is currently invalid. Reason: {str(exc)}")
+                print(f"This file's header extension is currently invalid. Reason: {exc}")
 
         try:
             self.nucleus
