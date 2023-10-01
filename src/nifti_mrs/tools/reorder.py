@@ -61,12 +61,12 @@ def reorder(nmrs, dim_tag_list):
     for key in nmrs.hdr_ext:
         if dim_n.match(key):
             # Look for matching _info/_header tags
-            if (key + '_info') in nmrs.hdr_ext:
-                tmp_info = nmrs.hdr_ext[key + '_info']
+            if (f'{key}_info') in nmrs.hdr_ext:
+                tmp_info = nmrs.hdr_ext[f'{key}_info']
             else:
                 tmp_info = None
-            if (key + '_header') in nmrs.hdr_ext:
-                tmp_header = nmrs.hdr_ext[key + '_header']
+            if (f'{key}_header') in nmrs.hdr_ext:
+                tmp_header = nmrs.hdr_ext[f'{key}_header']
             else:
                 tmp_header = None
 
