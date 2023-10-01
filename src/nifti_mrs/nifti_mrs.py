@@ -390,7 +390,7 @@ class NIFTI_MRS():
         :param header: dict containing the dimension headers
         :type header: dict
         """
-        if tag not in dimension_tags.keys():
+        if tag not in dimension_tags:
             raise ValueError(f'Tag must be one of: {", ".join(list(dimension_tags.keys()))}.')
 
         dim = self._dim_tag_to_index(dim)
