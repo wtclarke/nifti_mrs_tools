@@ -1,5 +1,9 @@
 This document contains the nifti_mrs_tools release history in reverse chronological order.
 
+1.1.0 (WIP)
+-----------------------------
+- Code spelling changes.
+
 1.0.2 (Friday 28th July 2023)
 -----------------------------
 - Bugfix release for NIfTI-MRS header extension validator.
@@ -19,7 +23,7 @@ This document contains the nifti_mrs_tools release history in reverse chronologi
 
 0.1.7 (Friday 31st March 2023)
 --------------------------------
-- Added `--newaxis` option to `mrs_tools merge` allowing the user to merge files along a previously non-existant dimension (without using `reorder` first).
+- Added `--newaxis` option to `mrs_tools merge` allowing the user to merge files along a previously non-existent dimension (without using `reorder` first).
 
 0.1.6 (Thursday 30th March 2023)
 --------------------------------
