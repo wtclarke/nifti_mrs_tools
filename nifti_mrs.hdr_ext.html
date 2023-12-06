@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>nifti_mrs.hdr_ext &mdash; nifti-mrs 1.0.2 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>nifti_mrs.hdr_ext &mdash; nifti-mrs 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=fc837d61"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -35,7 +37,7 @@
             nifti-mrs
           </a>
               <div class="version">
-                1.0.2
+                1.1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -105,10 +107,10 @@
            <div itemprop="articleBody">
              
   <section id="module-nifti_mrs.hdr_ext">
-<span id="nifti-mrs-hdr-ext"></span><h1><code class="docutils literal notranslate"><span class="pre">nifti_mrs.hdr_ext</span></code><a class="headerlink" href="#module-nifti_mrs.hdr_ext" title="Permalink to this heading"></a></h1>
+<span id="nifti-mrs-hdr-ext"></span><h1><code class="docutils literal notranslate"><span class="pre">nifti_mrs.hdr_ext</span></code><a class="headerlink" href="#module-nifti_mrs.hdr_ext" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="nifti_mrs.hdr_ext.Hdr_Ext">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nifti_mrs.hdr_ext.</span></span><span class="sig-name descname"><span class="pre">Hdr_Ext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec_frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resonant_nucleus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nifti_mrs.hdr_ext.</span></span><span class="sig-name descname"><span class="pre">Hdr_Ext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec_frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resonant_nucleus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext" title="Link to this definition"></a></dt>
 <dd><p>Class to hold meta data stored in a NIfTI MRS header extension.
 Required fields must be passed to initialise,
 Default dimension information automatically generated, but may be modified by set_dim_info method.
@@ -116,7 +118,7 @@ Standard defined meta-data and user-defined data can be added using set_standard
 set_user_def respectively.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="nifti_mrs.hdr_ext.Hdr_Ext.from_header_ext">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_header_ext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hdr_ext_dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext.from_header_ext" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_header_ext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hdr_ext_dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext.from_header_ext" title="Link to this definition"></a></dt>
 <dd><p>Create a Hdr_Ext object from a json string deserialised into a python dict</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -133,13 +135,13 @@ set_user_def respectively.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="nifti_mrs.hdr_ext.Hdr_Ext.ndim">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ndim</span></span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext.ndim" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ndim</span></span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext.ndim" title="Link to this definition"></a></dt>
 <dd><p>Returns the number of dimensions implied by the ‘dim_{5,6,7}’ tags</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="nifti_mrs.hdr_ext.Hdr_Ext.set_dim_info">
-<span class="sig-name descname"><span class="pre">set_dim_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hdr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext.set_dim_info" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_dim_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hdr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext.set_dim_info" title="Link to this definition"></a></dt>
 <dd><p>Set information associated with the optional, higher data dimensions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -155,7 +157,7 @@ set_user_def respectively.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="nifti_mrs.hdr_ext.Hdr_Ext.remove_dim_info">
-<span class="sig-name descname"><span class="pre">remove_dim_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext.remove_dim_info" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">remove_dim_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext.remove_dim_info" title="Link to this definition"></a></dt>
 <dd><p>Set a dimension’s information to None</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -166,20 +168,20 @@ set_user_def respectively.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="nifti_mrs.hdr_ext.Hdr_Ext.set_standard_def">
-<span class="sig-name descname"><span class="pre">set_standard_def</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext.set_standard_def" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_standard_def</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext.set_standard_def" title="Link to this definition"></a></dt>
 <dd><p>Add a single standard-defined bit of meta-data to the object.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="nifti_mrs.hdr_ext.Hdr_Ext.set_user_def">
-<span class="sig-name descname"><span class="pre">set_user_def</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext.set_user_def" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_user_def</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext.set_user_def" title="Link to this definition"></a></dt>
 <dd><p>Add user-defined metadata keys to the header extension.
 add keys and values one at a time using key, value and doc.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="nifti_mrs.hdr_ext.Hdr_Ext.remove_standard_def">
-<span class="sig-name descname"><span class="pre">remove_standard_def</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext.remove_standard_def" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">remove_standard_def</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext.remove_standard_def" title="Link to this definition"></a></dt>
 <dd><p>Remove key from list of standard defined key-value pairs</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -190,7 +192,7 @@ add keys and values one at a time using key, value and doc.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="nifti_mrs.hdr_ext.Hdr_Ext.remove_user_def">
-<span class="sig-name descname"><span class="pre">remove_user_def</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext.remove_user_def" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">remove_user_def</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext.remove_user_def" title="Link to this definition"></a></dt>
 <dd><p>Remove key from list of user defined key-value pairs</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -201,23 +203,23 @@ add keys and values one at a time using key, value and doc.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="nifti_mrs.hdr_ext.Hdr_Ext.to_dict">
-<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext.to_dict" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext.to_dict" title="Link to this definition"></a></dt>
 <dd><p>Generate dictionary representation from properties.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="nifti_mrs.hdr_ext.Hdr_Ext.current_keys">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">current_keys</span></span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext.current_keys" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">current_keys</span></span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext.current_keys" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="nifti_mrs.hdr_ext.Hdr_Ext.to_json">
-<span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext.to_json" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext.to_json" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="nifti_mrs.hdr_ext.Hdr_Ext.copy">
-<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext.copy" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.hdr_ext.Hdr_Ext.copy" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>mrs_tools &mdash; nifti-mrs 1.0.2 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>mrs_tools &mdash; nifti-mrs 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=fc837d61"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -34,7 +36,7 @@
             nifti-mrs
           </a>
               <div class="version">
-                1.0.2
+                1.1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -84,7 +86,7 @@
            <div itemprop="articleBody">
              
   <section id="mrs-tools">
-<h1><code class="docutils literal notranslate"><span class="pre">mrs_tools</span></code><a class="headerlink" href="#mrs-tools" title="Permalink to this heading"></a></h1>
+<h1><code class="docutils literal notranslate"><span class="pre">mrs_tools</span></code><a class="headerlink" href="#mrs-tools" title="Link to this heading"></a></h1>
 <p><strong>The command-line tool for manipulation of NIfTI-MRS files.</strong></p>
 <p><code class="code docutils literal notranslate"><span class="pre">usage:</span> <span class="pre">mrs_tools</span> <span class="pre">[-h]</span> <span class="pre">[-v]</span> <span class="pre">{info,vis,merge,split,reorder,conjugate}</span> <span class="pre">...</span></code></p>
 <p>NIfTI-MRS (Magnetic Resonance Spectroscopy) tools</p>
@@ -103,7 +105,7 @@
 </dd>
 </dl>
 <section id="info">
-<h2>info<a class="headerlink" href="#info" title="Permalink to this heading"></a></h2>
+<h2>info<a class="headerlink" href="#info" title="Link to this heading"></a></h2>
 <p>Information about the NIfTI-MRS file.</p>
 <p><code class="code docutils literal notranslate"><span class="pre">usage:</span> <span class="pre">mrs_tools</span> <span class="pre">info</span> <span class="pre">[-h]</span> <span class="pre">FILE</span> <span class="pre">or</span> <span class="pre">list</span> <span class="pre">of</span> <span class="pre">FILEs</span> <span class="pre">[FILE</span> <span class="pre">or</span> <span class="pre">list</span> <span class="pre">of</span> <span class="pre">FILEs</span> <span class="pre">...]`</span></code></p>
 <dl>
@@ -121,7 +123,7 @@
 </dl>
 </section>
 <section id="vis">
-<h2>vis<a class="headerlink" href="#vis" title="Permalink to this heading"></a></h2>
+<h2>vis<a class="headerlink" href="#vis" title="Link to this heading"></a></h2>
 <p>Quick visualisation of a NIfTI-MRS file or FSL-MRS basis set.</p>
 <p><code class="code docutils literal notranslate"><span class="pre">usage:</span> <span class="pre">mrs_tools</span> <span class="pre">vis</span> <span class="pre">[-h]</span> <span class="pre">[--ppmlim</span> <span class="pre">LOW</span> <span class="pre">HIGH]</span> <span class="pre">[--mask</span> <span class="pre">MASK]</span> <span class="pre">[--save</span> <span class="pre">SAVE]</span> <span class="pre">[--display_dim</span> <span class="pre">DISPLAY_DIM]</span> <span class="pre">[--no_mean]</span> <span class="pre">FILE</span> <span class="pre">or</span> <span class="pre">DIR</span></code></p>
 <dl>
@@ -154,7 +156,7 @@
 </dl>
 </section>
 <section id="merge">
-<h2>merge<a class="headerlink" href="#merge" title="Permalink to this heading"></a></h2>
+<h2>merge<a class="headerlink" href="#merge" title="Link to this heading"></a></h2>
 <p>Merge NIfTI-MRS along higher dimensions.</p>
 <p><code class="code docutils literal notranslate"><span class="pre">usage:</span> <span class="pre">mrs_tools</span> <span class="pre">merge</span> <span class="pre">[-h]</span> <span class="pre">--files</span> <span class="pre">FILES</span> <span class="pre">[FILES</span> <span class="pre">...]</span> <span class="pre">--dim</span> <span class="pre">DIM</span> <span class="pre">[--newaxis]</span> <span class="pre">[--output</span> <span class="pre">OUTPUT][--filename</span> <span class="pre">FILENAME]</span></code></p>
 <dl>
@@ -186,7 +188,7 @@
 </dl>
 </section>
 <section id="split">
-<h2>split<a class="headerlink" href="#split" title="Permalink to this heading"></a></h2>
+<h2>split<a class="headerlink" href="#split" title="Link to this heading"></a></h2>
 <p>Split NIfTI-MRS along higher dimensions.</p>
 <p><code class="code docutils literal notranslate"><span class="pre">usage:</span> <span class="pre">mrs_tools</span> <span class="pre">split</span> <span class="pre">[-h]</span> <span class="pre">--file</span> <span class="pre">FILE</span> <span class="pre">--dim</span> <span class="pre">DIM</span> <span class="pre">(--indices</span> <span class="pre">INDICES</span> <span class="pre">[INDICES</span> <span class="pre">...]</span> <span class="pre">|</span> <span class="pre">--index</span> <span class="pre">INDEX)</span> <span class="pre">[--output</span> <span class="pre">OUTPUT]</span> <span class="pre">[--filename</span> <span class="pre">FILENAME]</span></code></p>
 <dl>
@@ -223,7 +225,7 @@
 </dl>
 </section>
 <section id="reorder">
-<h2>reorder<a class="headerlink" href="#reorder" title="Permalink to this heading"></a></h2>
+<h2>reorder<a class="headerlink" href="#reorder" title="Link to this heading"></a></h2>
 <p>Reorder higher dimensions of NIfTI-MRS.</p>
 <p><code class="code docutils literal notranslate"><span class="pre">usage:</span> <span class="pre">mrs_tools</span> <span class="pre">reorder</span> <span class="pre">[-h]</span> <span class="pre">--file</span> <span class="pre">FILE</span> <span class="pre">--dim_order</span> <span class="pre">DIM_ORDER</span> <span class="pre">[DIM_ORDER</span> <span class="pre">...]</span> <span class="pre">[--output</span> <span class="pre">OUTPUT]</span> <span class="pre">[--filename</span> <span class="pre">FILENAME]</span></code></p>
 <dl>
@@ -252,7 +254,7 @@
 </dl>
 </section>
 <section id="reshape">
-<h2>reshape<a class="headerlink" href="#reshape" title="Permalink to this heading"></a></h2>
+<h2>reshape<a class="headerlink" href="#reshape" title="Link to this heading"></a></h2>
 <p>Reshapes the higher dimensions of a NIfTI-MRS file.</p>
 <p><code class="code docutils literal notranslate"><span class="pre">usage:</span> <span class="pre">mrs_tools</span> <span class="pre">reshape</span> <span class="pre">[-h]</span> <span class="pre">--file</span> <span class="pre">FILE</span> <span class="pre">--shape</span> <span class="pre">SHAPE</span> <span class="pre">[SHAPE</span> <span class="pre">...]</span> <span class="pre">[--d5</span> <span class="pre">D5]</span> <span class="pre">[--d6</span> <span class="pre">D6]</span> <span class="pre">[--d7</span> <span class="pre">D7]</span> <span class="pre">[--output</span> <span class="pre">OUTPUT]</span> <span class="pre">[--filename</span> <span class="pre">FILENAME]</span></code></p>
 <dl>
@@ -291,7 +293,7 @@
 </dl>
 </section>
 <section id="conjugate">
-<h2>conjugate<a class="headerlink" href="#conjugate" title="Permalink to this heading"></a></h2>
+<h2>conjugate<a class="headerlink" href="#conjugate" title="Link to this heading"></a></h2>
 <p>Conjugate data to correct phase/frequency convention in a NIfTI-MRS file.</p>
 <p><code class="code docutils literal notranslate"><span class="pre">usage:</span> <span class="pre">mrs_tools</span> <span class="pre">conjugate</span> <span class="pre">[-h]</span> <span class="pre">--file</span> <span class="pre">FILE</span> <span class="pre">[--output</span> <span class="pre">OUTPUT]</span> <span class="pre">[--filename</span> <span class="pre">FILENAME]</span></code></p>
 <dl>

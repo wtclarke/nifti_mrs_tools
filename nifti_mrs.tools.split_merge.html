@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>nifti_mrs.tools.split_merge &mdash; nifti-mrs 1.0.2 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>nifti_mrs.tools.split_merge &mdash; nifti-mrs 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=fc837d61"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -35,7 +37,7 @@
             nifti-mrs
           </a>
               <div class="version">
-                1.0.2
+                1.1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -92,13 +94,13 @@
            <div itemprop="articleBody">
              
   <section id="module-nifti_mrs.tools.split_merge">
-<span id="nifti-mrs-tools-split-merge"></span><h1><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.split_merge</span></code><a class="headerlink" href="#module-nifti_mrs.tools.split_merge" title="Permalink to this heading"></a></h1>
+<span id="nifti-mrs-tools-split-merge"></span><h1><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.split_merge</span></code><a class="headerlink" href="#module-nifti_mrs.tools.split_merge" title="Link to this heading"></a></h1>
 <p>Tools for merging and splitting the dimensions of NIfTI-MRS</p>
 <p>Author: Will Clarke &lt;<a class="reference external" href="mailto:william&#46;clarke&#37;&#52;&#48;ndcn&#46;ox&#46;ac&#46;uk">william<span>&#46;</span>clarke<span>&#64;</span>ndcn<span>&#46;</span>ox<span>&#46;</span>ac<span>&#46;</span>uk</a>&gt;
 Copyright (C) 2021 University of Oxford</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="nifti_mrs.tools.split_merge.split">
-<span class="sig-prename descclassname"><span class="pre">nifti_mrs.tools.split_merge.</span></span><span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nmrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_or_indicies</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.tools.split_merge.split" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">nifti_mrs.tools.split_merge.</span></span><span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nmrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_or_indices</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.tools.split_merge.split" title="Link to this definition"></a></dt>
 <dd><p>Splits, or extracts indices from, a specified dimension of a
 NIFTI_MRS object. Output is two NIFTI_MRS objects. Header information preserved.</p>
 <dl class="field-list simple">
@@ -107,8 +109,8 @@ NIFTI_MRS object. Output is two NIFTI_MRS objects. Header information preserved.
 <li><p><strong>nmrs</strong> (<em>fsl_mrs.core.nifti_mrs.NIFTI_MRS</em>) – Input nifti_mrs object to split</p></li>
 <li><p><strong>dimension</strong> (<em>str</em><em> or </em><em>int</em>) – Dimension along which to split.
 Dimension tag or one of 4, 5, 6 (for 0-indexed 5th, 6th, and 7th)</p></li>
-<li><p><strong>index_or_indicies</strong> (<em>int</em><em> or </em><em>[</em><em>int</em><em>]</em>) – Single integer index to split after,
-or list of interger indices to insert into second array.
+<li><p><strong>index_or_indices</strong> (<em>int</em><em> or </em><em>[</em><em>int</em><em>]</em>) – Single integer index to split after,
+or list of integer indices to insert into second array.
 E.g. ‘0’ will place the first index into the first output
 and 1 -&gt; N in the second.
 ‘[1, 5, 10]’ will place 1, 5 and 10 into the second output
@@ -126,7 +128,7 @@ and all other will remain in the first.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="nifti_mrs.tools.split_merge.merge">
-<span class="sig-prename descclassname"><span class="pre">nifti_mrs.tools.split_merge.</span></span><span class="sig-name descname"><span class="pre">merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_of_nmrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.tools.split_merge.merge" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">nifti_mrs.tools.split_merge.</span></span><span class="sig-name descname"><span class="pre">merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_of_nmrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.tools.split_merge.merge" title="Link to this definition"></a></dt>
 <dd><p>Concatenate NIfTI-MRS objects along specified higher dimension</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
