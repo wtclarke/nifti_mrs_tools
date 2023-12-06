@@ -8,7 +8,7 @@ Copyright Will Clarke, University of Oxford, 2021
 
 # Define nifti-mrs version number here.
 # First element is major version, second is minor
-nifti_mrs_version = [0, 7]
+nifti_mrs_version = [0, 8]
 
 # Possible dimension tags and descriptions
 dimension_tags = {"DIM_COIL": "For storage of data from each individual receiver coil element.",
@@ -34,6 +34,7 @@ required = {'SpectrometerFrequency':
 
 # Defined metadata fields
 # # 5.1 MRS specific Tags
+# 'SpectralWidth'
 # 'EchoTime'
 # 'RepetitionTime'
 # 'InversionTime'
@@ -80,6 +81,11 @@ required = {'SpectrometerFrequency':
 # Format is a dict of tuples containing (type, unit string, doc string, anonymisation state)
 standard_defined = {
     # 5.1 MRS specific Tags
+    'SpectralWidth':
+        (float,
+         'Hz',
+         'The spectral bandwidth of the MR signal that is sampled. Inverse of the dwell time. NIfTI-MRS standard compliant software will always preferentially infer the spectral width from the dwell time stored in the NIfTI pixdim field. Units: hertz',
+         False),
     'EchoTime':
         (float,
          's',

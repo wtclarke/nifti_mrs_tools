@@ -1,7 +1,8 @@
 This document contains the nifti_mrs_tools release history in reverse chronological order.
 
-1.0.3 (Wednesday 6th December 2023)
+1.1.0 (Wednesday 6th December 2023)
 -----------------------------------
+- Update definitions to NIfTI-MRS V0.8
 - Fixes issue with displaying spectra with a singleton dimension
 - Code spelling changes.
 
