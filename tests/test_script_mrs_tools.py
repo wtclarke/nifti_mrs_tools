@@ -68,6 +68,21 @@ def test_vis_svs(tmp_path):
 
     assert (tmp_path / 'svs4.png').exists()
 
+    # Test SVS with singleton dimension
+    subprocess.check_call([
+        'mrs_tools', 'reorder',
+        '--file', svs_raw,
+        '--dim_order', 'DIM_COIL', 'DIM_DYN', 'DIM_EDIT',
+        '--output', str(tmp_path),
+        '--filename', 'singleton'])
+
+    subprocess.check_call(['mrs_tools', 'vis',
+                           '--ppmlim', '0.2', '4.2',
+                           '--save', str(tmp_path / 'svs5.png'),
+                           str(tmp_path / 'singleton.nii.gz')])
+
+    assert (tmp_path / 'svs5.png').exists()
+
 
 # def test_vis_basis(tmp_path):
 #     subprocess.check_call(['mrs_tools', 'vis',

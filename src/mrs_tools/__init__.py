@@ -225,7 +225,7 @@ def vis(args):
                 fig = plot_spectra(data.mrs(), ppmlim=args.ppmlim, plot_avg=args.no_mean)
 
             else:
-                while data.ndim > 4:
+                while data.ndim > 4 and np.prod(data.shape[4:]) > 1:
                     print(f'Averaging {data.dim_tags[0]}')
                     data = nifti_mrs_proc.average(data, data.dim_tags[0])
                 fig = plot_spectrum(data.mrs(), ppmlim=args.ppmlim)
