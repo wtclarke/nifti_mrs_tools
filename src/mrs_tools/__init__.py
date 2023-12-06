@@ -207,11 +207,23 @@ def vis(args):
     # Single nifti file
     def vis_nifti_mrs(file):
         data = read_FID(file)
+
         if data.ndim > 4 \
                 and 'DIM_COIL' in data.dim_tags\
                 and args.display_dim != 'DIM_COIL':
             print('Performing coil combination')
             data = nifti_mrs_proc.coilcombine(data)
+
+        def average_dim_if_multiple(dd, dim):
+            """Averages a dimension if non-singleton"""
+            if dim is None:
+                # Protect against loss of dimension during process.
+                return dd
+            if dd.shape[dd.dim_position(dim)] > 1:
+                print(f'Averaging {dim}')
+                return nifti_mrs_proc.average(dd, dim)
+            else:
+                return dd
 
         if np.prod(data.shape[:3]) == 1:
             # SVS
@@ -220,14 +232,12 @@ def vis(args):
                     if dim is None:
                         continue
                     if dim != args.display_dim:
-                        print(f'Averaging {dim}')
-                        data = nifti_mrs_proc.average(data, dim)
+                        data = average_dim_if_multiple(data, dim)
                 fig = plot_spectra(data.mrs(), ppmlim=args.ppmlim, plot_avg=args.no_mean)
 
             else:
-                while data.ndim > 4:
-                    print(f'Averaging {data.dim_tags[0]}')
-                    data = nifti_mrs_proc.average(data, data.dim_tags[0])
+                for dim in data.dim_tags:
+                    data = average_dim_if_multiple(data, dim)
                 fig = plot_spectrum(data.mrs(), ppmlim=args.ppmlim)
 
             if args.save is not None:
@@ -236,9 +246,8 @@ def vis(args):
                 plt.show()
 
         else:
-            while data.ndim > 4:
-                print(f'Averaging {data.dim_tags[0]}')
-                data = nifti_mrs_proc.average(data, data.dim_tags[0])
+            for dim in data.dim_tags:
+                data = average_dim_if_multiple(data, dim)
 
             mrsi = data.mrs()
             if args.mask is not None:
