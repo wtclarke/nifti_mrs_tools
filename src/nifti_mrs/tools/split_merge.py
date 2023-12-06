@@ -11,7 +11,7 @@ from nifti_mrs.nifti_mrs import NIFTI_MRS, NIFTIMRS_DimDoesntExist
 from nifti_mrs import utils
 
 
-def split(nmrs, dimension, index_or_indicies):
+def split(nmrs, dimension, index_or_indices):
     """Splits, or extracts indices from, a specified dimension of a
     NIFTI_MRS object. Output is two NIFTI_MRS objects. Header information preserved.
 
@@ -20,13 +20,13 @@ def split(nmrs, dimension, index_or_indicies):
     :param dimension: Dimension along which to split.
         Dimension tag or one of 4, 5, 6 (for 0-indexed 5th, 6th, and 7th)
     :type dimension: str or int
-    :param index_or_indicies: Single integer index to split after,
-        or list of interger indices to insert into second array.
+    :param index_or_indices: Single integer index to split after,
+        or list of integer indices to insert into second array.
         E.g. '0' will place the first index into the first output
         and 1 -> N in the second.
         '[1, 5, 10]' will place 1, 5 and 10 into the second output
         and all other will remain in the first.
-    :type index_or_indicies: int or [int]
+    :type index_or_indices: int or [int]
     :return: Two NIFTI_MRS object containing the split files
     :rtype: fsl_mrs.core.nifti_mrs.NIFTI_MRS
     """
@@ -46,28 +46,28 @@ def split(nmrs, dimension, index_or_indicies):
         raise TypeError('Dimension must be an int (4, 5, or 6) or string (DIM_TAG string).')
 
     # Construct indexing
-    if isinstance(index_or_indicies, int):
-        if index_or_indicies < 0\
-                or (index_or_indicies + 1) >= nmrs.shape[dim_index]:
-            raise ValueError('index_or_indicies must be between 0 and N-1,'
+    if isinstance(index_or_indices, int):
+        if index_or_indices < 0\
+                or (index_or_indices + 1) >= nmrs.shape[dim_index]:
+            raise ValueError('index_or_indices must be between 0 and N-1,'
                              f' where N is the size of the specified dimension ({nmrs.shape[dim_index]}).')
-        index = np.arange(index_or_indicies + 1, nmrs.shape[dim_index])
+        index = np.arange(index_or_indices + 1, nmrs.shape[dim_index])
 
-    elif isinstance(index_or_indicies, list):
-        if not np.logical_and(np.asarray(index_or_indicies) >= 0,
-                              np.asarray(index_or_indicies) <= nmrs.shape[dim_index]).all():
-            raise ValueError('index_or_indicies must have elements between 0 and N,'
+    elif isinstance(index_or_indices, list):
+        if not np.logical_and(np.asarray(index_or_indices) >= 0,
+                              np.asarray(index_or_indices) <= nmrs.shape[dim_index]).all():
+            raise ValueError('index_or_indices must have elements between 0 and N,'
                              f' where N is the size of the specified dimension ({nmrs.shape[dim_index]}).')
-        index = index_or_indicies
+        index = index_or_indices
 
     else:
-        raise TypeError('index_or_indicies must be single index or list of indicies')
+        raise TypeError('index_or_indices must be single index or list of indices')
 
     # Split header down
     split_hdr_ext_1, split_hdr_ext_2 = _split_dim_header(nmrs.hdr_ext,
                                                          dim_index + 1,
                                                          nmrs.shape[dim_index],
-                                                         index_or_indicies)
+                                                         index_or_indices)
     out_hdr_1 = utils.modify_hdr_ext(split_hdr_ext_1, nmrs.header)
     out_hdr_2 = utils.modify_hdr_ext(split_hdr_ext_2, nmrs.header)
 
@@ -86,7 +86,7 @@ def _split_dim_header(hdr, dimension, dim_length, index):
     :type dimension: int
     :param dim_length: Length of dimension
     :type index: int
-    :param index: Index to split after or indicies to extract
+    :param index: Index to split after or indices to extract
     :type index: int or list of ints
     :return: Split header eextension dicts
     :rtype: dict

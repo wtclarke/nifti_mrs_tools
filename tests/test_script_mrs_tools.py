@@ -183,14 +183,14 @@ def test_split(tmp_path):
     subprocess.check_call(['mrs_tools', 'split',
                            '--dim', 'DIM_DYN',
                            '--indices', '1', '4', '15',
-                           '--filename', 'indicies_select',
+                           '--filename', 'indices_select',
                            '--output', str(tmp_path),
                            '--file', str(test_data_split)])
 
-    assert (tmp_path / 'indicies_select_others.nii.gz').exists()
-    assert (tmp_path / 'indicies_select_selected.nii.gz').exists()
-    f1 = nib.load(tmp_path / 'indicies_select_others.nii.gz')
-    f2 = nib.load(tmp_path / 'indicies_select_selected.nii.gz')
+    assert (tmp_path / 'indices_select_others.nii.gz').exists()
+    assert (tmp_path / 'indices_select_selected.nii.gz').exists()
+    f1 = nib.load(tmp_path / 'indices_select_others.nii.gz')
+    f2 = nib.load(tmp_path / 'indices_select_selected.nii.gz')
     assert f1.shape[5] == 13
     assert f2.shape[5] == 3
 

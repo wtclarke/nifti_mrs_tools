@@ -444,7 +444,7 @@ class NIFTI_MRS():
     def save(self, filepath):
         """Save NIfTI-MRS to file
 
-        :param filepath: Name and path of save loaction
+        :param filepath: Name and path of save location
         :type filepath: str or pathlib.Path
         """
         # Ensure final copy of header extension is loaded into Image object
@@ -469,7 +469,7 @@ class NIFTI_MRS():
         :type reduce_dim_index: bool, optional
         :param voxel_index: slice or tuple of first three spatial dimensions., defaults to None
         :type voxel_index: slice or tuple, optional
-        :return: yeildsarray of sliced data
+        :return: yeilds array of sliced data
         :rtype: np.array
         :return: data location slice object.
         :rtype: slice
@@ -478,7 +478,7 @@ class NIFTI_MRS():
         data = self[:]
         dim = self._dim_tag_to_index(dim)
 
-        # Convert indicies to slices to preserve singleton dimensions
+        # Convert indices to slices to preserve singleton dimensions
         if voxel_index is not None:
             tmp = []
             for vi in voxel_index:
