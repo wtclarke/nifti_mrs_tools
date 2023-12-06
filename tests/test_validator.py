@@ -214,3 +214,41 @@ def test_dynamic_header_size():
         dim_5_header={'test': {'Value': [0, 1, 3, 4], 'Description': 'test'}}
     )
     validator.validate_hdr_ext(json.dumps(test_dict), (1, 1, 1, 512, 4), data_dimensions=5)
+
+
+def test_spectralwidth():
+    # Wrong value
+    test_dict = dict(
+        SpectrometerFrequency=[123.2, ],
+        ResonantNucleus=["1H", ],
+        SpectralWidth=500
+    )
+
+    with raises(
+            validator.headerExtensionError,
+            match=r'SpectralWidth \(500\.00 Hz\) does not match 1 / dwelltime \(1000\.00 Hz\).'):
+        validator.validate_spectralwidth(
+            json.dumps(test_dict),
+            0.001)
+
+    # Right value
+    test_dict = dict(
+        SpectrometerFrequency=[123.2, ],
+        ResonantNucleus=["1H", ],
+        SpectralWidth=1000
+    )
+
+    validator.validate_spectralwidth(
+        json.dumps(test_dict),
+        0.001)
+
+    # No value
+    test_dict = dict(
+        SpectrometerFrequency=[123.2, ],
+        ResonantNucleus=["1H", ],
+    )
+
+    validator.validate_spectralwidth(
+        json.dumps(test_dict),
+        0.001)
+
