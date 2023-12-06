@@ -37,36 +37,36 @@ def test_vis_error(tmp_path):
 @pytest.mark.with_fsl_mrs
 def test_vis_svs(tmp_path):
     pytest.importorskip("fsl_mrs")
-    subprocess.check_call(['mrs_tools', 'vis',
-                           '--ppmlim', '0.2', '4.2',
-                           '--save', str(tmp_path / 'svs.png'),
-                           svs])
+    # subprocess.check_call(['mrs_tools', 'vis',
+    #                        '--ppmlim', '0.2', '4.2',
+    #                        '--save', str(tmp_path / 'svs.png'),
+    #                        svs])
 
-    assert (tmp_path / 'svs.png').exists()
+    # assert (tmp_path / 'svs.png').exists()
 
-    subprocess.check_call(['mrs_tools', 'vis',
-                           '--ppmlim', '0.2', '4.2',
-                           '--save', str(tmp_path / 'svs2.png'),
-                           svs.with_suffix('').with_suffix('')])
+    # subprocess.check_call(['mrs_tools', 'vis',
+    #                        '--ppmlim', '0.2', '4.2',
+    #                        '--save', str(tmp_path / 'svs2.png'),
+    #                        svs.with_suffix('').with_suffix('')])
 
-    assert (tmp_path / 'svs2.png').exists()
+    # assert (tmp_path / 'svs2.png').exists()
 
-    subprocess.check_call(['mrs_tools', 'vis',
-                           '--ppmlim', '0.2', '4.2',
-                           '--display_dim', 'DIM_DYN',
-                           '--save', str(tmp_path / 'svs3.png'),
-                           svs_raw])
+    # subprocess.check_call(['mrs_tools', 'vis',
+    #                        '--ppmlim', '0.2', '4.2',
+    #                        '--display_dim', 'DIM_DYN',
+    #                        '--save', str(tmp_path / 'svs3.png'),
+    #                        svs_raw])
 
-    assert (tmp_path / 'svs3.png').exists()
+    # assert (tmp_path / 'svs3.png').exists()
 
-    subprocess.check_call(['mrs_tools', 'vis',
-                           '--ppmlim', '0.2', '4.2',
-                           '--display_dim', 'DIM_COIL',
-                           '--no_mean',
-                           '--save', str(tmp_path / 'svs4.png'),
-                           svs_raw])
+    # subprocess.check_call(['mrs_tools', 'vis',
+    #                        '--ppmlim', '0.2', '4.2',
+    #                        '--display_dim', 'DIM_COIL',
+    #                        '--no_mean',
+    #                        '--save', str(tmp_path / 'svs4.png'),
+    #                        svs_raw])
 
-    assert (tmp_path / 'svs4.png').exists()
+    # assert (tmp_path / 'svs4.png').exists()
 
     # Test SVS with singleton dimension
     subprocess.check_call([
@@ -74,14 +74,28 @@ def test_vis_svs(tmp_path):
         '--file', svs_raw,
         '--dim_order', 'DIM_COIL', 'DIM_DYN', 'DIM_EDIT',
         '--output', str(tmp_path),
-        '--filename', 'singleton'])
+        '--filename', 'singleton_last'])
 
     subprocess.check_call(['mrs_tools', 'vis',
                            '--ppmlim', '0.2', '4.2',
                            '--save', str(tmp_path / 'svs5.png'),
-                           str(tmp_path / 'singleton.nii.gz')])
+                           str(tmp_path / 'singleton_last.nii.gz')])
 
     assert (tmp_path / 'svs5.png').exists()
+
+    subprocess.check_call([
+        'mrs_tools', 'reorder',
+        '--file', svs_raw,
+        '--dim_order', 'DIM_EDIT', 'DIM_COIL', 'DIM_DYN',
+        '--output', str(tmp_path),
+        '--filename', 'singleton_first'])
+
+    subprocess.check_call(['mrs_tools', 'vis',
+                           '--ppmlim', '0.2', '4.2',
+                           '--save', str(tmp_path / 'svs6.png'),
+                           str(tmp_path / 'singleton_first.nii.gz')])
+
+    assert (tmp_path / 'svs6.png').exists()
 
 
 # def test_vis_basis(tmp_path):

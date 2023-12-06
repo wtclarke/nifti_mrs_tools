@@ -214,6 +214,7 @@ def vis(args):
             data = nifti_mrs_proc.coilcombine(data)
 
         if np.prod(data.shape[:3]) == 1:
+            print(data.shape)
             # SVS
             if args.display_dim:
                 for dim in data.dim_tags:
@@ -226,6 +227,8 @@ def vis(args):
 
             else:
                 while data.ndim > 4 and np.prod(data.shape[4:]) > 1:
+                    print(data.ndim)
+                    print(np.prod(data.shape[4:]))
                     print(f'Averaging {data.dim_tags[0]}')
                     data = nifti_mrs_proc.average(data, data.dim_tags[0])
                 fig = plot_spectrum(data.mrs(), ppmlim=args.ppmlim)
