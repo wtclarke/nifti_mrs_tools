@@ -207,8 +207,7 @@ def vis(args):
     # Single nifti file
     def vis_nifti_mrs(file):
         data = read_FID(file)
-        print(data.shape)
-        print(data.dim_tags)
+
         if data.ndim > 4 \
                 and 'DIM_COIL' in data.dim_tags\
                 and args.display_dim != 'DIM_COIL':
@@ -217,8 +216,6 @@ def vis(args):
 
         def average_dim_if_multiple(dd, dim):
             """Averages a dimension if non-singleton"""
-            print(dim)
-            print(dd.dim_position(dim))
             if dim is None:
                 # Protect against loss of dimension during process.
                 return dd
