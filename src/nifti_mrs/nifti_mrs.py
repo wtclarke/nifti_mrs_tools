@@ -132,12 +132,18 @@ class NIFTI_MRS():
                 self._hdr_ext.to_json(),
                 self.image.shape,
                 np.max((self._hdr_ext.ndim, self.image.ndim)))
+            validator.validate_spectralwidth(
+                self._hdr_ext.to_json(),
+                self.dwelltime)
         else:
             try:
                 validator.validate_hdr_ext(
                     self._hdr_ext.to_json(),
                     self.image.shape,
                     np.max((self._hdr_ext.ndim, self.image.ndim)))
+                validator.validate_spectralwidth(
+                    self._hdr_ext.to_json(),
+                    self.dwelltime)
             except validator.headerExtensionError as exc:
                 print(f"This file's header extension is currently invalid. Reason: {str(exc)}")
 
@@ -278,9 +284,11 @@ class NIFTI_MRS():
         '''Update MRS JSON header extension from python dict or Hdr_Ext object'''
         if isinstance(new_hdr, dict):
             validator.validate_hdr_ext(json.dumps(new_hdr), self.shape)
+            validator.validate_spectralwidth(json.dumps(new_hdr), self.dwelltime)
             self._hdr_ext = Hdr_Ext.from_header_ext(new_hdr)
         elif isinstance(new_hdr, Hdr_Ext):
             validator.validate_hdr_ext(new_hdr.to_json(), self.shape)
+            validator.validate_spectralwidth(new_hdr.to_json(), self.dwelltime)
             self._hdr_ext = new_hdr
         else:
             raise TypeError('Passed header extension must be a dict or Hdr_Ext object')

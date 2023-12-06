@@ -38,6 +38,11 @@ def validate_nifti_mrs(nifti_mrs):
         nifti_mrs.header.extensions[0].get_content(),
         nifti_mrs.shape)
 
+    # Validate that any SpectralWidth definition matches pixdim[4]
+    validate_spectralwidth(
+        nifti_mrs.header.extensions[0].get_content(),
+        nifti_mrs.header['pixdim'][4])
+
 
 def validate_nifti_data(nifti_img_data):
     """Validate the data inside a nibabel nifti image
@@ -230,3 +235,23 @@ def check_type(value, json_type):
         if isinstance(value, json_type):
             return True
     return False
+
+
+def validate_spectralwidth(header_ex, dwelltime):
+    """If a SpectralWidth field is present, check that it matches the dwell time
+
+    Dwell time is stored in pixdim[4].
+
+    :param header_ex: NIfTI-MRS header extensions as a json deserialisable string
+    :type header_ex: str
+    :param dwelltime: Dwell time as stored in pixdim[4] to check against any SpectralWidth definition. In seconds.
+    :type dwelltime: float
+    """
+
+    json_dict = json.loads(header_ex)
+    # check that (if present) SpectralWidth is consistent with pixdim[4]
+    if 'SpectralWidth' in json_dict:
+        if not np.isclose(json_dict['SpectralWidth'], 1 / dwelltime, atol=1E-2):
+            raise headerExtensionError(
+                f'SpectralWidth ({json_dict["SpectralWidth"]:0.2f} Hz) does not match'
+                f' 1 / dwelltime ({1 / dwelltime:0.2f} Hz).')
