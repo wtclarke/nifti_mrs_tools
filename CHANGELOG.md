@@ -1,5 +1,9 @@
 This document contains the nifti_mrs_tools release history in reverse chronological order.
 
+1.1.2 (WIP)
+-----------------------------------
+- When reading files any user defined parameters without a description will print a warning to the user and generate an empty description key.
+
 1.1.1 (Wednesday 6th December 2023)
 -----------------------------------
 - Validator checks consistency of any `SpectraWidth` header extension value with the dwell time in `pixdim[4]`.
