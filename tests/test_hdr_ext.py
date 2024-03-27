@@ -130,6 +130,12 @@ def test_to_from_dict():
     assert hdr2._dim_info[1] == {"tag": "DIM_EDIT", "info": None, "hdr": None}
     assert 'RepetitionTime' in hdr2._standard_data
 
+    dict_rep['my_value3'] = 5.0
+    dict_rep['my_value4'] = {'foo': 5.0, }
+    hdr3 = Hdr_Ext.from_header_ext(dict_rep)
+    assert hdr3['my_value3'] == {'Value': 5.0, 'Description': ''}
+    assert hdr3['my_value4'] == {'foo': 5.0, 'Description': ''}
+
 
 def test_to_json():
     hdr = Hdr_Ext(100., '1H', dimensions=5)

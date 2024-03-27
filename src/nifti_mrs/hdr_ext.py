@@ -90,7 +90,8 @@ class Hdr_Ext:
             if key in standard_defined:
                 obj.set_standard_def(key, hdr_ext_dict[key])
             else:
-                if 'Value' in hdr_ext_dict[key]\
+                if isinstance(hdr_ext_dict[key], dict)\
+                        and 'Value' in hdr_ext_dict[key]\
                         and 'Description' in hdr_ext_dict[key]:
                     obj.set_user_def(
                         key,
@@ -103,7 +104,21 @@ class Hdr_Ext:
                         hdr_ext_dict[key],
                         hdr_ext_dict[key]['Description'])
                 else:
-                    raise ValueError(f'User-defined key {key} must contain a "Description" field"')
+                    print(
+                        "This file's header extension is currently invalid. "
+                        f"Reason: User-defined key {key} does not contain a 'Description' field. "
+                        "Setting empty 'Description'.")
+                    if isinstance(hdr_ext_dict[key], dict)\
+                            and 'Value' in hdr_ext_dict[key]:
+                        obj.set_user_def(
+                            key,
+                            hdr_ext_dict[key]['Value'],
+                            '')
+                    else:
+                        obj.set_user_def(
+                            key,
+                            hdr_ext_dict[key],
+                            '')
 
         return obj
 

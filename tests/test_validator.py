@@ -251,4 +251,3 @@ def test_spectralwidth():
     validator.validate_spectralwidth(
         json.dumps(test_dict),
         0.001)
-
