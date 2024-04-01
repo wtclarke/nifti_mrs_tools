@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>nifti_mrs.create_nmrs &mdash; nifti-mrs 1.1.1 documentation</title>
+  <title>nifti_mrs.create_nmrs &mdash; nifti-mrs 1.2.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -15,7 +15,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=58fbf978"></script>
+        <script src="_static/documentation_options.js?v=6efca38a"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             nifti-mrs
           </a>
               <div class="version">
-                1.1.1
+                1.2.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -51,11 +51,7 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="nifti_mrs.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs</span></code></a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="nifti_mrs.nifti_mrs.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.nifti_mrs</span></code></a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.create_nmrs</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#nifti_mrs.create_nmrs.gen_nifti_mrs"><code class="docutils literal notranslate"><span class="pre">gen_nifti_mrs()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#nifti_mrs.create_nmrs.gen_nifti_mrs_hdr_ext"><code class="docutils literal notranslate"><span class="pre">gen_nifti_mrs_hdr_ext()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.create_nmrs</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="nifti_mrs.definitions.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.definitions</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="nifti_mrs.validator.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.validator</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="nifti_mrs.hdr_ext.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.hdr_ext</span></code></a></li>
@@ -93,61 +89,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-nifti_mrs.create_nmrs">
-<span id="nifti-mrs-create-nmrs"></span><h1><code class="docutils literal notranslate"><span class="pre">nifti_mrs.create_nmrs</span></code><a class="headerlink" href="#module-nifti_mrs.create_nmrs" title="Link to this heading"></a></h1>
-<p>Generate new NIfTI-MRS objects and files from data blocks.</p>
-<p>Copyright William Clarke, University of Oxford, 2023</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="nifti_mrs.create_nmrs.gen_nifti_mrs">
-<span class="sig-prename descclassname"><span class="pre">nifti_mrs.create_nmrs.</span></span><span class="sig-name descname"><span class="pre">gen_nifti_mrs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dwelltime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spec_freq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nucleus</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'1H'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">affine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim_tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[None,</span> <span class="pre">None,</span> <span class="pre">None]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nifti_version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_conj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.create_nmrs.gen_nifti_mrs" title="Link to this definition"></a></dt>
-<dd><p>Generate NIfTI-MRS from data and required metadata</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>numpy.array</em>) – Complex-typed numpy array of at least 4 dimensions (max 7)</p></li>
-<li><p><strong>dwelltime</strong> (<em>float</em>) – Spectral (4th dimension) dwelltime in seconds</p></li>
-<li><p><strong>spec_freq</strong> (<em>float</em>) – Spectrometer Frequency in MHz</p></li>
-<li><p><strong>nucleus</strong> (<em>str</em><em>, </em><em>optional</em>) – Resonant Nucleus string (e.g. 1H, 31P, 2H), defaults to ‘1H’</p></li>
-<li><p><strong>affine</strong> (<em>numpy.array</em><em>, </em><em>optional</em>) – 4x4 orientation/position affine, defaults to None which will use default (scaled identity).</p></li>
-<li><p><strong>dim_tags</strong> (<em>list</em><em>, </em><em>optional</em>) – List of dimension tags (e.g. DIM_DYN), defaults to [None, None, None]</p></li>
-<li><p><strong>nifti_version</strong> (<em>int</em><em>, </em><em>optional</em>) – Version of NIfTI header format, defaults to 2</p></li>
-<li><p><strong>no_conj</strong> (<em>bool</em><em>, </em><em>optional</em>) – If true stops conjugation of data on creation, defaults to False</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>NIfTI-MRS object</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="nifti_mrs.nifti_mrs.html#nifti_mrs.nifti_mrs.NIFTI_MRS" title="nifti_mrs.nifti_mrs.NIFTI_MRS">nifti_mrs.nifti_mrs.NIFTI_MRS</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="nifti_mrs.create_nmrs.gen_nifti_mrs_hdr_ext">
-<span class="sig-prename descclassname"><span class="pre">nifti_mrs.create_nmrs.</span></span><span class="sig-name descname"><span class="pre">gen_nifti_mrs_hdr_ext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dwelltime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hdr_ext</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">affine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nifti_version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_conj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.create_nmrs.gen_nifti_mrs_hdr_ext" title="Link to this definition"></a></dt>
-<dd><p>Generate NIfTI-MRS from data and header extension object</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>numpy.array</em>) – Complex-typed numpy array of at least 4 dimensions (max 7)</p></li>
-<li><p><strong>dwelltime</strong> (<em>float</em>) – Spectral (4th dimension) dwelltime in seconds</p></li>
-<li><p><strong>hdr_ext</strong> (<a class="reference internal" href="nifti_mrs.hdr_ext.html#nifti_mrs.hdr_ext.Hdr_Ext" title="nifti_mrs.hdr_ext.Hdr_Ext"><em>nifti_mrs.hdr_ext.Hdr_Ext</em></a>) – Populated NIfTI-MRS header extension</p></li>
-<li><p><strong>affine</strong> (<em>numpy.array</em><em>, </em><em>optional</em>) – 4x4 orientation/position affine, defaults to None which will use default (scaled identity).</p></li>
-<li><p><strong>dim_tags</strong> (<em>list</em><em>, </em><em>optional</em>) – List of dimension tags (e.g. DIM_DYN), defaults to [None, None, None]</p></li>
-<li><p><strong>nifti_version</strong> (<em>int</em><em>, </em><em>optional</em>) – Version of NIfTI header format, defaults to 2</p></li>
-<li><p><strong>no_conj</strong> (<em>bool</em><em>, </em><em>optional</em>) – If true stops conjugation of data on creation, defaults to False</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>NIfTI-MRS object</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="nifti_mrs.nifti_mrs.html#nifti_mrs.nifti_mrs.NIFTI_MRS" title="nifti_mrs.nifti_mrs.NIFTI_MRS">nifti_mrs.nifti_mrs.NIFTI_MRS</a></p>
-</dd>
-</dl>
-</dd></dl>
-
+  <section id="nifti-mrs-create-nmrs">
+<h1><code class="docutils literal notranslate"><span class="pre">nifti_mrs.create_nmrs</span></code><a class="headerlink" href="#nifti-mrs-create-nmrs" title="Link to this heading"></a></h1>
 </section>
 
 
@@ -161,7 +104,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, William Clarke, University of Oxford, Oxford, UK.</p>
+    <p>&#169; Copyright 2024, William Clarke, University of Oxford, Oxford, UK.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

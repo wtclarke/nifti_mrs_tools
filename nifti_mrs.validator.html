@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>nifti_mrs.validator &mdash; nifti-mrs 1.1.1 documentation</title>
+  <title>nifti_mrs.validator &mdash; nifti-mrs 1.2.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -15,7 +15,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=58fbf978"></script>
+        <script src="_static/documentation_options.js?v=6efca38a"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             nifti-mrs
           </a>
               <div class="version">
-                1.1.1
+                1.2.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -53,19 +53,7 @@
 <li class="toctree-l2"><a class="reference internal" href="nifti_mrs.nifti_mrs.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.nifti_mrs</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="nifti_mrs.create_nmrs.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.create_nmrs</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="nifti_mrs.definitions.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.definitions</span></code></a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.validator</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#nifti_mrs.validator.Error"><code class="docutils literal notranslate"><span class="pre">Error</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#nifti_mrs.validator.headerExtensionError"><code class="docutils literal notranslate"><span class="pre">headerExtensionError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#nifti_mrs.validator.niftiHeaderError"><code class="docutils literal notranslate"><span class="pre">niftiHeaderError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#nifti_mrs.validator.niftiDataError"><code class="docutils literal notranslate"><span class="pre">niftiDataError</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#nifti_mrs.validator.validate_nifti_mrs"><code class="docutils literal notranslate"><span class="pre">validate_nifti_mrs()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#nifti_mrs.validator.validate_nifti_data"><code class="docutils literal notranslate"><span class="pre">validate_nifti_data()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#nifti_mrs.validator.validate_nifti_header"><code class="docutils literal notranslate"><span class="pre">validate_nifti_header()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#nifti_mrs.validator.validate_hdr_ext"><code class="docutils literal notranslate"><span class="pre">validate_hdr_ext()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#nifti_mrs.validator.check_type"><code class="docutils literal notranslate"><span class="pre">check_type()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#nifti_mrs.validator.validate_spectralwidth"><code class="docutils literal notranslate"><span class="pre">validate_spectralwidth()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.validator</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="nifti_mrs.hdr_ext.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.hdr_ext</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="nifti_mrs.tools.misc.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.misc</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="nifti_mrs.tools.reshape.html"><code class="docutils literal notranslate"><span class="pre">nifti_mrs.tools.reshape</span></code></a></li>
@@ -101,99 +89,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-nifti_mrs.validator">
-<span id="nifti-mrs-validator"></span><h1><code class="docutils literal notranslate"><span class="pre">nifti_mrs.validator</span></code><a class="headerlink" href="#module-nifti_mrs.validator" title="Link to this heading"></a></h1>
-<dl class="py exception">
-<dt class="sig sig-object py" id="nifti_mrs.validator.Error">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nifti_mrs.validator.</span></span><span class="sig-name descname"><span class="pre">Error</span></span><a class="headerlink" href="#nifti_mrs.validator.Error" title="Link to this definition"></a></dt>
-<dd><p>Base class for other exceptions</p>
-</dd></dl>
-
-<dl class="py exception">
-<dt class="sig sig-object py" id="nifti_mrs.validator.headerExtensionError">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nifti_mrs.validator.</span></span><span class="sig-name descname"><span class="pre">headerExtensionError</span></span><a class="headerlink" href="#nifti_mrs.validator.headerExtensionError" title="Link to this definition"></a></dt>
-<dd><p>Raised if problems with header extension are found.</p>
-</dd></dl>
-
-<dl class="py exception">
-<dt class="sig sig-object py" id="nifti_mrs.validator.niftiHeaderError">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nifti_mrs.validator.</span></span><span class="sig-name descname"><span class="pre">niftiHeaderError</span></span><a class="headerlink" href="#nifti_mrs.validator.niftiHeaderError" title="Link to this definition"></a></dt>
-<dd><p>Raised if problems with nifti header are found.</p>
-</dd></dl>
-
-<dl class="py exception">
-<dt class="sig sig-object py" id="nifti_mrs.validator.niftiDataError">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nifti_mrs.validator.</span></span><span class="sig-name descname"><span class="pre">niftiDataError</span></span><a class="headerlink" href="#nifti_mrs.validator.niftiDataError" title="Link to this definition"></a></dt>
-<dd><p>Raised if problems with nifti data are found.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="nifti_mrs.validator.validate_nifti_mrs">
-<span class="sig-prename descclassname"><span class="pre">nifti_mrs.validator.</span></span><span class="sig-name descname"><span class="pre">validate_nifti_mrs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nifti_mrs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.validator.validate_nifti_mrs" title="Link to this definition"></a></dt>
-<dd><p>Validate a full NIfTI MRS image.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="nifti_mrs.validator.validate_nifti_data">
-<span class="sig-prename descclassname"><span class="pre">nifti_mrs.validator.</span></span><span class="sig-name descname"><span class="pre">validate_nifti_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nifti_img_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.validator.validate_nifti_data" title="Link to this definition"></a></dt>
-<dd><p>Validate the data inside a nibabel nifti image
-1. Check data is complex
-2. Check number of dimensions is at least 4 but less than 8.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="nifti_mrs.validator.validate_nifti_header">
-<span class="sig-prename descclassname"><span class="pre">nifti_mrs.validator.</span></span><span class="sig-name descname"><span class="pre">validate_nifti_header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nifti_header</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.validator.validate_nifti_header" title="Link to this definition"></a></dt>
-<dd><p>Validate the header of a nibabel nifti image
-Check data type is complex
-Check orientation data. - How? TO DO
-Check dwell time
-Check intent name</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="nifti_mrs.validator.validate_hdr_ext">
-<span class="sig-prename descclassname"><span class="pre">nifti_mrs.validator.</span></span><span class="sig-name descname"><span class="pre">validate_hdr_ext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">header_ex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension_sizes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dimensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.validator.validate_hdr_ext" title="Link to this definition"></a></dt>
-<dd><p>Validate the header extension
-1. Check that it is json formatted string.
-2. Check that it contains the required meta-data
-3. Check that it contains any required dimension information.
-4. Check that standard-defined data is of correct type.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>header_ex</strong> (<em>str</em>) – NIfTI-MRS header extensions as a json deserialisable string</p></li>
-<li><p><strong>dimension_sizes</strong> (<em>tuple</em><em> of </em><em>ints</em>) – Size of the NIfTI-MRS dimensions</p></li>
-<li><p><strong>data_dimensions</strong> (<em>int</em><em>, </em><em>optional</em>) – Total number of data dimensions in corresponding nifti-mrs data, defaults to None
-When None the dimensions are inferred from the tags and size</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="nifti_mrs.validator.check_type">
-<span class="sig-prename descclassname"><span class="pre">nifti_mrs.validator.</span></span><span class="sig-name descname"><span class="pre">check_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.validator.check_type" title="Link to this definition"></a></dt>
-<dd><p>Checks that values is of type json_type
-json_type may be a tuple to handle array types
-e.g. (list, float) indicates a list of floats.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="nifti_mrs.validator.validate_spectralwidth">
-<span class="sig-prename descclassname"><span class="pre">nifti_mrs.validator.</span></span><span class="sig-name descname"><span class="pre">validate_spectralwidth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">header_ex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dwelltime</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nifti_mrs.validator.validate_spectralwidth" title="Link to this definition"></a></dt>
-<dd><p>If a SpectralWidth field is present, check that it matches the dwell time</p>
-<p>Dwell time is stored in pixdim[4].</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>header_ex</strong> (<em>str</em>) – NIfTI-MRS header extensions as a json deserialisable string</p></li>
-<li><p><strong>dwelltime</strong> (<em>float</em>) – Dwell time as stored in pixdim[4] to check against any SpectralWidth definition. In seconds.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
+  <section id="nifti-mrs-validator">
+<h1><code class="docutils literal notranslate"><span class="pre">nifti_mrs.validator</span></code><a class="headerlink" href="#nifti-mrs-validator" title="Link to this heading"></a></h1>
 </section>
 
 
@@ -207,7 +104,7 @@ e.g. (list, float) indicates a list of floats.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, William Clarke, University of Oxford, Oxford, UK.</p>
+    <p>&#169; Copyright 2024, William Clarke, University of Oxford, Oxford, UK.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
