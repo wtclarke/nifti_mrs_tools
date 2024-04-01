@@ -218,10 +218,10 @@ def validate_hdr_ext(header_ex, dimension_sizes, data_dimensions=None):
 def check_type(value, json_type):
     '''Checks that values is of type json_type
        json_type may be a tuple to handle array types
-       e.g. (list, float) indicates a list of floats.
+       e.g. (list, str) indicates a list of strings.
     '''
-    if isinstance(json_type, tuple):
-        while len(json_type) > 1:
+    if isinstance(json_type, tuple) and len(json_type) > 1:
+        while json_type[0] == list:
             if not check_type(value, json_type[0]):
                 return False
             try:
@@ -230,7 +230,7 @@ def check_type(value, json_type):
             except TypeError:
                 return False
             json_type = json_type[1:]
-        return check_type(value, json_type[0])
+        return check_type(value, json_type)
     else:
         if isinstance(value, json_type):
             return True

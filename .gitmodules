@@ -1,0 +1,3 @@
+[submodule "src/nifti_mrs/standard"]
+	path = src/nifti_mrs/standard
+	url = https://github.com/wtclarke/mrs_nifti_standard.git

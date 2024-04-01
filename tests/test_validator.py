@@ -251,3 +251,49 @@ def test_spectralwidth():
     validator.validate_spectralwidth(
         json.dumps(test_dict),
         0.001)
+
+
+def test_check_type():
+    assert validator.check_type(
+        0.5, ((float, int), )
+    )
+
+    assert validator.check_type(
+        1, ((float, int), )
+    )
+
+    assert not validator.check_type(
+        'string', ((float, int), )
+    )
+
+    assert validator.check_type(
+        'string', (str, )
+    )
+
+    assert not validator.check_type(
+        'string', (list, str, )
+    )
+
+    assert validator.check_type(
+        ['s', 'tring'], (list, str, )
+    )
+
+    assert not validator.check_type(
+        ['s', 'tring'], (str, )
+    )
+
+    assert validator.check_type(
+        [['s', 'tring'],], (list, list, str, )
+    )
+
+    assert not validator.check_type(
+        [['s', 'tring'],], (list, str, )
+    )
+
+    assert validator.check_type(
+        [[0.5, 1],], (list, list, (float, int), )
+    )
+
+    assert validator.check_type(
+        [{'a': 1, }, ], (list, dict, )
+    )
