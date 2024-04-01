@@ -1,8 +1,10 @@
 This document contains the nifti_mrs_tools release history in reverse chronological order.
 
-1.1.2 (WIP)
------------------------------------
+1.2.0 (Monday 1st April 2024)
+-----------------------------
 - When reading files any user defined parameters without a description will print a warning to the user and generate an empty description key.
+- The package now automatically includes the machine-readable JSON formatted definitions file from V0.9 of the [official standard](https://github.com/wtclarke/mrs_nifti_standard).
+- Better handling of numbers as either `floats` or `ints` to allow for variable implementations of JSON libraries across packages.
 
 1.1.1 (Wednesday 6th December 2023)
 -----------------------------------
