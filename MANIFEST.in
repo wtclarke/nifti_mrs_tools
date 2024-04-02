@@ -1,1 +1,2 @@
 LICENSE
+exclude src/nifti_mrs/standard/*/*
