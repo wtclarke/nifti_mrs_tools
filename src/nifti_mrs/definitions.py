@@ -18,7 +18,7 @@ else:
     # See https://setuptools.pypa.io/en/latest/userguide/datafiles.html#accessing-data-files-at-runtime
     from importlib_resources import files
 
-data_text = files('nifti_mrs.standard').joinpath('definitions.json').read_text()
+data_text = files('nifti_mrs.standard').joinpath('definitions.json').read_text(encoding='utf-8')
 json_def = json.loads(data_text)
 
 # Carry out translation
