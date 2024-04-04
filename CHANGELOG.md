@@ -1,5 +1,10 @@
 This document contains the nifti_mrs_tools release history in reverse chronological order.
 
+1.2.1 (Thursday 4th April 2024)
+-------------------------------
+- Removed unnecessary file accidentally included in distribution. PR#25. Thanks to Ben Beasley.
+- Fixed encoding error bug on import when using FSL-MRS. PR#26. Thanks to Donnie Cameron.
+
 1.2.0 (Monday 1st April 2024)
 -----------------------------
 - When reading files any user defined parameters without a description will print a warning to the user and generate an empty description key.
