@@ -31,6 +31,10 @@ def main(import_args=None):
         type=Path,
         metavar='FILE or list of FILEs',
         help='NIfTI MRS file(s)', nargs='+')
+    infoparser.add_argument(
+        '--full-hdr',
+        action="store_true",
+        help='Display the full header extension.')
     infoparser.set_defaults(func=info)
 
     # Vis tool
@@ -165,19 +169,11 @@ def info(args):
 
     for file in args.file:
         data = NIFTI_MRS(file)
-
-        print(f'\nRead file {file.name} ({file.parent.resolve()}).')
-        print(f'NIfTI-MRS version {data.nifti_mrs_version}')
-        print(f'Data shape {data.shape}')
-        print(f'Dimension tags: {data.dim_tags}')
-
-        print(f'Spectrometer Frequency: {data.spectrometer_frequency[0]} MHz')
-        print(f'Dwelltime (Bandwidth): {data.dwelltime:0.3E}s ({data.bandwidth:0.0f} Hz)')
-        print(f'Nucleus: {data.nucleus[0]}')
-        if data.nucleus[0] in GYRO_MAG_RATIO:
-            field_strength = data.spectrometer_frequency[0] / GYRO_MAG_RATIO[data.nucleus[0]]
-            print(f'Field Strength: {field_strength:0.2f} T')
-        print()
+        print(data)
+        if args.full_hdr:
+            print('NIfTI-MRS Header Extension:')
+            for key in data.hdr_ext:
+                print(f'\t{key}: {data.hdr_ext[key]}')
 
 
 def vis(args):

@@ -17,6 +17,8 @@ from .hdr_ext import Hdr_Ext
 from .definitions import dimension_tags, standard_defined
 import nifti_mrs.utils as utils
 
+from mrs_tools.constants import GYRO_MAG_RATIO
+
 
 class NIFTIMRS_DimDoesntExist(Exception):
     pass
@@ -105,9 +107,6 @@ class NIFTI_MRS():
         # Instantiate Image object
         self.image = Image(*args, **kwargs)
 
-        # Store original filename for reports etc
-        self._filename = filename
-
         # Check that file meets minimum requirements
         try:
             if float(self.nifti_mrs_version) < 0.2:
@@ -168,6 +167,24 @@ class NIFTI_MRS():
         # print(super().__getitem__(sliceobj)[0])
         self.image[sliceobj] = values.conj()
         # print(super().__getitem__(sliceobj)[0])
+
+    def __str__(self):
+        str_out = ''
+        if self.file:
+            str_out += f'File {self.filename} ({self.file.parent.resolve()})\n'
+        str_out += f'NIfTI-MRS version {self.nifti_mrs_version}\n'
+        str_out += f'Data shape {self.shape}\n'
+        str_out += f'Dimension tags: {self.dim_tags}\n'
+
+        str_out += f'Spectrometer Frequency: {self.spectrometer_frequency[0]} MHz\n'
+        str_out += f'Dwelltime (Spectral bandwidth): {self.dwelltime:0.3E} s ({self.spectralwidth:0.0f} Hz)\n'
+        str_out += f'Nucleus: {self.nucleus[0]}\n'
+        str_out += f'Field Strength: {self.field_strength:0.2f} T\n'
+        return str_out
+
+    def __repr__(self):
+        """See the :meth:`__str__` method."""
+        return self.__str__()
 
     # Implement useful calls to attributes of the image class object. Should I just be using inheretence here? Not sure.
     @property
@@ -233,6 +250,14 @@ class NIFTI_MRS():
     def spectrometer_frequency(self):
         '''Central or spectrometer frequency in MHz - returns list'''
         return self.hdr_ext['SpectrometerFrequency']
+
+    @property
+    def field_strength(self):
+        """Field strength in tesla. NaN returned if unrecognised nucleus."""
+        if self.nucleus[0] in GYRO_MAG_RATIO:
+            return self.spectrometer_frequency[0] / GYRO_MAG_RATIO[self.nucleus[0]]
+        else:
+            return np.nan
 
     def getAffine(self, *args):
         """Return an affine transformation which can be used to transform
@@ -341,11 +366,18 @@ class NIFTI_MRS():
         self.hdr_ext = curr_hdr_ext
 
     @property
+    def file(self):
+        if self.image.dataSource:
+            return Path(self.image.dataSource)
+        else:
+            return None
+
+    @property
     def filename(self):
         '''Name of file object was generated from.
         Returns empty string if N/A.'''
-        if self._filename:
-            return self._filename
+        if self.file:
+            return self.file.name
         else:
             return ''
 
@@ -443,7 +475,6 @@ class NIFTI_MRS():
                 self.header)
 
             new_obj = NIFTI_MRS(reduced_data, header=new_hd)
-            new_obj._filename = self.filename
 
             return new_obj
         else:
