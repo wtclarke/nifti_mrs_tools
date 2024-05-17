@@ -1,5 +1,9 @@
 This document contains the nifti_mrs_tools release history in reverse chronological order.
 
+1.2.2 (WIP)
+-------------------------------
+- Improved NIfTI-MRS object inspection in python interface.
+
 1.2.1 (Thursday 4th April 2024)
 -------------------------------
 - Removed unnecessary file accidentally included in distribution. PR#25. Thanks to Ben Beasley.
