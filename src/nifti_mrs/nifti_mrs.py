@@ -90,17 +90,13 @@ class NIFTI_MRS():
             # object results in consistent phase/freq convention.
             args = list(args)
             args[0] = args[0].conj()
-            filename = None
         elif isinstance(args[0], Path):
             args = list(args)
-            filename = args[0].name
             args[0] = str(args[0])
         elif isinstance(args[0], str):
             args = list(args)
-            filename = Path(args[0]).name
         elif isinstance(args[0], NIFTI_MRS):
             args = list(args)
-            filename = args[0].filename
             input_hdr_ext = args[0].hdr_ext
             args[0] = args[0].image
 
