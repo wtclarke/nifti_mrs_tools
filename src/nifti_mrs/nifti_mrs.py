@@ -654,3 +654,13 @@ class NIFTI_MRS():
         tvar_array = np.asarray(tvar_tuple, dtype=object).reshape(np.prod(self.shape[4:]), len(tvar_tuple[0]))
 
         return tvar_dict2, tvar_tuple2.reshape(self.shape[4:]), tvar_array
+
+    def plot(self, display_dim=None, ppmlim=None, plot_avg=False, mask=None, legend=True):
+        from nifti_mrs.vis import vis_nifti_mrs
+        return vis_nifti_mrs(
+            self,
+            display_dim=display_dim,
+            ppmlim=ppmlim,
+            plot_avg=plot_avg,
+            mask=mask,
+            legend=legend)
