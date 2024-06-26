@@ -1,10 +1,11 @@
 This document contains the nifti_mrs_tools release history in reverse chronological order.
 
-1.2.2 (Wednesday 26th June 2024)
+1.3.0 (Wednesday 26th June 2024)
 --------------------------------
 - Added `--full-hdr` argumet to `mrs_tools info` which enables printing of the full header extension.
 - Improved NIfTI-MRS object inspection in python interface.
 - Added `.plot()` method to `NIFTI_MRS` objects. This matches the behaviour of `mrs_tools vis`.
+- Update definitions to NIfTI-MRS V0.10
 
 1.2.1 (Thursday 4th April 2024)
 -------------------------------
