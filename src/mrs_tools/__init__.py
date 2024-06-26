@@ -187,72 +187,15 @@ def vis(args):
     :type args: Namespace
     """
     try:
-        from fsl_mrs.utils.plotting import plot_spectrum, plot_spectra
-        from fsl_mrs.utils.mrs_io import read_FID, read_basis
+        from fsl_mrs.utils.mrs_io import read_basis
         from fsl_mrs.utils.mrs_io.main import FileNotRecognisedError
         import matplotlib.pyplot as plt
-        from fsl_mrs.utils.preproc import nifti_mrs_proc
     except ImportError:
         raise ImportError(
             "mrs_tools vis requires FSL-MRS tools to be installed. "
             "See fsl-mrs.com for installation instructions.")
 
-    import numpy as np
-    import nibabel as nib
-
-    # Single nifti file
-    def vis_nifti_mrs(file):
-        data = read_FID(file)
-
-        if data.ndim > 4 \
-                and 'DIM_COIL' in data.dim_tags\
-                and args.display_dim != 'DIM_COIL':
-            print('Performing coil combination')
-            data = nifti_mrs_proc.coilcombine(data)
-
-        def average_dim_if_multiple(dd, dim):
-            """Averages a dimension if non-singleton"""
-            if dim is None:
-                # Protect against loss of dimension during process.
-                return dd
-            if dd.shape[dd.dim_position(dim)] > 1:
-                print(f'Averaging {dim}')
-                return nifti_mrs_proc.average(dd, dim)
-            else:
-                return dd
-
-        if np.prod(data.shape[:3]) == 1:
-            # SVS
-            if args.display_dim:
-                for dim in data.dim_tags:
-                    if dim is None:
-                        continue
-                    if dim != args.display_dim:
-                        data = average_dim_if_multiple(data, dim)
-                fig = plot_spectra(data.mrs(), ppmlim=args.ppmlim, plot_avg=args.no_mean)
-
-            else:
-                for dim in data.dim_tags:
-                    data = average_dim_if_multiple(data, dim)
-                fig = plot_spectrum(data.mrs(), ppmlim=args.ppmlim)
-
-            if args.save is not None:
-                fig.savefig(args.save)
-            else:
-                plt.show()
-
-        else:
-            for dim in data.dim_tags:
-                data = average_dim_if_multiple(data, dim)
-
-            mrsi = data.mrs()
-            if args.mask is not None:
-                mask_hdr = nib.load(args.mask)
-                mask = np.asanyarray(mask_hdr.dataobj)
-                if mask.ndim == 2:
-                    mask = np.expand_dims(mask, 2)
-                mrsi.set_mask(mask)
-            mrsi.plot(ppmlim=args.ppmlim)
+    from nifti_mrs.nifti_mrs import NIFTI_MRS
 
     # Some logic to figure out what we are dealing with
     p = args.file
@@ -281,17 +224,26 @@ def vis(args):
                          ' NIFTI-MRS file, not a directory (unless'
                          ' it contains basis files).')
 
-    elif p.is_file():
-        vis_nifti_mrs(p)
-
     else:
         try:
-            vis_nifti_mrs(p)
-        except FileNotRecognisedError as exc:
+            data = NIFTI_MRS(p)
+        except FileNotFoundError as exc:
             raise FileNotFoundError(
                 f"No file or directory '{p}' found."
                 " Please specify correct file extension (e.g. nii.gz) if there is one.")\
                 from exc
+
+        fig = data.plot(
+            display_dim=args.display_dim,
+            ppmlim=args.ppmlim,
+            plot_avg=args.no_mean,
+            mask=args.mask,
+            legend=True)
+
+        if args.save is not None:
+            fig.savefig(args.save)
+        else:
+            plt.show()
 
 
 def merge(args):
