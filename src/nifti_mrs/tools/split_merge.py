@@ -40,7 +40,7 @@ def split(nmrs, dimension, index_or_indices):
         if dimension > (nmrs.ndim - 1) or dimension < 4:
             raise ValueError('Dimension must be one of 4, 5, or 6 (or DIM_TAG string).'
                              f' This data has {nmrs.ndim} dimensions,'
-                             f' i.e. a maximum dimension value of {nmrs.ndim-1}.')
+                             f' i.e. a maximum dimension value of {nmrs.ndim - 1}.')
         dim_index = dimension
     else:
         raise TypeError('Dimension must be an int (4, 5, or 6) or string (DIM_TAG string).')
@@ -164,7 +164,7 @@ def merge(array_of_nmrs, dimension):
         if dimension > (array_of_nmrs[0].ndim - 1) or dimension < 4:
             raise ValueError('Dimension must be one of 4, 5, or 6 (or DIM_TAG string).'
                              f' This data has {array_of_nmrs[0].ndim} dimensions,'
-                             f' i.e. a maximum dimension value of {array_of_nmrs[0].ndim-1}.')
+                             f' i.e. a maximum dimension value of {array_of_nmrs[0].ndim - 1}.')
         dim_index = dimension
     else:
         raise TypeError('Dimension must be an int (4, 5, or 6) or string (DIM_TAG string).')
