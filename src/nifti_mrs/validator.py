@@ -40,7 +40,7 @@ def validate_nifti_mrs(nifti_mrs):
 
     # Validate that any SpectralWidth definition matches pixdim[4]
     validate_spectralwidth(
-        nifti_mrs.header.extensions[0].json(),
+        nifti_mrs.header.extensions[0].text,
         nifti_mrs.header['pixdim'][4])
 
 
