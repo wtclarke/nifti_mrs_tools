@@ -7,7 +7,6 @@ Copyright Will Clarke, University of Oxford, 2021'''
 # Imports
 import subprocess
 from pathlib import Path
-import json
 
 import nibabel as nib
 import pytest
@@ -163,8 +162,7 @@ def test_merge(tmp_path):
     assert (tmp_path / 'test_newaxis_merge.nii.gz').exists()
     fna = nib.load(tmp_path / 'test_newaxis_merge.nii.gz')
     hdr_ext_codes = fna.header.extensions.get_codes()
-    hdr_ext = json.loads(
-        fna.header.extensions[hdr_ext_codes.index(44)].get_content())
+    hdr_ext = fna.header.extensions[hdr_ext_codes.index(44)].json()
 
     assert fna.ndim == 7
     assert fna.shape == (1, 1, 1, 4096, 4, 2, 2)
@@ -267,8 +265,7 @@ def test_reshape(tmp_path):
     assert f1.shape == (1, 1, 1, 4096, 4, 4, 4)
 
     hdr_ext_codes = f1.header.extensions.get_codes()
-    hdr_ext = json.loads(
-        f1.header.extensions[hdr_ext_codes.index(44)].get_content())
+    hdr_ext = f1.header.extensions[hdr_ext_codes.index(44)].json()
 
     assert hdr_ext['dim_5'] == 'DIM_COIL'
     assert hdr_ext['dim_6'] == 'DIM_DYN'
@@ -287,8 +284,7 @@ def test_reshape(tmp_path):
     assert f2.shape == (1, 1, 1, 4096, 8, 8)
 
     hdr_ext_codes = f2.header.extensions.get_codes()
-    hdr_ext = json.loads(
-        f2.header.extensions[hdr_ext_codes.index(44)].get_content())
+    hdr_ext = f2.header.extensions[hdr_ext_codes.index(44)].json()
 
     assert hdr_ext['dim_5'] == 'DIM_COIL'
     assert hdr_ext['dim_6'] == 'DIM_DYN'
