@@ -35,7 +35,7 @@ def validate_nifti_mrs(nifti_mrs):
 
     # Validate header extension
     validate_hdr_ext(
-        nifti_mrs.header.extensions[0],
+        nifti_mrs.header.extensions[0].text,
         nifti_mrs.shape)
 
     # Validate that any SpectralWidth definition matches pixdim[4]
@@ -97,7 +97,7 @@ def validate_hdr_ext(header_ex, dimension_sizes, data_dimensions=None):
     """
     # 1. Check that header_ext is json
     try:
-        json_dict = header_ex.json()
+        json_dict = json.loads(header_ex)
     except json.JSONDecodeError as exc:
         raise headerExtensionError("Header extension is not json deserialisable.") from exc
 
