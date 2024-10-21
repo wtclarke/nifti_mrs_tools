@@ -2,6 +2,7 @@ This document contains the nifti_mrs_tools release history in reverse chronologi
 
 1.3.1 (Monday 21st October 2024)
 --------------------------------
+- Drop support for python 3.8. Testing extended to python 3.12 and 3.13.
 - Fix compatibility issue with nibabel > 5.3
 
 1.3.0 (Wednesday 26th June 2024)
