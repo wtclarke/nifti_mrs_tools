@@ -1,5 +1,9 @@
 This document contains the nifti_mrs_tools release history in reverse chronological order.
 
+1.3.1 (Monday 21st October 2024)
+--------------------------------
+- Fix compatibility issue with nibabel > 5.3
+
 1.3.0 (Wednesday 26th June 2024)
 --------------------------------
 - Added `--full-hdr` argumet to `mrs_tools info` which enables printing of the full header extension.

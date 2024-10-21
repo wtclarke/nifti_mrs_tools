@@ -118,8 +118,7 @@ class NIFTI_MRS():
                 raise NotNIFTI_MRS('NIFTI-MRS must have a header extension.')
 
             self._hdr_ext = Hdr_Ext.from_header_ext(
-                json.loads(
-                    self.header.extensions[hdr_ext_codes.index(44)].get_content()))
+                self.header.extensions[hdr_ext_codes.index(44)].json())
 
         # Some validation upon creation
         if validate_on_creation:
