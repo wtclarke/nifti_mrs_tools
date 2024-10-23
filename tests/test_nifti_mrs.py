@@ -174,6 +174,7 @@ def test_set_dim_tag():
     assert nmrs.hdr_ext['dim_6_header'] == {'EchoTime': np.arange(16).tolist()}
 
     # Produce singleton data
+    nmrs = NIFTI_MRS(data['unprocessed'])
     _, singleton = tools.split(nmrs, 'DIM_DYN', [0,])
     assert singleton.shape == (1, 1, 1, 4096, 4, 1)
 
