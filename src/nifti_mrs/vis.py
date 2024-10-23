@@ -28,12 +28,16 @@ def vis_nifti_mrs(data, display_dim=None, ppmlim=None, plot_avg=False, mask=None
         print('Performing coil combination')
         data = nifti_mrs_proc.coilcombine(data)
 
-    def average_dim_if_multiple(dd, dim):
-        """Averages a dimension if non-singleton"""
+    def handle_dim_if_multiple(dd, dim):
+        """Handles a dimension if non-singleton"""
         if dim is None:
             # Protect against loss of dimension during process.
             return dd
-        if dd.shape[dd.dim_position(dim)] > 1:
+        if dd.shape[dd.dim_position(dim)] > 1\
+                and dim in ('DIM_EDIT', 'DIM_METCYCLE', 'DIM_ISIS'):
+            print(f'Subtracting {dim}')
+            return nifti_mrs_proc.subtract(dd, dim=dim)
+        elif dd.shape[dd.dim_position(dim)] > 1:
             print(f'Averaging {dim}')
             return nifti_mrs_proc.average(dd, dim)
         else:
@@ -46,7 +50,7 @@ def vis_nifti_mrs(data, display_dim=None, ppmlim=None, plot_avg=False, mask=None
                 if dim is None:
                     continue
                 if dim != display_dim:
-                    data = average_dim_if_multiple(data, dim)
+                    data = handle_dim_if_multiple(data, dim)
             mrs = []
             for fid, _ in data.iterate_over_dims():
                 mrs.append(
@@ -59,7 +63,7 @@ def vis_nifti_mrs(data, display_dim=None, ppmlim=None, plot_avg=False, mask=None
 
         else:
             for dim in data.dim_tags:
-                data = average_dim_if_multiple(data, dim)
+                data = handle_dim_if_multiple(data, dim)
             mrs = MRS(
                 data[:].squeeze(),
                 bw=data.bandwidth,
@@ -71,7 +75,7 @@ def vis_nifti_mrs(data, display_dim=None, ppmlim=None, plot_avg=False, mask=None
 
     else:
         for dim in data.dim_tags:
-            data = average_dim_if_multiple(data, dim)
+            data = handle_dim_if_multiple(data, dim)
 
         mrsi = MRSI(
             data[:],
