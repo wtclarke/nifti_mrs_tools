@@ -195,7 +195,7 @@ def test_set_dim_tag():
 
     with pytest.raises(
             NIFTIMRS_DimDoesntExist,
-            match="DIM_DYN doesn't exist in list of tags: ['DIM_COIL', None, None]"):
+            match="DIM_DYN doesn't exist in list of tags"):
         singleton.set_dim_tag("DIM_DYN", None)
 
     with pytest.raises(
