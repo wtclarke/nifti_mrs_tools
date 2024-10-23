@@ -1,5 +1,9 @@
 This document contains the nifti_mrs_tools release history in reverse chronological order.
 
+1.3.2 (Wednesday 23rd October 2024)
+-----------------------------------
+- Better visualisation using `mrs_tools vis` for data containing ISIS, metabolite cycling or editing.
+
 1.3.1 (Monday 21st October 2024)
 --------------------------------
 - Drop support for python 3.8. Testing extended to python 3.12 and 3.13.
