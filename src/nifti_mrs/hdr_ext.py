@@ -136,15 +136,15 @@ class Hdr_Ext:
 
         :param dim:  May be (0,1,2) or ("5th","6th","7th")
         :type dim: str or int
-        :param tag: Must be one of the defined dimension tag strings. E.g. DIM_DYN
+        :param tag: Must be one of the defined dimension tag strings. E.g. DIM_DYN or None
         :type tag: str
         :param info: Optional, free-form for documentation, defaults to None
         :type info: str, optional
         :param hdr: Dict containing relevant header value names and values. Defaults to None
         :type hdr: dict, optional
         """
-        if tag not in dimension_tags:
-            raise ValueError("tag must be one of the defined dimension tag.")
+        if tag is not None and tag not in dimension_tags:
+            raise ValueError("tag must be one of the defined dimension tags or None.")
 
         new_info = {"tag": tag,
                     "info": info,
