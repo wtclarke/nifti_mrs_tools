@@ -425,10 +425,16 @@ class NIFTI_MRS():
         :param header: dict containing the dimension headers
         :type header: dict
         """
-        if tag not in dimension_tags.keys():
+        if tag is not None and tag not in dimension_tags.keys():
             raise ValueError(f'Tag must be one of: {", ".join(list(dimension_tags.keys()))}.')
 
         dim = self._dim_tag_to_index(dim)
+
+        # If tag is None, check that the dimension is singleton
+        if tag is None and self.ndim > dim and self.shape[dim] > 1:
+            raise ValueError('Tag cannot be set to None for non-singleton dimension.')
+        if tag is None and self.ndim > dim:
+            raise ValueError('Tag can only be set to None for trailing singleton dimension.')
 
         if header is not None:
             # Check size

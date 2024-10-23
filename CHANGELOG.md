@@ -3,6 +3,7 @@ This document contains the nifti_mrs_tools release history in reverse chronologi
 1.3.2 (Wednesday 23rd October 2024)
 -----------------------------------
 - Better visualisation using `mrs_tools vis` for data containing ISIS, metabolite cycling or editing.
+- Dimension tags can now be set to `None` to remove trailing singleton dimension.
 
 1.3.1 (Monday 21st October 2024)
 --------------------------------

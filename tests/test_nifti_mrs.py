@@ -11,9 +11,10 @@ import pytest
 import numpy as np
 from nibabel.nifti1 import Nifti1Extension
 
-from nifti_mrs.nifti_mrs import NIFTI_MRS
+from nifti_mrs.nifti_mrs import NIFTI_MRS, NIFTIMRS_DimDoesntExist
 from nifti_mrs.validator import headerExtensionError
 from nifti_mrs.create_nmrs import gen_nifti_mrs, gen_nifti_mrs_hdr_ext
+from nifti_mrs import tools
 
 # Files
 testsPath = Path(__file__).parent
@@ -171,6 +172,43 @@ def test_set_dim_tag():
         'DIM_DYN',
         header={'EchoTime': np.arange(16).tolist()})
     assert nmrs.hdr_ext['dim_6_header'] == {'EchoTime': np.arange(16).tolist()}
+
+    # Produce singleton data
+    _, singleton = tools.split(nmrs, 'DIM_DYN', [0,])
+    assert singleton.shape == (1, 1, 1, 4096, 4, 1)
+
+    singleton.set_dim_tag(5, None)
+    assert singleton.shape == (1, 1, 1, 4096, 4)
+
+    # Run twice to check setting None on None is fine
+    singleton.set_dim_tag(5, None)
+    assert singleton.shape == (1, 1, 1, 4096, 4)
+
+    # Restore
+    singleton.set_dim_tag(5, "DIM_DYN")
+    assert singleton.shape == (1, 1, 1, 4096, 4, 1)
+
+    # Run using string
+    singleton.set_dim_tag("DIM_DYN", None)
+    assert singleton.shape == (1, 1, 1, 4096, 4)
+
+    with pytest.raises(
+            NIFTIMRS_DimDoesntExist,
+            match="DIM_DYN doesn't exist in list of tags: ['DIM_COIL', None, None]"):
+        singleton.set_dim_tag("DIM_DYN", None)
+
+    with pytest.raises(
+            ValueError,
+            match="Tag cannot be set to None for non-singleton dimension"):
+        singleton.set_dim_tag("DIM_COIL", None)
+
+    _, singleton_non_final = tools.split(nmrs, 'DIM_COIL', [0,])
+    assert singleton_non_final.shape == (1, 1, 1, 4096, 1, 16)
+
+    with pytest.raises(
+            ValueError,
+            match="Tag can only be set to None for trailing singleton dimension."):
+        singleton_non_final.set_dim_tag("DIM_COIL", None)
 
 
 def test_nifti_mrs_filename():
