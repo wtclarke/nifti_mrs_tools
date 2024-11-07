@@ -219,7 +219,13 @@ class NIFTI_MRS():
     @property
     def dwelltime(self):
         '''Return dwelltime in seconds'''
-        return self.header['pixdim'][4]
+        t_unit = self.header.get_xyzt_units()[1]
+        dwelltime=self.header['pixdim'][4]
+        if t_unit=="msec":
+            return dwelltime*1e-3
+        if t_unit=="usec":
+            return dwelltime*1e-6
+        return dwelltime
 
     @dwelltime.setter
     def dwelltime(self, new_dt):
