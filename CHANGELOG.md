@@ -1,6 +1,6 @@
 This document contains the nifti_mrs_tools release history in reverse chronological order.
 
-1.3.3 (Wednesday 23rd October 2024)
+1.3.3 (Friday 8th November 2024)
 -----------------------------------
 - Handle different time units in nifti header for dwelltime (with thanks to @Septem).
 - Handle singleton coil dimensions with `mrs_tools vis`  (with thanks to @Septem).

@@ -1,6 +1,5 @@
 from pathlib import Path
 
-import matplotlib.figure
 import pytest
 
 testsPath = Path(__file__).parent
@@ -16,7 +15,7 @@ def test_vis_error(tmp_path):
                 ImportError,
                 match="mrs_tools vis requires FSL-MRS tools to be installed. "
                       "See fsl-mrs.com for installation instructions."):
-            import nifti_mrs.vis
+            import nifti_mrs.vis   # noqa: F401
     else:
         pytest.skip("fsl-mrs present, skipping test")
 
