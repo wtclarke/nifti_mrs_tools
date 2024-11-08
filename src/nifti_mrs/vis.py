@@ -24,7 +24,8 @@ def vis_nifti_mrs(data, display_dim=None, ppmlim=None, plot_avg=False, mask=None
 
     if data.ndim > 4 \
             and 'DIM_COIL' in data.dim_tags\
-            and display_dim != 'DIM_COIL':
+            and display_dim != 'DIM_COIL'\
+            and data.shape[4+data.dim_tags.index('DIM_COIL')]>1:
         print('Performing coil combination')
         data = nifti_mrs_proc.coilcombine(data)
 
