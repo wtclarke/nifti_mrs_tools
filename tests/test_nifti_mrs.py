@@ -61,6 +61,25 @@ def test_modification_mrs_meta():
     assert obj.nifti_mrs_version == '1.3'
 
 
+def test_time_units():
+    obj = NIFTI_MRS(data['unprocessed'])
+
+    obj.image.header.set_xyzt_units('mm', 'sec')
+    obj.dwelltime = 1 / 5000
+    assert obj.spectralwidth == 5000
+    assert obj.bandwidth == 5000
+
+    obj.image.header.set_xyzt_units('mm', 'msec')
+    obj.dwelltime = 1E3 / 5000
+    assert obj.spectralwidth == 5000
+    assert obj.bandwidth == 5000
+
+    obj.image.header.set_xyzt_units('mm', 'usec')
+    obj.dwelltime = 1E6 / 5000
+    assert obj.spectralwidth == 5000
+    assert obj.bandwidth == 5000
+
+
 def test_hdr_ext():
     obj = NIFTI_MRS(data['unprocessed'])
 
