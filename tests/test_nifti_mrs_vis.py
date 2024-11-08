@@ -13,7 +13,7 @@ def test_vis_error(tmp_path):
     except ImportError:
         with pytest.raises(
                 ImportError,
-                match="mrs_tools vis requires FSL-MRS tools to be installed. "
+                match="NIfTI-MRS visualisation requires FSL-MRS tools to be installed. "
                       "See fsl-mrs.com for installation instructions."):
             import nifti_mrs.vis   # noqa: F401
     else:
