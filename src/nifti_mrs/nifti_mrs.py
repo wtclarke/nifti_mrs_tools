@@ -475,7 +475,10 @@ class NIFTI_MRS():
         """
         if remove_dim:
             dim = self._dim_tag_to_index(remove_dim)
-            reduced_data = self[:].take(0, axis=dim)
+            if dim==len(self.shape)-1 and self.shape[-1]==1:
+                reduced_data = self[:]
+            else:
+                reduced_data = self[:].take(0, axis=dim)
             new_hdr_ext = self.hdr_ext.copy()
             new_hdr_ext.remove_dim_info(dim - 4)
             new_hd = utils.modify_hdr_ext(
@@ -487,6 +490,16 @@ class NIFTI_MRS():
             return new_obj
         else:
             return NIFTI_MRS(self[:], header=self.header)
+            
+    def remove_dim(self, remove_dim):
+        """Return a copy of this image with a dimension removed. (Intuitive wrapper of copy function with remove_dim.)
+        
+        :param remove_dim: dimension index (4, 5, 6) or tag to remove. Takes first index. Defaults to None/no removal
+        :type remove_dim: str or int, optional
+        :return: Copy of object
+        :rtype: NIFTI_MRS
+        """
+        return self.copy(remove_dim)
 
     def save(self, filepath):
         """Save NIfTI-MRS to file

@@ -306,3 +306,17 @@ def _merge_dim_header(hdr1, hdr2, dimension, dim_length1, dim_length2):
         # Nothing to merge - still run check
         run_check()
     return out_hdr
+
+def remove_dim(nmrs, remove_dim):
+    """Removes a specficied dimension from a NIFTI_MRS object and returns a copy of the so modified NIFTI_MRS.
+    Intuitive wrapper of NIFTI_MRS member funciton.
+
+    :param nmrs: Input nifti_mrs object from which to remove dim
+    :type nmrs: fsl_mrs.core.nifti_mrs.NIFTI_MRS
+    :param remove_dim: dimension index (4, 5, 6) or tag to remove. Takes first index. 
+    :type remove_dim: str or int
+    :return: A NIFTI_MRS object with dimensionality reduced
+    :rtype: fsl_mrs.core.nifti_mrs.NIFTI_MRS
+    """
+    return nrms.copy(remove_dim)
+
