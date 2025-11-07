@@ -18,7 +18,9 @@ from nifti_mrs import tools
 
 # Files
 testsPath = Path(__file__).parent
-data = {'unprocessed': testsPath / 'test_data' / 'metab_raw.nii.gz'}
+data = {
+    'unprocessed': testsPath / 'test_data' / 'metab_raw.nii.gz',
+    'int_frequency': testsPath / 'test_data' / 'metab_int_freq.nii.gz'}
 
 
 def test_nifti_mrs_class():
@@ -468,3 +470,10 @@ def test_on_load_validator(capsys):
     assert captured.out == \
         "This file's header extension is currently invalid. "\
         "Reason:  With 6 dimensions the header extension must contain 'dim_5'.\n"
+
+
+def test_int_freq():
+    obj = NIFTI_MRS(data['int_frequency'])
+
+    assert obj.spectrometer_frequency == [297.0]
+    assert isinstance(obj.spectrometer_frequency[0], float)

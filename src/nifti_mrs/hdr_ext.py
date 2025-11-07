@@ -22,11 +22,11 @@ class Hdr_Ext:
         :param dimensions: Number of dimensions in image. Defaults to None
         :type dimensions: int, optional
         """
-        if isinstance(spec_frequency, float):
-            self.SpectrometerFrequency = [spec_frequency, ]
+        if isinstance(spec_frequency, (float, int)):
+            self.SpectrometerFrequency = [float(spec_frequency), ]
         elif isinstance(spec_frequency, (list, tuple))\
-                and isinstance(spec_frequency[0], float):
-            self.SpectrometerFrequency = spec_frequency
+                and isinstance(spec_frequency[0], (float, int)):
+            self.SpectrometerFrequency = [float(freq) for freq in spec_frequency]
         else:
             raise ValueError('spec_frequency must be a float or array of floats.')
 
