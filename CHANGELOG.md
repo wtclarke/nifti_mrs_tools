@@ -3,6 +3,7 @@ This document contains the nifti_mrs_tools release history in reverse chronologi
 1.3.4 (WIP)
 -----------------------------------
 - Improved behaviour around removing dimensions when copying NIfTI-MRS objects. Thanks to @mbrammerloh.
+- Dropped support for python 3.9, added support and testing for 3.14
 
 1.3.3 (Friday 8th November 2024)
 -----------------------------------
