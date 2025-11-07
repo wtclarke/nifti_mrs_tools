@@ -4,3 +4,4 @@ __pycache__/
 tmp_notes
 build
 test_*.ipynb
+.DS_store
