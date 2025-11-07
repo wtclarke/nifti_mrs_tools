@@ -1,9 +1,11 @@
 from pathlib import Path
 
+import numpy as np
 import pytest
 
 from nifti_mrs.nifti_mrs import NIFTI_MRS
 from nifti_mrs import tools as nmrs_tools
+from nifti_mrs.create_nmrs import gen_nifti_mrs
 
 testsPath = Path(__file__).parent
 test_data = testsPath / 'test_data' / 'metab_raw.nii.gz'
@@ -30,3 +32,22 @@ def test_reshape():
 
     assert reshaped.shape == (1, 1, 1, 4096, 2, 2, 16)
     assert reshaped.dim_tags == ['DIM_COIL', 'DIM_DYN', 'DIM_USER_0']
+
+
+def test_remove_dim():
+    """Test the wrapper for copy(remove_dim)"""
+    example_singleton = gen_nifti_mrs(
+        np.zeros((1, 1, 1, 256, 4, 1), complex),
+        1 / 1000,
+        123.0,
+        dim_tags=['DIM_COIL', 'DIM_DYN']
+    )
+    assert example_singleton.shape == (1, 1, 1, 256, 4, 1)
+
+    rm_dim_dyn = nmrs_tools.remove_dim(example_singleton, 'DIM_DYN')
+    assert rm_dim_dyn.shape == (1, 1, 1, 256, 4)
+    assert rm_dim_dyn.dim_tags == ['DIM_COIL', None, None]
+
+    rm_dim_coil = nmrs_tools.remove_dim(example_singleton, 'DIM_COIL')
+    assert rm_dim_coil.shape == (1, 1, 1, 256, 1)
+    assert rm_dim_coil.dim_tags == ['DIM_DYN', None, None]
