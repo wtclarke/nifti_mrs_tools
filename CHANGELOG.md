@@ -1,5 +1,9 @@
 This document contains the nifti_mrs_tools release history in reverse chronological order.
 
+1.3.4 (WIP)
+-----------------------------------
+- Improved behaviour around removing dimensions when copying NIfTI-MRS objects. Thanks to @mbrammerloh.
+
 1.3.3 (Friday 8th November 2024)
 -----------------------------------
 - Handle different time units in nifti header for dwelltime (with thanks to @Septem).

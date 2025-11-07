@@ -50,6 +50,43 @@ def test_copy():
     assert np.allclose(obj3[:], obj1[:])
 
 
+def test_copy_remove_dim():
+    example_singleton = gen_nifti_mrs(
+        np.zeros((1, 1, 1, 256, 4, 1), complex),
+        1 / 1000,
+        123.0,
+        dim_tags=['DIM_COIL', 'DIM_DYN']
+    )
+    assert example_singleton.shape == (1, 1, 1, 256, 4, 1)
+
+    rm_dim_dyn = example_singleton.copy(remove_dim='DIM_DYN')
+    assert rm_dim_dyn.shape == (1, 1, 1, 256, 4)
+    assert rm_dim_dyn.dim_tags == ['DIM_COIL', None, None]
+
+    rm_dim_coil = example_singleton.copy(remove_dim='DIM_COIL')
+    assert rm_dim_coil.shape == (1, 1, 1, 256, 1)
+    assert rm_dim_coil.dim_tags == ['DIM_DYN', None, None]
+
+
+def test_remove_dim():
+    """Test the wrapper for copy(remove_dim)"""
+    example_singleton = gen_nifti_mrs(
+        np.zeros((1, 1, 1, 256, 4, 1), complex),
+        1 / 1000,
+        123.0,
+        dim_tags=['DIM_COIL', 'DIM_DYN']
+    )
+    assert example_singleton.shape == (1, 1, 1, 256, 4, 1)
+
+    rm_dim_dyn = example_singleton.remove_dim('DIM_DYN')
+    assert rm_dim_dyn.shape == (1, 1, 1, 256, 4)
+    assert rm_dim_dyn.dim_tags == ['DIM_COIL', None, None]
+
+    rm_dim_coil = example_singleton.remove_dim('DIM_COIL')
+    assert rm_dim_coil.shape == (1, 1, 1, 256, 1)
+    assert rm_dim_coil.dim_tags == ['DIM_DYN', None, None]
+
+
 def test_modification_mrs_meta():
     obj = NIFTI_MRS(data['unprocessed'])
 

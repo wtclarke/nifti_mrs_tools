@@ -63,3 +63,16 @@ def reshape(nmrs, reshape, d5=None, d6=None, d7=None):
     # reshpaed_hrd = _reshape_hdr(nmrs_reshaped.dynamic_hdr_vals[2],)
 
     return nmrs_reshaped
+
+
+def remove_dim(nmrs: NIFTI_MRS, remove_dim: str | int) -> NIFTI_MRS:
+    """Removes a specified dimension from a NIFTI_MRS object and returns a copy of the so modified NIFTI_MRS.
+
+    :param nmrs: Input nifti_mrs object from which to remove dim
+    :type nmrs: NIFTI_MRS
+    :param remove_dim: dimension index (4, 5, 6) or tag to remove. Takes first index.
+    :type remove_dim: str | int
+    :return: A NIFTI_MRS object with dimensionality reduced
+    :rtype: NIFTI_MRS
+    """
+    return nmrs.copy(remove_dim=remove_dim)
