@@ -3,6 +3,7 @@
     Author: Will Clarke <william.clarke@ndcn.ox.ac.uk>
     Copyright (C) 2021 University of Oxford
 """
+from typing import Union
 from nifti_mrs.nifti_mrs import NIFTI_MRS
 from nifti_mrs import utils
 
@@ -65,7 +66,7 @@ def reshape(nmrs, reshape, d5=None, d6=None, d7=None):
     return nmrs_reshaped
 
 
-def remove_dim(nmrs: NIFTI_MRS, remove_dim: str | int) -> NIFTI_MRS:
+def remove_dim(nmrs: NIFTI_MRS, remove_dim: Union[str, int]) -> NIFTI_MRS:
     """Removes a specified dimension from a NIFTI_MRS object and returns a copy of the so modified NIFTI_MRS.
 
     :param nmrs: Input nifti_mrs object from which to remove dim
