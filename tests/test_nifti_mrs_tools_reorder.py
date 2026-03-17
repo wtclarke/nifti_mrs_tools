@@ -35,6 +35,23 @@ def complex_hdr_data():
     return nmrs
 
 
+@pytest.fixture
+def complex_hdr_data_three():
+    nmrs = gen_nifti_mrs(
+        np.ones((1, 1, 1, 512, 2, 3, 4), dtype=complex),
+        1 / 1000,
+        123.2,
+        dim_tags=['DIM_COIL', 'DIM_USER_0', 'DIM_EDIT']
+    )
+    nmrs.set_dim_tag(
+        'DIM_USER_0',
+        'DIM_USER_0',
+        info="EchoTime",
+        header={"EchoTime": [0.001, 0.003, 0.005]})
+
+    return nmrs
+
+
 def test_complex(complex_hdr_data):
     out = nmrs_tools.reorder(complex_hdr_data, ['DIM_USER_0', 'DIM_COIL'])
     assert out.hdr_ext['dim_5'] == 'DIM_USER_0'
@@ -91,3 +108,24 @@ def test_reorder():
     assert out.hdr_ext['dim_5'] == 'DIM_EDIT'
     assert out.hdr_ext['dim_6'] == 'DIM_COIL'
     assert out.hdr_ext['dim_7'] == 'DIM_DYN'
+
+    # Add an additional singleton at 6
+    out = nmrs_tools.reorder(nmrs, ['DIM_COIL', 'DIM_EDIT', 'DIM_DYN'])
+    assert out[:].shape == (1, 1, 1, 4096, 4, 1, 16)
+    assert out.shape == (1, 1, 1, 4096, 4, 1, 16)
+    assert out.hdr_ext['dim_5'] == 'DIM_COIL'
+    assert out.hdr_ext['dim_6'] == 'DIM_EDIT'
+    assert out.hdr_ext['dim_7'] == 'DIM_DYN'
+
+
+def test_reorder_three_dims(complex_hdr_data_three):
+
+    # Test reordering a file with three pre-specified dimensions
+    # Original order = 'DIM_COIL', 'DIM_USER_0', 'DIM_EDIT'
+    out = nmrs_tools.reorder(
+        complex_hdr_data_three,
+        ['DIM_USER_0', 'DIM_EDIT', 'DIM_COIL'])
+
+    assert out.hdr_ext['dim_5'] == 'DIM_USER_0'
+    assert out.hdr_ext['dim_6'] == 'DIM_EDIT'
+    assert out.hdr_ext['dim_7'] == 'DIM_COIL'
