@@ -42,7 +42,7 @@ jobs:
             pytest -k "not with_fsl_mrs" tests
             conda install -c conda-forge -c defaults \
               -c https://fsl.fmrib.ox.ac.uk/fsldownloads/fslconda/public/ \
-              fsl_mrs
+              fsl_mrs pip
             pip install .
             pytest -k "with_fsl_mrs" tests
 
