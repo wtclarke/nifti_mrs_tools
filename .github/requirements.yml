@@ -4,3 +4,4 @@ dependencies:
  - fslpy
  - flake8
  - pytest
+ - pip
