@@ -1,6 +1,8 @@
 dependencies:
+ - fsl_mrs
  - numpy
  - nibabel
  - fslpy
  - flake8
  - pytest
+ - pip

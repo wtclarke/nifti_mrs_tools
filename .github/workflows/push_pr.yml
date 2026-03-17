@@ -19,9 +19,9 @@ jobs:
         with:
           submodules: true
           lfs: true
-      - uses: conda-incubator/setup-miniconda@v2
+      - uses: conda-incubator/setup-miniconda@v3
         with:
-          auto-update-conda: true
+          mamba-version: "*"
           python-version: ${{ matrix.python-version }}
           activate-environment: test
           environment-file: .github/requirements.yml
@@ -40,9 +40,19 @@ jobs:
         run: |
             pip install .
             pytest -k "not with_fsl_mrs" tests
-            conda install -c conda-forge -c defaults \
-              -c https://fsl.fmrib.ox.ac.uk/fsldownloads/fslconda/public/ \
-              fsl_mrs
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          mamba-version: "*"
+          python-version: ${{ matrix.python-version }}
+          activate-environment: fsl_mrs
+          environment-file: .github/requirements_fslmrs.yml
+          auto-activate-base: false
+          channels: conda-forge, https://fsl.fmrib.ox.ac.uk/fsldownloads/fslconda/public/
+      - name: Run pytest with fsl_mrs
+        shell: bash -l {0}
+        run: |
+            conda info
+            conda list
             pip install .
             pytest -k "with_fsl_mrs" tests
 
