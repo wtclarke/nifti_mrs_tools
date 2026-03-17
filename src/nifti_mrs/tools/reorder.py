@@ -11,7 +11,9 @@ from nifti_mrs.nifti_mrs import NIFTI_MRS
 from nifti_mrs import utils
 
 
-def reorder(nmrs, dim_tag_list):
+def reorder(
+        nmrs: NIFTI_MRS,
+        dim_tag_list: list[str | None] | tuple[str | None, ...]) -> NIFTI_MRS:
     """Reorder the higher dimensions of a NIfTI-MRS object.
     Can force a singleton dimension with new tag.
 
@@ -33,9 +35,13 @@ def reorder(nmrs, dim_tag_list):
 
     # Create singleton dimensions if required
     original_dims = nmrs.ndim
-    new_dim = sum(x is not None for x in nmrs.dim_tags) + 4
-    dims_to_add = tuple(range(original_dims, new_dim + 1))
-    data_with_singleton = np.expand_dims(nmrs[:], dims_to_add)
+    new_dims = 4 + sum(x is not None for x in dim_tag_list)
+    if new_dims > original_dims:
+        new_dim_location: int = sum(x is not None for x in nmrs.dim_tags) + 4
+        dims_to_add = tuple(range(original_dims, new_dim_location + 1))
+        data_with_singleton = np.expand_dims(nmrs[:], dims_to_add)
+    else:
+        data_with_singleton = nmrs[:]
 
     # Create list of source indices
     # Create list of destination indices
