@@ -1,5 +1,10 @@
 This document contains the nifti_mrs_tools release history in reverse chronological order.
 
+1.3.5 (Wednesday 18th march 2026)
+---------------------------------
+- Fixed bug in reorder command when there were three defined dimensions already
+- Added type hints to arguments and outputs of main tools functions.
+
 1.3.4 (Friday 7th November 2025)
 -----------------------------------
 - Improved behaviour around removing dimensions when copying NIfTI-MRS objects. Thanks to @mbrammerloh.
