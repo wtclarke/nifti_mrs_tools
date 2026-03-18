@@ -9,7 +9,7 @@ import numpy as np
 from nifti_mrs.nifti_mrs import NIFTI_MRS
 
 
-def conjugate(nmrs):
+def conjugate(nmrs: NIFTI_MRS) -> NIFTI_MRS:
     """Conjugate a nifti-mrs object.
 
     :param nmrs: NIFTI_MRS object to conjugate

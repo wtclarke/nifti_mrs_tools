@@ -11,7 +11,10 @@ from nifti_mrs.nifti_mrs import NIFTI_MRS, NIFTIMRS_DimDoesntExist
 from nifti_mrs import utils
 
 
-def split(nmrs, dimension, index_or_indices):
+def split(
+        nmrs: NIFTI_MRS,
+        dimension: str | int,
+        index_or_indices: int | list[int]) -> tuple[NIFTI_MRS, NIFTI_MRS]:
     """Splits, or extracts indices from, a specified dimension of a
     NIFTI_MRS object. Output is two NIFTI_MRS objects. Header information preserved.
 
@@ -28,7 +31,7 @@ def split(nmrs, dimension, index_or_indices):
         and all other will remain in the first.
     :type index_or_indices: int or [int]
     :return: Two NIFTI_MRS object containing the split files
-    :rtype: fsl_mrs.core.nifti_mrs.NIFTI_MRS
+    :rtype: tuple[NIFTI_MRS, NIFTI_MRS]
     """
 
     if isinstance(dimension, str):
@@ -144,7 +147,9 @@ def _split_dim_header(hdr, dimension, dim_length, index):
     return hdr1, hdr2
 
 
-def merge(array_of_nmrs, dimension):
+def merge(
+        array_of_nmrs: list[NIFTI_MRS] | tuple[NIFTI_MRS, ...],
+        dimension: str | int) -> NIFTI_MRS:
     """Concatenate NIfTI-MRS objects along specified higher dimension
 
     :param array_of_nmrs: Array of NIFTI-MRS objects to concatenate

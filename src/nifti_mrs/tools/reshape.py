@@ -15,7 +15,12 @@ import numpy as np
 #     return reshaped_hdr
 
 
-def reshape(nmrs, reshape, d5=None, d6=None, d7=None):
+def reshape(
+        nmrs: NIFTI_MRS,
+        reshape: tuple[int, ...],
+        d5: str | None = None,
+        d6: str | None = None,
+        d7: str | None = None) -> NIFTI_MRS:
     """Reshape the higher dimensions (5-7) of an nifti-mrs file.
     Uses numpy reshape syntax to reshape. Use -1 for automatic sizing.
 
