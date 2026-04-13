@@ -1,6 +1,10 @@
 This document contains the nifti_mrs_tools release history in reverse chronological order.
 
-1.3.5 (Wednesday 18th march 2026)
+1.x.x (WIP)
+-----------------------------------
+- Added `axes` class to handle NIfTI-MRS information that are useful for plotting.
+
+1.3.5 (Wednesday 18th March 2026)
 ---------------------------------
 - Fixed bug in reorder command when there were three defined dimensions already
 - Added type hints to arguments and outputs of main tools functions.
