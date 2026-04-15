@@ -6,6 +6,7 @@ Copyright (C) 2026 University of Oxford
 """
 
 import numpy as np
+from mrs_tools.constants import PPM_SHIFT
 
 
 class Axes():
@@ -66,12 +67,13 @@ class Axes():
             RxOffset=RxOffset,
             npoints=nifti_mrs_obj.shape[3])
 
+    # TODO should we add an attribute for shift?
     @staticmethod
     def default_shift(ResonantNucleus):
         """Return the default chemical shift position for a nucleus."""
-        from mrs_tools.constants import PPM_SHIFT
         return PPM_SHIFT.get(str(ResonantNucleus), 0.0)
 
+    # TODO consider which of these getters we do not need
     @property
     def ResonantNucleus(self):
         return self._ResonantNucleus
@@ -106,49 +108,47 @@ class Axes():
         """Spectral width in Hz."""
         return 1.0 / self.dwelltime
 
-    def _resolve_npoints(self, npoints=None):
-        if npoints is None:
-            npoints = self.npoints
-        if npoints is None:
-            raise ValueError('npoints must be provided or set on initialisation.')
-        npoints = int(npoints)
-        if npoints <= 0:
-            raise ValueError('npoints must be positive.')
-        return npoints
-
-    def time_axis_array(self, npoints=None):
+    def time_axis_array(self):
         """Return the time axis in seconds."""
-        npts = self._resolve_npoints(npoints)
-        return np.arange(npts) * self.dwelltime
+        return np.linspace(self.dwelltime, self.dwelltime * self.npoints, self.npoints)
 
-    def frequency_axis_array(self, npoints=None):
-        """Return the frequency axis in Hz including receiver offset."""
-        npts = self._resolve_npoints(npoints)
-        return np.fft.fftshift(np.fft.fftfreq(npts, d=self.dwelltime)) + self.RxOffset
+    def frequency_axis_array(self):
+        """Return the frequency axis in Hz."""
+        bandwidth = 1 / self.dwelltime
+        return np.linspace(-bandwidth / 2, bandwidth / 2, self.npoints)
 
-    def ppm_axis_array(self, npoints=None):
-        """Return the ppm axis referenced to the chemical shift position."""
-        return self.SpecFreqChemShift - (self.frequency_axis_array(npoints) / self.SpectrometerFrequency)
-
-    def ppm_axis_shiftless_array(self, npoints=None):
+    def ppm_axis_array(self):
         """Return the ppm axis centred at zero ppm."""
-        return -(self.frequency_axis_array(npoints) / self.SpectrometerFrequency)
+        return self.hz2ppm(1E6 * self.SpectrometerFrequency, self.frequency_axis_array(), shift=False)
+    
+    # TODO add RxOffset shift here too
+    def ppm_axis_shift_array(self):
+        """Return the ppm axis referenced to the chemical shift position."""
+        return self.hz2ppm(1E6 * self.SpectrometerFrequency, self.frequency_axis_array(), shift=True, 
+                            shift_amount=self.SpecFreqChemShift)
+    
+    def hz2ppm(cf, hz, shift=True, shift_amount=PPM_SHIFT['1H']):
+        """Convert frequency scale to frequency scale with optional shift."""
+        if shift:
+            return hz / cf + shift_amount
+        else:
+            return hz / cf
 
     @property
-    def time_axis(self):
+    def timeAxis(self):
         return self.time_axis_array()
 
     @property
-    def frequency_axis(self):
+    def frequencyAxis(self):
         return self.frequency_axis_array()
 
     @property
-    def ppm_axis(self):
+    def ppmAxis(self):
         return self.ppm_axis_array()
 
     @property
-    def ppm_axis_shiftless(self):
-        return self.ppm_axis_shiftless_array()
+    def ppmAxisShift(self):
+        return self.ppm_axis_shift_array()
 
     def axis_indices(self, axis, lower, upper):
         """Return indices spanning an inclusive range on the supplied axis."""
@@ -156,18 +156,20 @@ class Axes():
         lo, hi = sorted((lower, upper))
         return np.where((axis >= lo) & (axis <= hi))[0]
 
-    def time_indices(self, lower, upper, npoints=None):
+    def timeIndices(self, lower, upper):
         """Return indices spanning a time range in seconds."""
-        return self.axis_indices(self.time_axis_array(npoints), lower, upper)
+        return self.axis_indices(self.time_axis_array(), lower, upper)
 
-    def frequency_indices(self, lower, upper, npoints=None):
+    def frequencyIndices(self, lower, upper):
         """Return indices spanning a frequency range in Hz."""
-        return self.axis_indices(self.frequency_axis_array(npoints), lower, upper)
+        return self.axis_indices(self.frequency_axis_array(), lower, upper)
 
-    def ppm_indices(self, lower, upper, npoints=None):
-        """Return indices spanning a ppm range on the referenced ppm axis."""
-        return self.axis_indices(self.ppm_axis_array(npoints), lower, upper)
-
-    def ppm_shiftless_indices(self, lower, upper, npoints=None):
+    def ppmIndices(self, lower, upper):
         """Return indices spanning a ppm range on the zero-centred ppm axis."""
-        return self.axis_indices(self.ppm_axis_shiftless_array(npoints), lower, upper)
+        return self.axis_indices(self.ppm_axis_array(), lower, upper)
+
+    def ppmIndicesShift(self, lower, upper):
+        """Return indices spanning a ppm range on the referenced ppm axis."""
+        return self.axis_indices(self.ppm_axis_shift_array(), lower, upper)
+
+    # TODO add a default plotting method with correct axis limits, FID list (or spectra). Returns a matplolib axes or fig object.
