@@ -119,15 +119,15 @@ class Axes():
 
     def ppm_axis_array(self):
         """Return the ppm axis centred at zero ppm."""
-        return self.hz2ppm(1E6 * self.SpectrometerFrequency, self.frequency_axis_array(), shift=False)
+        return self.hz2ppm(1E6 * self.SpectrometerFrequency, self.frequencyAxis, shift=False)
     
     # TODO add RxOffset shift here too
     def ppm_axis_shift_array(self):
         """Return the ppm axis referenced to the chemical shift position."""
-        return self.hz2ppm(1E6 * self.SpectrometerFrequency, self.frequency_axis_array(), shift=True, 
+        return self.hz2ppm(1E6 * self.SpectrometerFrequency, self.frequencyAxis, shift=True, 
                             shift_amount=self.SpecFreqChemShift)
     
-    def hz2ppm(cf, hz, shift=True, shift_amount=PPM_SHIFT['1H']):
+    def hz2ppm(self, cf, hz, shift=True, shift_amount=PPM_SHIFT['1H']):
         """Convert frequency scale to frequency scale with optional shift."""
         if shift:
             return hz / cf + shift_amount
