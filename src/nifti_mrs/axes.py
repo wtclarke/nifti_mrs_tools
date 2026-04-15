@@ -108,6 +108,7 @@ class Axes():
         """Spectral width in Hz."""
         return 1.0 / self.dwelltime
 
+    # TODO consider starting these methods with underscore
     def time_axis_array(self):
         """Return the time axis in seconds."""
         return np.linspace(self.dwelltime, self.dwelltime * self.npoints, self.npoints)
@@ -130,9 +131,9 @@ class Axes():
     def hz2ppm(self, cf, hz, shift=True, shift_amount=PPM_SHIFT['1H']):
         """Convert frequency scale to frequency scale with optional shift."""
         if shift:
-            return hz / cf + shift_amount
+            return 1E6 * hz / cf + shift_amount
         else:
-            return hz / cf
+            return 1E6 * hz / cf
 
     @property
     def timeAxis(self):
