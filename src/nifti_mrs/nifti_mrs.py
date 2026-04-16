@@ -6,6 +6,7 @@ Copyright William Clarke, University of Oxford, 2023
 import json
 from pathlib import Path
 import re
+from packaging.version import Version
 
 import nibabel as nib
 import numpy as np
@@ -105,7 +106,7 @@ class NIFTI_MRS():
 
         # Check that file meets minimum requirements
         try:
-            if float(self.nifti_mrs_version) < 0.2:
+            if Version(self.nifti_mrs_version) < Version("0.2"):
                 raise NotNIFTI_MRS('NIFTI-MRS > V0.2 required.')
         except IndexError:
             raise NotNIFTI_MRS('NIFTI-MRS intent code not set.')
