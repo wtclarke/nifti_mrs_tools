@@ -1,4 +1,4 @@
-"""Axis helper class for NIfTI-MRS objects.
+"""Axes helper class for NIfTI-MRS objects.
 
 Author:  Vasilis Karlaftis      <vasilis.karlaftis@ndcn.ox.ac.uk>
 
@@ -121,13 +121,13 @@ class Axes():
     def ppm_axis_array(self):
         """Return the ppm axis centred at zero ppm."""
         return self.hz2ppm(1E6 * self.SpectrometerFrequency, self.frequencyAxis, shift=False)
-    
+
     # TODO add RxOffset shift here too
     def ppm_axis_shift_array(self):
         """Return the ppm axis referenced to the chemical shift position."""
-        return self.hz2ppm(1E6 * self.SpectrometerFrequency, self.frequencyAxis, shift=True, 
-                            shift_amount=self.SpecFreqChemShift)
-    
+        return self.hz2ppm(1E6 * self.SpectrometerFrequency, self.frequencyAxis, shift=True,
+                           shift_amount=self.SpecFreqChemShift)
+
     def hz2ppm(self, cf, hz, shift=True, shift_amount=PPM_SHIFT['1H']):
         """Convert frequency scale to frequency scale with optional shift."""
         if shift:
@@ -151,26 +151,36 @@ class Axes():
     def ppmAxisShift(self):
         return self.ppm_axis_shift_array()
 
-    def axis_indices(self, axis, lower, upper):
+    def axis_indices(self, axis, limits=None):
         """Return indices spanning an inclusive range on the supplied axis."""
         axis = np.asarray(axis)
-        lo, hi = sorted((lower, upper))
-        return np.where((axis >= lo) & (axis <= hi))[0]
+        if limits is None:
+            return np.arange(0, axis.size)
+        if not isinstance(limits, tuple) or len(limits) != 2:
+            raise ValueError("'limits' must be a 2-tuple")
+        lo, hi = sorted(limits)
+        # find nearest indices that satisfy the input range
+        first = np.argmin(np.abs(axis - lo))
+        last  = np.argmin(np.abs(axis - hi))
+        if first > last:
+            first, last = last, first
+        return np.arange(first, last + 1)
 
-    def timeIndices(self, lower, upper):
+    def timeIndices(self, limits):
         """Return indices spanning a time range in seconds."""
-        return self.axis_indices(self.time_axis_array(), lower, upper)
+        return self.axis_indices(self.time_axis_array(), limits)
 
-    def frequencyIndices(self, lower, upper):
+    def frequencyIndices(self, limits):
         """Return indices spanning a frequency range in Hz."""
-        return self.axis_indices(self.frequency_axis_array(), lower, upper)
+        return self.axis_indices(self.frequency_axis_array(), limits)
 
-    def ppmIndices(self, lower, upper):
+    def ppmIndices(self, limits):
         """Return indices spanning a ppm range on the zero-centred ppm axis."""
-        return self.axis_indices(self.ppm_axis_array(), lower, upper)
+        return self.axis_indices(self.ppm_axis_array(), limits)
 
-    def ppmIndicesShift(self, lower, upper):
+    def ppmShiftIndices(self, limits):
         """Return indices spanning a ppm range on the referenced ppm axis."""
-        return self.axis_indices(self.ppm_axis_shift_array(), lower, upper)
+        return self.axis_indices(self.ppm_axis_shift_array(), limits)
 
-    # TODO add a default plotting method with correct axis limits, FID list (or spectra). Returns a matplolib axes or fig object.
+    # TODO add a default plotting method with correct axis limits, FID list (or spectra).
+    # Returns a matplolib axes or fig object.
