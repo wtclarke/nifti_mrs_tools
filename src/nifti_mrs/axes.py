@@ -125,7 +125,7 @@ class Axes():
     # TODO add RxOffset shift here too
     def ppm_axis_shift_array(self):
         """Return the ppm axis referenced to the chemical shift position."""
-        return self.hz2ppm(1E6 * self.SpectrometerFrequency, self.frequencyAxis, shift=True,
+        return self.hz2ppm(1E6 * (self.SpectrometerFrequency + self.RxOffset), self.frequencyAxis, shift=True,
                            shift_amount=self.SpecFreqChemShift)
 
     def hz2ppm(self, cf, hz, shift=True, shift_amount=PPM_SHIFT['1H']):

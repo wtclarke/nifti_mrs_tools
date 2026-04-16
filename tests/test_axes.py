@@ -22,14 +22,14 @@ def test_axes_init():
         SpectrometerFrequency=123.4,
         dwelltime=1/2000.0,
         SpecFreqChemShift=5.0,
-        RxOffset=1.0,
+        RxOffset=-1.0,
         npoints=8)
     
     assert axes.ResonantNucleus == '1H'
     assert axes.SpectrometerFrequency == 123.4
     assert axes.dwelltime == 1/2000.0
     assert axes.SpecFreqChemShift == 5.0
-    assert axes.RxOffset == 1.0
+    assert axes.RxOffset == -1.0
     assert axes.npoints == 8
     assert axes.SpectralWidth == 2000.0
     assert axes.timeAxis.shape == (8,)
@@ -40,7 +40,7 @@ def test_axes_init():
     assert np.allclose(axes.timeAxis, np.linspace(1/2000.0, 8/2000.0, 8))
     assert np.allclose(axes.frequencyAxis, np.linspace(-2000.0/2, 2000.0/2, 8))
     assert np.allclose(axes.ppmAxis, axes.hz2ppm(1E6 * 123.4, axes.frequencyAxis, shift=False))
-    assert np.allclose(axes.ppmAxisShift, axes.hz2ppm(1E6 * 123.4, axes.frequencyAxis, shift=True, shift_amount=5.0))
+    assert np.allclose(axes.ppmAxisShift, axes.hz2ppm(1E6 * (123.4 - 1.0), axes.frequencyAxis, shift=True, shift_amount=5.0))
 
 
 def test_axes_from_nifti_mrs():
@@ -62,7 +62,7 @@ def test_axes_from_nifti_mrs():
     assert np.allclose(axes.timeAxis, np.linspace(nmrs.dwelltime, nmrs.shape[3] * nmrs.dwelltime, nmrs.shape[3]))
     assert np.allclose(axes.frequencyAxis, np.linspace(-1/nmrs.dwelltime/2, 1/nmrs.dwelltime/2, nmrs.shape[3]))
     assert np.allclose(axes.ppmAxis, axes.hz2ppm(1E6 * 297.219948, axes.frequencyAxis, shift=False))
-    assert np.allclose(axes.ppmAxisShift, axes.hz2ppm(1E6 * 297.219948, axes.frequencyAxis, shift=True, shift_amount=4.65))
+    assert np.allclose(axes.ppmAxisShift, axes.hz2ppm(1E6 * (297.219948 - 0), axes.frequencyAxis, shift=True, shift_amount=4.65))
 
 
 def test_axes_indices():
@@ -71,7 +71,7 @@ def test_axes_indices():
         SpectrometerFrequency=123.4,
         dwelltime=1/2000.0,
         SpecFreqChemShift=5.0,
-        RxOffset=1.0,
+        RxOffset=-1.0,
         npoints=8)
 
     assert np.array_equal(axes.timeIndices((0.001, 0.0025)), np.array([1, 2, 3, 4]))
