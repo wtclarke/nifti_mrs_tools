@@ -156,7 +156,7 @@ class Axes():
         axis = np.asarray(axis)
         if limits is None:
             return np.arange(0, axis.size)
-        if not isinstance(limits, tuple) or len(limits) != 2:
+        if not isinstance(limits, (tuple, list, np.ndarray)) or len(limits) != 2:
             raise ValueError("'limits' must be a 2-tuple")
         lo, hi = sorted(limits)
         # find nearest indices that satisfy the input range

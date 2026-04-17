@@ -74,11 +74,30 @@ def test_axes_indices():
         RxOffset=-1.0,
         npoints=8)
 
+    # call them using tuple indices
     assert np.array_equal(axes.timeIndices((0.001, 0.0025)), np.array([1, 2, 3, 4]))
     assert np.array_equal(axes.frequencyIndices((-200.0, 400.0)), np.array([3, 4, 5]))
     assert np.array_equal(axes.ppmIndices((1, 4)), np.array([4, 5]))
     assert np.array_equal(axes.ppmShiftIndices((6, 9)), np.array([4, 5]))
     ppmlim = (2, 8)
     ppmlim_shifted = tuple([i + axes.SpecFreqChemShift for i in ppmlim])
+    assert np.array_equal(axes.ppmShiftIndices(ppmlim_shifted), axes.ppmIndices(ppmlim))
+
+    # call them using list indices
+    assert np.array_equal(axes.timeIndices([0.001, 0.0025]), np.array([1, 2, 3, 4]))
+    assert np.array_equal(axes.frequencyIndices([-200.0, 400.0]), np.array([3, 4, 5]))
+    assert np.array_equal(axes.ppmIndices([1, 4]), np.array([4, 5]))
+    assert np.array_equal(axes.ppmShiftIndices([6, 9]), np.array([4, 5]))
+    ppmlim = [2, 8]
+    ppmlim_shifted = [i + axes.SpecFreqChemShift for i in ppmlim]
+    assert np.array_equal(axes.ppmShiftIndices(ppmlim_shifted), axes.ppmIndices(ppmlim))
+
+    # call them using ndarray indices
+    assert np.array_equal(axes.timeIndices(np.array([0.001, 0.0025])), np.array([1, 2, 3, 4]))
+    assert np.array_equal(axes.frequencyIndices(np.array([-200.0, 400.0])), np.array([3, 4, 5]))
+    assert np.array_equal(axes.ppmIndices(np.array([1, 4])), np.array([4, 5]))
+    assert np.array_equal(axes.ppmShiftIndices(np.array([6, 9])), np.array([4, 5]))
+    ppmlim = np.array([2, 8])
+    ppmlim_shifted = np.array([i + axes.SpecFreqChemShift for i in ppmlim])
     assert np.array_equal(axes.ppmShiftIndices(ppmlim_shifted), axes.ppmIndices(ppmlim))
 
