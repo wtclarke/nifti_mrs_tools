@@ -7,6 +7,7 @@ Copyright (C) 2026 University of Oxford
 
 import numpy as np
 from mrs_tools.constants import PPM_SHIFT
+from nifti_mrs.nifti_mrs import NIFTI_MRS
 
 
 class Axes():
@@ -14,42 +15,41 @@ class Axes():
 
     def __init__(
             self,
-            ResonantNucleus,
-            SpectrometerFrequency,
-            dwelltime,
-            SpecFreqChemShift=None,
-            RxOffset=0.0,
-            npoints=None):
+            npoints: int,
+            ResonantNucleus: str,
+            SpectrometerFrequency: float,
+            dwelltime: float,
+            SpecFreqChemShift: float = None,
+            RxOffset: float = 0.0):
         """Create an axes helper object.
 
+        :param npoints: Number of points along the spectral dimension.
+        :type npoints: int
         :param ResonantNucleus: Resonant nucleus string (e.g. ``1H``).
         :type ResonantNucleus: str
         :param SpectrometerFrequency: Spectrometer frequency in MHz.
         :type SpectrometerFrequency: float
         :param dwelltime: Spectral dwell time in seconds.
         :type dwelltime: float
-        :param SpecFreqChemShift: Chemical shift position in ppm.
+        :param SpecFreqChemShift: Nominal chemical shift in ppm.
             If not provided defaults are used. Current defaults follow the
-            FSL-MRS convention of 4.65 ppm for proton/deuterium and 0.0 ppm
-            otherwise.
-        :type SpecFreqChemShift: float, optional
-        :param RxOffset: Receiver offset in Hz, defaults to 0.0.
-        :type RxOffset: float, optional
-        :param npoints: Number of points along the spectral dimension.
-        :type npoints: int, optional
+            FSL-MRS convention.
+        :type SpecFreqChemShift: float [optional]
+        :param RxOffset: Receiver chemical shift in ppm, defaults to 0.0.
+        :type RxOffset: float [optional]
         """
-        self._ResonantNucleus = str(ResonantNucleus)
+        self._npoints               = int(npoints)
+        self._ResonantNucleus       = str(ResonantNucleus)
         self._SpectrometerFrequency = float(SpectrometerFrequency)
-        self._dwelltime = float(dwelltime)
-        self._RxOffset = float(RxOffset)
-        self._npoints = None if npoints is None else int(npoints)
+        self._dwelltime             = float(dwelltime)
+        self._RxOffset              = float(RxOffset)
 
+        if self._npoints <= 0:
+            raise ValueError('npoints must be positive.')
         if self._dwelltime <= 0:
             raise ValueError('dwelltime must be positive.')
         if self._SpectrometerFrequency <= 0:
             raise ValueError('SpectrometerFrequency must be positive.')
-        if self._npoints is not None and self._npoints <= 0:
-            raise ValueError('npoints must be positive.')
 
         if SpecFreqChemShift is None:
             self._SpecFreqChemShift = self.default_shift(self._ResonantNucleus)
@@ -57,8 +57,23 @@ class Axes():
             self._SpecFreqChemShift = float(SpecFreqChemShift)
 
     @classmethod
-    def from_nifti_mrs(cls, nifti_mrs_obj, SpecFreqChemShift=None, RxOffset=0.0):
-        """Initialise from a :class:`nifti_mrs.nifti_mrs.NIFTI_MRS` object."""
+    def from_nifti_mrs(cls,
+                       nifti_mrs_obj: NIFTI_MRS,
+                       SpecFreqChemShift: float = None,
+                       RxOffset: float = 0.0):
+        """Initialise from a :class:`nifti_mrs.nifti_mrs.NIFTI_MRS` object.
+
+        :param nifti_mrs_obj: NIfTI-MRS object to initialise from.
+        :type nifti_mrs_obj: NIFTI_MRS
+        :param SpecFreqChemShift: Nominal chemical shift in ppm.
+            If not provided defaults are used. Current defaults follow the
+            FSL-MRS convention.
+        :type SpecFreqChemShift: float [optional]
+        :param RxOffset: Receiver chemical shift in ppm, defaults to 0.0.
+        :type RxOffset: float [optional]
+        :return: Axes object initialised from the NIfTI-MRS object.
+        :rtype: Axes
+        """
         return cls(
             ResonantNucleus=nifti_mrs_obj.nucleus[0],
             SpectrometerFrequency=nifti_mrs_obj.spectrometer_frequency[0],
@@ -67,15 +82,19 @@ class Axes():
             RxOffset=RxOffset,
             npoints=nifti_mrs_obj.shape[3])
 
-    # TODO should we add an attribute for shift?
     @staticmethod
-    def default_shift(ResonantNucleus):
+    def default_shift(ResonantNucleus: str):
         """Return the default chemical shift position for a nucleus."""
         return PPM_SHIFT.get(str(ResonantNucleus), 0.0)
 
-    # TODO consider which of these getters we do not need
+    @property
+    def npoints(self):
+        """Number of points in the spectral dimension."""
+        return self._npoints
+
     @property
     def ResonantNucleus(self):
+        """Resonant nucleus string (e.g. ``1H``)."""
         return self._ResonantNucleus
 
     @property
@@ -90,69 +109,76 @@ class Axes():
 
     @property
     def SpecFreqChemShift(self):
-        """Chemical shift position in ppm."""
+        """Nominal chemical shift in ppm."""
         return self._SpecFreqChemShift
 
     @property
     def RxOffset(self):
-        """Receiver offset in Hz."""
+        """Receiver chemical shift in ppm."""
         return self._RxOffset
-
-    @property
-    def npoints(self):
-        """Number of points in the spectral dimension."""
-        return self._npoints
 
     @property
     def SpectralWidth(self):
         """Spectral width in Hz."""
         return 1.0 / self.dwelltime
 
-    # TODO consider starting these methods with underscore
-    def time_axis_array(self):
+    @property
+    def ppmshift(self):
+        """Chemical shift offset from SpectrometerFrequency in ppm."""
+        return self.SpecFreqChemShift + self.RxOffset
+
+    @staticmethod
+    def hz2ppm(cf: float, hz: float, shift: bool = True, shift_amount: float = PPM_SHIFT['1H']):
+        """Convert frequency scale to frequency scale with optional shift.
+
+        :param cf: Spectrometer frequency in MHz.
+        :type cf: float
+        :param hz: Frequency in Hz.
+        :type hz: float
+        :param shift: Whether to apply chemical shift.
+        :type shift: bool
+        :param shift_amount: Chemical shift amount in ppm.
+        :type shift_amount: float
+        """
+        if shift:
+            return hz / cf + shift_amount
+        else:
+            return hz / cf
+
+    @property
+    def timeAxis(self) -> np.ndarray:
         """Return the time axis in seconds."""
         return np.linspace(self.dwelltime, self.dwelltime * self.npoints, self.npoints)
 
-    def frequency_axis_array(self):
+    @property
+    def frequencyAxis(self) -> np.ndarray:
         """Return the frequency axis in Hz."""
         bandwidth = 1 / self.dwelltime
         return np.linspace(-bandwidth / 2, bandwidth / 2, self.npoints)
 
-    def ppm_axis_array(self):
+    @property
+    def ppmAxis(self) -> np.ndarray:
         """Return the ppm axis centred at zero ppm."""
-        return self.hz2ppm(1E6 * self.SpectrometerFrequency, self.frequencyAxis, shift=False)
+        return self.hz2ppm(self.SpectrometerFrequency, self.frequencyAxis, shift=False)
 
-    # TODO add RxOffset shift here too
-    def ppm_axis_shift_array(self):
+    @property
+    def ppmAxisShift(self) -> np.ndarray:
         """Return the ppm axis referenced to the chemical shift position."""
-        return self.hz2ppm(1E6 * (self.SpectrometerFrequency + self.RxOffset), self.frequencyAxis, shift=True,
-                           shift_amount=self.SpecFreqChemShift)
+        return self.hz2ppm(self.SpectrometerFrequency, self.frequencyAxis, shift=True,
+                           shift_amount=self.ppmshift)
 
-    def hz2ppm(self, cf, hz, shift=True, shift_amount=PPM_SHIFT['1H']):
-        """Convert frequency scale to frequency scale with optional shift."""
-        if shift:
-            return 1E6 * hz / cf + shift_amount
-        else:
-            return 1E6 * hz / cf
+    @staticmethod
+    def axis_indices(axis: np.ndarray, limits: tuple = None) -> slice:
+        """Return indices spanning an inclusive range on the supplied axis.
 
-    @property
-    def timeAxis(self):
-        return self.time_axis_array()
-
-    @property
-    def frequencyAxis(self):
-        return self.frequency_axis_array()
-
-    @property
-    def ppmAxis(self):
-        return self.ppm_axis_array()
-
-    @property
-    def ppmAxisShift(self):
-        return self.ppm_axis_shift_array()
-
-    def axis_indices(self, axis, limits=None):
-        """Return indices spanning an inclusive range on the supplied axis."""
+        :param axis: Axis values to find indices on.
+        :type axis: np.ndarray
+        :param limits: Tuple of (lower, upper) limits to find indices spanning, defaults
+             to None (return all indices).
+        :type limits: tuple, list, np.ndarray [optional]
+        :return: Indices spanning the range.
+        :rtype: slice
+        """
         axis = np.asarray(axis)
         if limits is None:
             return np.arange(0, axis.size)
@@ -164,23 +190,51 @@ class Axes():
         last  = np.argmin(np.abs(axis - hi))
         if first > last:
             first, last = last, first
-        return np.arange(first, last + 1)
+        return slice(first, last + 1)
 
-    def timeIndices(self, limits):
-        """Return indices spanning a time range in seconds."""
-        return self.axis_indices(self.time_axis_array(), limits)
+    def timeIndices(self, limits: tuple) -> slice:
+        """Return indices spanning a time range in seconds.
 
-    def frequencyIndices(self, limits):
-        """Return indices spanning a frequency range in Hz."""
-        return self.axis_indices(self.frequency_axis_array(), limits)
+        :param limits: Tuple of (lower, upper) limits to find indices spanning, defaults
+             to None (return all indices).
+        :type limits: tuple, list, np.ndarray [optional]
+        :return: timeAxis indices spanning the range.
+        :rtype: slice
+        """
+        return self.axis_indices(self.timeAxis, limits)
 
-    def ppmIndices(self, limits):
-        """Return indices spanning a ppm range on the zero-centred ppm axis."""
-        return self.axis_indices(self.ppm_axis_array(), limits)
+    def frequencyIndices(self, limits: tuple) -> slice:
+        """Return indices spanning a frequency range in Hz.
 
-    def ppmShiftIndices(self, limits):
-        """Return indices spanning a ppm range on the referenced ppm axis."""
-        return self.axis_indices(self.ppm_axis_shift_array(), limits)
+        :param limits: Tuple of (lower, upper) limits to find indices spanning, defaults
+             to None (return all indices).
+        :type limits: tuple, list, np.ndarray [optional]
+        :return: frequencyAxis indices spanning the range.
+        :rtype: slice
+        """
+        return self.axis_indices(self.frequencyAxis, limits)
+
+    def ppmIndices(self, limits: tuple) -> slice:
+        """Return indices spanning a ppm range on the zero-centred ppm axis.
+
+        :param limits: Tuple of (lower, upper) limits to find indices spanning, defaults
+             to None (return all indices).
+        :type limits: tuple, list, np.ndarray [optional]
+        :return: ppmAxis indices spanning the range.
+        :rtype: slice
+        """
+        return self.axis_indices(self.ppmAxis, limits)
+
+    def ppmShiftIndices(self, limits: tuple) -> slice:
+        """Return indices spanning a ppm range on the referenced ppm axis.
+
+        :param limits: Tuple of (lower, upper) limits to find indices spanning, defaults
+             to None (return all indices).
+        :type limits: tuple, list, np.ndarray [optional]
+        :return: ppmAxisShift indices spanning the range.
+        :rtype: slice
+        """
+        return self.axis_indices(self.ppmAxisShift, limits)
 
     # TODO add a default plotting method with correct axis limits, FID list (or spectra).
     # Returns a matplolib axes or fig object.

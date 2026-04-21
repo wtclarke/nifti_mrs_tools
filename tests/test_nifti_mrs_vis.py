@@ -7,7 +7,7 @@ test_data_raw = testsPath / 'test_data' / 'metab_raw.nii.gz'
 test_data_proc = testsPath / 'test_data' / 'metab.nii.gz'
 
 
-def test_vis_error(tmp_path):
+def test_vis_error():
     try:
         import fsl_mrs  # noqa: F401
     except ImportError:
@@ -21,7 +21,7 @@ def test_vis_error(tmp_path):
 
 
 @pytest.mark.with_fsl_mrs
-def test_vis_svs(tmp_path):
+def test_vis_svs():
     import nifti_mrs.vis as vis
     from nifti_mrs.nifti_mrs import NIFTI_MRS
     import matplotlib
@@ -36,7 +36,7 @@ def test_vis_svs(tmp_path):
 
 
 @pytest.mark.with_fsl_mrs
-def test_vis_svs_singleton_channels(tmp_path):
+def test_vis_svs_singleton_channels():
     import nifti_mrs.vis as vis
     from nifti_mrs.nifti_mrs import NIFTI_MRS
     import matplotlib
