@@ -156,35 +156,35 @@ class Axes():
             return hz / cf
 
     @property
-    def timeAxis(self) -> np.ndarray:
+    def timeAxis(self) -> np.typing.NDArray[np.float64]:
         """Return the time axis in seconds."""
         return np.linspace(self.dwelltime, self.dwelltime * self.npoints, self.npoints)
 
     @property
-    def frequencyAxis(self) -> np.ndarray:
+    def frequencyAxis(self) -> np.typing.NDArray[np.float64]:
         """Return the frequency axis in Hz."""
         return np.linspace(-self.SpectralWidth / 2, self.SpectralWidth / 2, self.npoints)
 
     @property
-    def ppmAxis(self) -> np.ndarray:
+    def ppmAxis(self) -> np.typing.NDArray[np.float64]:
         """Return the ppm axis centred at zero ppm."""
         return self.hz2ppm(self.SpectrometerFrequency, self.frequencyAxis, shift=False)
 
     @property
-    def ppmAxisShift(self) -> np.ndarray:
+    def ppmAxisShift(self) -> np.typing.NDArray[np.float64]:
         """Return the ppm axis referenced to the chemical shift position."""
         return self.hz2ppm(self.SpectrometerFrequency, self.frequencyAxis, shift=True,
                            shift_amount=self.ppmshift)
 
     @staticmethod
-    def axis_indices(axis: np.ndarray, limits: tuple = None) -> slice:
+    def axis_indices(axis: np.typing.NDArray[np.float64], limits: tuple = None) -> slice:
         """Return indices spanning an inclusive range on the supplied axis.
 
         :param axis: Axis values to find indices on.
-        :type axis: np.ndarray
+        :type axis: NDArray[np.float64]
         :param limits: Tuple of (lower, upper) limits to find indices spanning, defaults
              to None (return all indices).
-        :type limits: tuple, list, np.ndarray [optional]
+        :type limits: tuple, list, NDArray[np.float64] [optional]
         :return: Indices spanning the range.
         :rtype: slice
         """
