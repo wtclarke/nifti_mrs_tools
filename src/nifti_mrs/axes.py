@@ -82,6 +82,16 @@ class Axes():
             RxOffset=RxOffset,
             npoints=nifti_mrs_obj.shape[3])
 
+    def copy(self):
+        """Return a copy of the Axes object."""
+        return Axes(
+            ResonantNucleus=self.ResonantNucleus,
+            SpectrometerFrequency=self.SpectrometerFrequency,
+            dwelltime=self.dwelltime,
+            SpecFreqChemShift=self.SpecFreqChemShift,
+            RxOffset=self.RxOffset,
+            npoints=self.npoints)
+
     @staticmethod
     def default_shift(ResonantNucleus: str):
         """Return the default chemical shift position for a nucleus."""
@@ -153,8 +163,7 @@ class Axes():
     @property
     def frequencyAxis(self) -> np.ndarray:
         """Return the frequency axis in Hz."""
-        bandwidth = 1 / self.dwelltime
-        return np.linspace(-bandwidth / 2, bandwidth / 2, self.npoints)
+        return np.linspace(-self.SpectralWidth / 2, self.SpectralWidth / 2, self.npoints)
 
     @property
     def ppmAxis(self) -> np.ndarray:
