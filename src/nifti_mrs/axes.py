@@ -158,7 +158,8 @@ class Axes():
     @property
     def timeAxis(self) -> np.typing.NDArray[np.float64]:
         """Return the time axis in seconds."""
-        return np.linspace(self.dwelltime, self.dwelltime * self.npoints, self.npoints)
+        # return 0 + self.dwelltime * np.arange(self.npoints)
+        return self.dwelltime + self.dwelltime * np.arange(self.npoints)
 
     @property
     def frequencyAxis(self) -> np.typing.NDArray[np.float64]:
@@ -190,7 +191,7 @@ class Axes():
         """
         axis = np.asarray(axis)
         if limits is None:
-            return np.arange(0, axis.size)
+            return slice(0, axis.size)
         if not isinstance(limits, (tuple, list, np.ndarray)) or len(limits) != 2:
             raise ValueError("'limits' must be a 2-tuple")
         lo, hi = sorted(limits)
