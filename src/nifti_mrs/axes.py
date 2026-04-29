@@ -158,8 +158,7 @@ class Axes():
     @property
     def timeAxis(self) -> np.typing.NDArray[np.float64]:
         """Return the time axis in seconds."""
-        # return 0 + self.dwelltime * np.arange(self.npoints)
-        return self.dwelltime + self.dwelltime * np.arange(self.npoints)
+        return 0 + self.dwelltime * np.arange(self.npoints)
 
     @property
     def frequencyAxis(self) -> np.typing.NDArray[np.float64]:
