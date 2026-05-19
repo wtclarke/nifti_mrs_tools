@@ -7,7 +7,6 @@ Copyright (C) 2026 University of Oxford
 
 import numpy as np
 from mrs_tools.constants import PPM_SHIFT
-from nifti_mrs.nifti_mrs import NIFTI_MRS
 
 
 class Axes():
@@ -52,25 +51,17 @@ class Axes():
             raise ValueError('SpectrometerFrequency must be positive.')
 
         if SpecFreqChemShift is None:
-            self._SpecFreqChemShift = self.default_shift(self._ResonantNucleus)
+            self._SpecFreqChemShift = PPM_SHIFT.get(self._ResonantNucleus, 0.0)
         else:
             self._SpecFreqChemShift = float(SpecFreqChemShift)
 
     @classmethod
-    def from_nifti_mrs(cls,
-                       nifti_mrs_obj: NIFTI_MRS,
-                       SpecFreqChemShift: float = None,
-                       RxOffset: float = 0.0):
+    def from_nifti_mrs(cls, nifti_mrs_obj: 'NIFTI_MRS'):
         """Initialise from a :class:`nifti_mrs.nifti_mrs.NIFTI_MRS` object.
 
         :param nifti_mrs_obj: NIfTI-MRS object to initialise from.
         :type nifti_mrs_obj: NIFTI_MRS
-        :param SpecFreqChemShift: Nominal chemical shift in ppm.
-            If not provided defaults are used. Current defaults follow the
-            FSL-MRS convention.
-        :type SpecFreqChemShift: float [optional]
-        :param RxOffset: Receiver chemical shift in ppm, defaults to 0.0.
-        :type RxOffset: float [optional]
+
         :return: Axes object initialised from the NIfTI-MRS object.
         :rtype: Axes
         """
@@ -78,8 +69,8 @@ class Axes():
             ResonantNucleus=nifti_mrs_obj.nucleus[0],
             SpectrometerFrequency=nifti_mrs_obj.spectrometer_frequency[0],
             dwelltime=nifti_mrs_obj.dwelltime,
-            SpecFreqChemShift=SpecFreqChemShift,
-            RxOffset=RxOffset,
+            SpecFreqChemShift=nifti_mrs_obj.SpecFreqChemShift,
+            RxOffset=nifti_mrs_obj.RxOffset,
             npoints=nifti_mrs_obj.shape[3])
 
     def copy(self):
@@ -91,11 +82,6 @@ class Axes():
             SpecFreqChemShift=self.SpecFreqChemShift,
             RxOffset=self.RxOffset,
             npoints=self.npoints)
-
-    @staticmethod
-    def default_shift(ResonantNucleus: str):
-        """Return the default chemical shift position for a nucleus."""
-        return PPM_SHIFT.get(str(ResonantNucleus), 0.0)
 
     @property
     def npoints(self):
@@ -163,7 +149,7 @@ class Axes():
     @property
     def frequencyAxis(self) -> np.typing.NDArray[np.float64]:
         """Return the frequency axis in Hz."""
-        return np.linspace(-self.SpectralWidth / 2, self.SpectralWidth / 2, self.npoints)
+        return np.fft.fftshift(np.fft.fftfreq(self.npoints, self.dwelltime))
 
     @property
     def ppmAxis(self) -> np.typing.NDArray[np.float64]:

@@ -17,8 +17,8 @@ from . import validator
 from .hdr_ext import Hdr_Ext
 from .definitions import dimension_tags, standard_defined
 import nifti_mrs.utils as utils
-
-from mrs_tools.constants import GYRO_MAG_RATIO
+from nifti_mrs.axes import Axes
+from mrs_tools.constants import GYRO_MAG_RATIO, PPM_SHIFT
 
 
 class NIFTIMRS_DimDoesntExist(Exception):
@@ -105,11 +105,11 @@ class NIFTI_MRS():
         self.image = Image(*args, **kwargs)
 
         # Check that file meets minimum requirements
-        try:
-            if Version(self.nifti_mrs_version) < Version("0.2"):
-                raise NotNIFTI_MRS('NIFTI-MRS > V0.2 required.')
-        except IndexError:
-            raise NotNIFTI_MRS('NIFTI-MRS intent code not set.')
+        version = self.nifti_mrs_version
+        if version is None:
+            raise NotNIFTI_MRS("NIFTI-MRS intent code not valid. Expected intent code of the form 'mrs_vM_m.'")
+        if Version(version) < Version("0.2"):
+            raise NotNIFTI_MRS('NIFTI-MRS > V0.2 required.')
 
         if input_hdr_ext is not None:
             self._hdr_ext = input_hdr_ext
@@ -120,6 +120,9 @@ class NIFTI_MRS():
 
             self._hdr_ext = Hdr_Ext.from_header_ext(
                 self.header.extensions[hdr_ext_codes.index(44)].json())
+
+        # Create Axes object from NIfTI_MRS
+        self._axes_obj = Axes.from_nifti_mrs(self)
 
         # Some validation upon creation
         if validate_on_creation:
@@ -182,7 +185,6 @@ class NIFTI_MRS():
         """See the :meth:`__str__` method."""
         return self.__str__()
 
-    # Implement useful calls to attributes of the image class object. Should I just be using inheretence here? Not sure.
     @property
     def header(self):
         """Returns NIfTI-MRS header object"""
@@ -210,8 +212,12 @@ class NIFTI_MRS():
     @property
     def nifti_mrs_version(self):
         """Get NIfTI-MRS version string."""
-        tmp_vstr = self.image.header.get_intent()[2].split('_')
-        return tmp_vstr[1].lstrip('v') + '.' + tmp_vstr[2]
+        intent_name = self.image.header.get_intent()[2]
+        pattern = re.compile(r'mrs_v(\d+)_(\d+)')
+        match = pattern.match(intent_name)
+        if match:
+            return f'{match.group(1)}.{match.group(2)}'
+        return None
 
     def set_version_info(self, major, minor):
         """Puts mrs_v{major}_{minor} into intent_name"""
@@ -261,6 +267,30 @@ class NIFTI_MRS():
             return self.spectrometer_frequency[0] / GYRO_MAG_RATIO[self.nucleus[0]]
         else:
             return np.nan
+
+    @property
+    def SpecFreqChemShift(self):
+        """
+        Nominal chemical shift in ppm.
+        Returns the default chemical shift position for the nucleus, if not specified.
+        """
+        if 'SpecFreqChemShift' in self.hdr_ext:
+            return float(self.hdr_ext['SpecFreqChemShift'])
+        else:
+            return PPM_SHIFT.get(self.nucleus[0], 0.0)
+
+    @property
+    def RxOffset(self):
+        """Receiver chemical shift in ppm. Returns 0, if not specified."""
+        if 'RxOffset' in self.hdr_ext:
+            return float(self.hdr_ext['RxOffset'])
+        else:
+            return 0.0
+
+    @property
+    def axes(self):
+        """Axes object containing MRS metadata for plotting."""
+        return self._axes_obj
 
     def getAffine(self, *args):
         """Return an affine transformation which can be used to transform

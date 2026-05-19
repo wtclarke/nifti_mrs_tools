@@ -1,5 +1,11 @@
 This document contains the nifti_mrs_tools release history in reverse chronological order.
 
+1.4.1 (Wednesday 20th May 2026)
+-----------------------------------
+- Added `axes`, `RxOffset` and `SpecFreqChemShift` properties in NIfTI-MRS class.
+- Updated `frequencyAxis` in Axes to match fftshift method.
+- Made `nifti_mrs_version` format checks stricter.
+
 1.4.0 (Wednesday 29th April 2026)
 -----------------------------------
 - Added `Axes` class to handle NIfTI-MRS information that are useful for plotting.

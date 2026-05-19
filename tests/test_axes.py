@@ -38,7 +38,7 @@ def test_axes_init():
     assert axes.ppmAxisShift.shape == (8,)
 
     assert np.allclose(axes.timeAxis, 0 + np.arange(8)/2000.0)
-    assert np.allclose(axes.frequencyAxis, np.linspace(-2000.0/2, 2000.0/2, 8))
+    assert np.allclose(axes.frequencyAxis, np.fft.fftshift(np.fft.fftfreq(8, 1/2000.0)))
     assert np.allclose(axes.ppmAxis, axes.hz2ppm(123.4, axes.frequencyAxis, shift=False))
     assert np.allclose(axes.ppmAxisShift, axes.hz2ppm(123.4, axes.frequencyAxis, shift=True, shift_amount=5.0-1.0))
 
@@ -60,7 +60,7 @@ def test_axes_from_nifti_mrs():
     assert axes.ppmAxisShift.shape == (nmrs.shape[3],)
 
     assert np.allclose(axes.timeAxis, 0 + np.arange(nmrs.shape[3]) * nmrs.dwelltime)
-    assert np.allclose(axes.frequencyAxis, np.linspace(-1/nmrs.dwelltime/2, 1/nmrs.dwelltime/2, nmrs.shape[3]))
+    assert np.allclose(axes.frequencyAxis, np.fft.fftshift(np.fft.fftfreq(nmrs.shape[3], nmrs.dwelltime)))
     assert np.allclose(axes.ppmAxis, axes.hz2ppm(297.219948, axes.frequencyAxis, shift=False))
     assert np.allclose(axes.ppmAxisShift, axes.hz2ppm(297.219948, axes.frequencyAxis, shift=True, shift_amount=4.65-0.0))
 
@@ -76,27 +76,27 @@ def test_axes_indices():
 
     # call them using tuple indices
     assert np.array_equal(axes.timeIndices((0.001, 0.0025)), slice(2, 6))
-    assert np.array_equal(axes.frequencyIndices((-200.0, 400.0)), slice(3, 6))
-    assert np.array_equal(axes.ppmIndices((1, 4)), slice(4, 6))
-    assert np.array_equal(axes.ppmShiftIndices((5, 8)), slice(4, 6))
+    assert np.array_equal(axes.frequencyIndices((-200.0, 400.0)), slice(3, 7))
+    assert np.array_equal(axes.ppmIndices((1, 4)), slice(4, 7))
+    assert np.array_equal(axes.ppmShiftIndices((5, 8)), slice(4, 7))
     ppmlim = (2, 8)
     ppmlim_shifted = tuple([i + axes.ppmshift for i in ppmlim])
     assert np.array_equal(axes.ppmShiftIndices(ppmlim_shifted), axes.ppmIndices(ppmlim))
 
     # call them using list indices
     assert np.array_equal(axes.timeIndices([0.001, 0.0025]), slice(2, 6))
-    assert np.array_equal(axes.frequencyIndices([-200.0, 400.0]), slice(3, 6))
-    assert np.array_equal(axes.ppmIndices([1, 4]), slice(4, 6))
-    assert np.array_equal(axes.ppmShiftIndices([5, 8]), slice(4, 6))
+    assert np.array_equal(axes.frequencyIndices([-200.0, 400.0]), slice(3, 7))
+    assert np.array_equal(axes.ppmIndices([1, 4]), slice(4, 7))
+    assert np.array_equal(axes.ppmShiftIndices([5, 8]), slice(4, 7))
     ppmlim = [2, 8]
     ppmlim_shifted = [i + axes.ppmshift for i in ppmlim]
     assert np.array_equal(axes.ppmShiftIndices(ppmlim_shifted), axes.ppmIndices(ppmlim))
 
     # call them using ndarray indices
     assert np.array_equal(axes.timeIndices(np.array([0.001, 0.0025])), slice(2, 6))
-    assert np.array_equal(axes.frequencyIndices(np.array([-200.0, 400.0])), slice(3, 6))
-    assert np.array_equal(axes.ppmIndices(np.array([1, 4])), slice(4, 6))
-    assert np.array_equal(axes.ppmShiftIndices(np.array([5, 8])), slice(4, 6))
+    assert np.array_equal(axes.frequencyIndices(np.array([-200.0, 400.0])), slice(3, 7))
+    assert np.array_equal(axes.ppmIndices(np.array([1, 4])), slice(4, 7))
+    assert np.array_equal(axes.ppmShiftIndices(np.array([5, 8])), slice(4, 7))
     ppmlim = np.array([2, 8])
     ppmlim_shifted = np.array([i + axes.ppmshift for i in ppmlim])
     assert np.array_equal(axes.ppmShiftIndices(ppmlim_shifted), axes.ppmIndices(ppmlim))
