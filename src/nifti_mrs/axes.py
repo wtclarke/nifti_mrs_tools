@@ -7,6 +7,11 @@ Copyright (C) 2026 University of Oxford
 
 import numpy as np
 from mrs_tools.constants import PPM_SHIFT
+from typing import TYPE_CHECKING
+
+# Make the type visible to linters/type-checkers without a runtime import
+if TYPE_CHECKING:
+    from nifti_mrs.nifti_mrs import NIFTI_MRS
 
 
 class Axes():
@@ -56,7 +61,7 @@ class Axes():
             self._SpecFreqChemShift = float(SpecFreqChemShift)
 
     @classmethod
-    def from_nifti_mrs(cls, nifti_mrs_obj: 'NIFTI_MRS'):
+    def from_nifti_mrs(cls, nifti_mrs_obj: NIFTI_MRS):
         """Initialise from a :class:`nifti_mrs.nifti_mrs.NIFTI_MRS` object.
 
         :param nifti_mrs_obj: NIfTI-MRS object to initialise from.
