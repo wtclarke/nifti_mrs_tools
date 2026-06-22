@@ -45,7 +45,7 @@ def test_axes_init():
 
 def test_axes_from_nifti_mrs():
     nmrs = NIFTI_MRS(metab, validate_on_creation=False)
-    axes = Axes.from_nifti_mrs(nmrs)
+    axes = nmrs.axes
 
     assert axes.ResonantNucleus == '1H'
     assert axes.SpectrometerFrequency == 297.219948
